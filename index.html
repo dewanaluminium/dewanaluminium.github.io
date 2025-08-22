@@ -228,6 +228,7 @@
   const fmtRp = n => new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', maximumFractionDigits: 0 }).format(n||0);
   const todayISO = () => new Date().toISOString().slice(0,10);
   const uid = (p="ID") => p + Math.random().toString(36).slice(2,8) + Date.now().toString(36).slice(-4);
+  const escHTML = s => String(s).replace(/[&<>"']/g, m => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[m]));
 
   const DBKEY = 'da_app_v2_3';
   const loadDB = () => {
@@ -515,8 +516,6 @@
       @media print { .toolbar{display:none} }
     </style>`; }
 
-  function escScriptClose(s){ return String(s).replace(/<\/script>/gi, "<\/script>"); }
-
   function cetakNota(sale){
     const pset = Object.fromEntries(db.products.map(p=>[p.id,p]));
     const shop = db.settings||{};
@@ -534,11 +533,11 @@
         </div>
       </div>
       <div style="display:flex;justify-content:space-between;align-items:flex-start">
-        <div><h1>${escScriptClose(shop.shopName||'Dewan Aluminium')}</h1><div class="muted">${escScriptClose((shop.shopNote||'').replace(/\n/g,'<br>'))}</div></div>
+        <div><h1>${escHTML(shop.shopName||'Dewan Aluminium')}</h1><div class="muted">${escHTML(shop.shopNote||'').replace(/\n/g,'<br>')}</div></div>
         <div>
           <div><strong>No. Nota:</strong> ${sale.id}</div>
           <div><strong>Tanggal:</strong> ${sale.date}</div>
-          <div><strong>Pelanggan:</strong> ${escScriptClose(sale.customer||'Umum')}</div>
+          <div><strong>Pelanggan:</strong> ${escHTML(sale.customer||'Umum')}</div>
         </div>
       </div>
       <table><thead><tr><th>No</th><th>Item</th><th class="right">Qty</th><th class="right">Harga</th><th class="right">Diskon</th><th class="right">Subtotal</th></tr></thead><tbody>${rows}</tbody></table>
@@ -564,7 +563,7 @@
     const list = filterSalesByDate(dari,sampai);
     const wrap = $('#laporan-hasil');
     if(list.length===0){ wrap.innerHTML = '<p class="muted">Tidak ada data.</p>'; return; }
-    const rows = list.map(s=>`<tr><td>${s.id}</td><td>${s.date}</td><td>${escScriptClose(s.customer)}</td><td class="right">${fmtRp(s.total)}</td></tr>`).join('');
+    const rows = list.map(s=>`<tr><td>${s.id}</td><td>${s.date}</td><td>${escHTML(s.customer)}</td><td class="right">${fmtRp(s.total)}</td></tr>`).join('');
     const total = list.reduce((a,b)=>a+b.total,0);
     wrap.innerHTML = `<table><thead><tr><th>No. Nota</th><th>Tanggal</th><th>Pelanggan</th><th class="right">Total</th></tr></thead><tbody>${rows}</tbody>
       <tfoot><tr><th colspan="3" class="right">TOTAL</th><th class="right">${fmtRp(total)}</th></tr></tfoot></table>`;
@@ -575,7 +574,7 @@
     const dari = $('#lap-dari').value; const sampai = $('#lap-sampai').value; if(!dari||!sampai) return alert('Pilih rentang tanggal.');
     const list = filterSalesByDate(dari,sampai);
     const w = window.open('', '_blank');
-    const rows = list.map(s=>`<tr><td>${s.id}</td><td>${s.date}</td><td>${escScriptClose(s.customer)}</td><td class="right">${fmtRp(s.total)}</td></tr>`).join('');
+    const rows = list.map(s=>`<tr><td>${s.id}</td><td>${s.date}</td><td>${escHTML(s.customer)}</td><td class="right">${fmtRp(s.total)}</td></tr>`).join('');
     const total = list.reduce((a,b)=>a+b.total,0);
     const html = `<!doctype html><html><head><meta charset="utf-8"><title>Laporan ${dari} s.d. ${sampai}</title>${prnStyles()}</head>
     <body>
