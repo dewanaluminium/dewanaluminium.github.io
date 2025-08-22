@@ -1,0 +1,774 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>POS & Stok Barang — Dewan Aluminium (PWA)</title>
+  <meta name="description" content="Aplikasi POS & Stok sederhana berbasis web. PWA + LocalStorage + Excel export. Siap untuk GitHub Pages." />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <!-- Excel export library (SheetJS) -->
+  <script src="https://cdn.jsdelivr.net/npm/xlsx@0.19.3/dist/xlsx.full.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/dayjs@1/dayjs.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/dayjs@1/plugin/utc.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/dayjs@1/plugin/timezone.js"></script>
+  <script>dayjs.extend(dayjs_plugin_utc); dayjs.extend(dayjs_plugin_timezone);</script>
+  <meta name="theme-color" content="#0f172a" />
+  <link id="manifestLink" rel="manifest" href="manifest.webmanifest">
+  <style>
+    :root { --bg:#0f172a; --card:#111827; --muted:#334155; --text:#e5e7eb; --brand:#22c55e; --accent:#3b82f6; --danger:#ef4444; }
+    * { box-sizing: border-box; }
+    html, body { height:100%; }
+    body { margin:0; font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, Cantarell, 'Helvetica Neue', Arial, 'Noto Sans', 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol'; background: var(--bg); color: var(--text); }
+    header { position: sticky; top: 0; z-index: 20; backdrop-filter: blur(6px); background: rgba(15,23,42,.8); border-bottom: 1px solid #1f2937; }
+    .container { max-width: 1100px; margin: 0 auto; padding: 16px; }
+    h1 { font-size: 20px; margin: 0; }
+    nav { display: flex; gap: 8px; flex-wrap: wrap; }
+    .tab { padding: 8px 12px; border: 1px solid #1f2937; background: #0b1220; color: #cbd5e1; border-radius: 10px; cursor: pointer; }
+    .tab.active { background: var(--accent); border-color: var(--accent); color: white; }
+    .grid { display:grid; gap: 12px; }
+    .cols-2 { grid-template-columns: repeat(2, minmax(0,1fr)); }
+    .cols-3 { grid-template-columns: repeat(3, minmax(0,1fr)); }
+    @media (max-width: 900px){ .cols-2, .cols-3 { grid-template-columns: 1fr; } }
+    .card { background: var(--card); border: 1px solid #1f2937; border-radius: 14px; padding: 14px; }
+    .muted { color: #94a3b8; }
+    label { font-size: 12px; color: #9ca3af; display:block; margin-bottom: 6px; }
+    input, select, textarea { width: 100%; padding: 10px 12px; border-radius: 10px; border: 1px solid #27324a; background: #0b1220; color: var(--text); }
+    textarea { resize: vertical; min-height: 80px; }
+    table { width: 100%; border-collapse: collapse; }
+    th, td { text-align: left; padding: 10px; border-bottom: 1px solid #1f2937; }
+    th { font-size: 12px; letter-spacing:.02em; color:#a8b1c0; text-transform: uppercase; }
+    tr:hover td { background: #0c1526; }
+    .btn { display:inline-flex; gap:8px; align-items:center; padding: 10px 12px; border-radius: 10px; border: 1px solid #27324a; background:#0b1220; color: var(--text); cursor:pointer; }
+    .btn.primary { background: var(--brand); border-color: var(--brand); color:#06210f; font-weight:600; }
+    .btn.accent { background: var(--accent); border-color: var(--accent); color: white; }
+    .btn.danger { background: var(--danger); border-color: var(--danger); color: white; }
+    .btn.ghost { background: transparent; }
+    .btn.small { padding:6px 8px; font-size:12px; border-radius: 8px; }
+    .toolbar { display:flex; gap:8px; flex-wrap: wrap; }
+    .right { text-align:right; }
+    .flex { display:flex; gap:12px; align-items: center; }
+    .flex-wrap { flex-wrap: wrap; }
+    .grow { flex:1; }
+    .badge { display:inline-block; font-size: 11px; padding: 3px 8px; border-radius: 999px; background:#0b1220; border:1px solid #27324a; color:#a3e635; }
+    @media print {
+      body * { visibility: hidden; }
+      #printArea, #printArea * { visibility: visible; }
+      #printArea { position: absolute; left: 0; top: 0; width: 80mm; padding: 8px; }
+      .no-print { display: none !important; }
+    }
+  </style>
+</head>
+<body>
+  <header class="no-print">
+    <div class="container flex flex-wrap" style="justify-content: space-between;">
+      <h1>🧾 POS & Stok — <span id="storeName">Dewan Aluminium</span> <span class="badge" title="Progressive Web App">PWA</span></h1>
+      <nav>
+        <button class="tab active" data-tab="penjualan">Penjualan</button>
+        <button class="tab" data-tab="barang">Barang</button>
+        <button class="tab" data-tab="laporan">Laporan</button>
+        <button class="tab" data-tab="pengaturan">Pengaturan</button>
+      </nav>
+    </div>
+  </header>
+
+  <main class="container" style="padding-top:18px; padding-bottom:40px;">
+    <section id="tab-penjualan" class="tabview">
+      <div class="grid cols-2">
+        <div class="card">
+          <div class="toolbar">
+            <input id="findItem" placeholder="Cari barang (nama / SKU)…" />
+            <button class="btn" id="scanSku">Scan/Entry SKU</button>
+          </div>
+          <div style="max-height: 290px; overflow:auto; margin-top:8px;">
+            <table>
+              <thead>
+                <tr><th>Nama</th><th>SKU</th><th class="right">Harga/Unit Dasar</th><th class="right">Stok (dasar)</th><th></th></tr>
+              </thead>
+              <tbody id="itemList"></tbody>
+            </table>
+          </div>
+        </div>
+        <div class="card">
+          <div class="flex flex-wrap">
+            <div class="grow">
+              <label>Pelanggan (opsional)</label>
+              <input id="customerName" placeholder="Nama pelanggan" />
+            </div>
+            <div>
+              <label>Tanggal</label>
+              <input id="saleDate" type="date" />
+            </div>
+          </div>
+          <div style="margin-top:10px; max-height: 240px; overflow:auto;">
+            <table>
+              <thead>
+                <tr><th>Item</th><th>Satuan</th><th class="right">Qty</th><th class="right">Harga</th><th class="right">Subtot</th><th></th></tr>
+              </thead>
+              <tbody id="cartBody"></tbody>
+            </table>
+          </div>
+          <div class="grid cols-3" style="margin-top:10px;">
+            <div>
+              <label>Diskon (%)</label>
+              <input id="discount" type="number" min="0" value="0" />
+            </div>
+            <div>
+              <label>Pajak (%)</label>
+              <input id="tax" type="number" min="0" value="0" />
+            </div>
+            <div>
+              <label>Catatan</label>
+              <input id="saleNote" placeholder="Catatan penjualan" />
+            </div>
+          </div>
+          <div class="flex" style="margin-top:12px; justify-content: space-between;">
+            <div class="toolbar">
+              <button class="btn" id="clearCart">Bersihkan</button>
+              <button class="btn" id="reprintLast">Cetak Ulang Nota Terakhir</button>
+            </div>
+            <div class="right">
+              <div class="muted">Total</div>
+              <div style="font-size:26px; font-weight:700;" id="grandTotal">Rp0</div>
+              <div class="toolbar" style="margin-top:8px; justify-content:flex-end;">
+                <input id="payAmount" type="number" placeholder="Bayar (Rp)" style="max-width:180px;" />
+                <button class="btn primary" id="payBtn">Bayar & Simpan</button>
+                <button class="btn" id="printBtn">Cetak Nota</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="tab-barang" class="tabview" hidden>
+      <div class="card">
+        <div class="grid cols-3">
+          <div>
+            <label>Nama Barang</label>
+            <input id="pName" placeholder="Contoh: Pipa Aluminium 1/2" />
+          </div>
+          <div>
+            <label>SKU / Kode</label>
+            <input id="pSku" placeholder="Contoh: ALU-001" />
+          </div>
+          <div>
+            <label>Satuan Dasar</label>
+            <input id="pUnitBase" placeholder="mis: meter, pcs" />
+          </div>
+          <div>
+            <label>Satuan Turunan (opsional)</label>
+            <input id="pUnitAlt" placeholder="mis: batang, box" />
+          </div>
+          <div>
+            <label>Konversi: 1 Satuan Turunan = X Satuan Dasar</label>
+            <input id="pUnitFactor" type="number" step="0.0001" min="0" placeholder="mis: 1 batang = 6 meter → isi 6" />
+          </div>
+          <div>
+            <label>Harga per Satuan Dasar (Rp)</label>
+            <input id="pPrice" type="number" min="0" />
+          </div>
+          <div>
+            <label>Stok Awal (dalam Satuan Dasar)</label>
+            <input id="pStock" type="number" min="0" />
+          </div>
+          <div class="flex" style="align-items: end;">
+            <button class="btn primary" id="addProduct">Simpan / Tambah</button>
+            <button class="btn" id="resetForm">Reset</button>
+          </div>
+        </div>
+      </div>
+      <div class="card" style="margin-top:12px;">
+        <div class="toolbar">
+          <input id="searchProduct" class="grow" placeholder="Cari barang…" />
+          <button class="btn" id="exportData">Backup (JSON)</button>
+          <label class="btn" for="importFile" style="cursor:pointer;">Pulihkan</label>
+          <input id="importFile" type="file" accept="application/json" style="display:none;" />
+          <button class="btn danger" id="wipeAll">Hapus Semua Data</button>
+        </div>
+        <div style="max-height: 380px; overflow:auto; margin-top:8px;">
+          <table>
+            <thead>
+              <tr><th>Nama</th><th>SKU</th><th>Satuan</th><th class="right">Harga/Dasar</th><th class="right">Stok (dasar)</th><th class="right">Nilai</th><th></th></tr>
+            </thead>
+            <tbody id="productBody"></tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <section id="tab-laporan" class="tabview" hidden>
+      <div class="grid cols-2">
+        <div class="card">
+          <div class="flex flex-wrap">
+            <div>
+              <label>Dari</label>
+              <input id="fromDate" type="date" />
+            </div>
+            <div>
+              <label>Sampai</label>
+              <input id="toDate" type="date" />
+            </div>
+            <div class="flex" style="align-items:end; gap:8px;">
+              <button class="btn" id="runReport">Tampilkan</button>
+              <button class="btn" id="printReport">Cetak</button>
+              <button class="btn accent" id="exportReportExcel">Export Excel</button>
+            </div>
+          </div>
+          <div style="margin-top:10px; max-height: 360px; overflow:auto;">
+            <table>
+              <thead>
+                <tr><th>Tanggal</th><th>Invoice</th><th>Pelanggan</th><th class="right">Subtotal</th><th class="right">Diskon</th><th class="right">Pajak</th><th class="right">Total</th></tr>
+              </thead>
+              <tbody id="reportBody"></tbody>
+              <tfoot>
+                <tr>
+                  <th colspan="3" class="right">TOTAL</th>
+                  <th class="right" id="rSubtotal">Rp0</th>
+                  <th class="right" id="rDiscount">Rp0</th>
+                  <th class="right" id="rTax">Rp0</th>
+                  <th class="right" id="rGrand">Rp0</th>
+                </tr>
+              </tfoot>
+            </table>
+          </div>
+        </div>
+        <div class="card">
+          <h3 style="margin-top:0">Ringkasan Stok</h3>
+          <div class="toolbar" style="margin-bottom:8px;">
+            <button class="btn accent" id="exportStockExcel">Export Stok Excel</button>
+          </div>
+          <div style="max-height: 420px; overflow:auto;">
+            <table>
+              <thead>
+                <tr><th>Nama</th><th>SKU</th><th class="right">Stok (dasar)</th><th class="right">Harga/Dasar</th><th class="right">Nilai</th></tr>
+              </thead>
+              <tbody id="stockSummary"></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="tab-pengaturan" class="tabview" hidden>
+      <div class="card grid cols-2">
+        <div>
+          <h3 style="margin:0 0 8px 0;">Identitas Toko</h3>
+          <label>Nama Toko</label>
+          <input id="confName" placeholder="Nama toko" />
+          <label style="margin-top:8px;">Alamat</label>
+          <textarea id="confAddr" placeholder="Alamat toko"></textarea>
+          <label style="margin-top:8px;">No. Kontak</label>
+          <input id="confPhone" placeholder="08xxxxxxxxxx" />
+          <label style="margin-top:8px;">Catatan Nota</label>
+          <input id="confFooter" placeholder="Terima kasih telah berbelanja" />
+          <div style="margin-top:10px;">
+            <button class="btn primary" id="saveConf">Simpan Pengaturan</button>
+          </div>
+        </div>
+        <div>
+          <h3 style="margin:0 0 8px 0;">Preferensi & PWA</h3>
+          <label>Awalan Invoice</label>
+          <input id="confPrefix" placeholder="INV-" />
+          <label style="margin-top:8px;">Pajak Default (%)</label>
+          <input type="number" id="confTax" value="0" />
+          <label style="margin-top:8px;">Diskon Default (%)</label>
+          <input type="number" id="confDisc" value="0" />
+          <label style="margin-top:8px;">Zona Waktu</label>
+          <input id="confTZ" placeholder="Asia/Makassar" />
+          <div class="toolbar" style="margin-top:10px;">
+            <button class="btn" id="downloadPWA">Unduh file PWA (manifest & sw.js)</button>
+          </div>
+          <div class="muted" style="font-size:12px; margin-top:6px;">Unggah kedua file tersebut ke repo yang sama dengan <code>index.html</code>, lalu aktifkan GitHub Pages. Setelah itu buka app dan pilih "Add to Home screen".</div>
+        </div>
+      </div>
+    </section>
+
+    <div id="printArea" class="no-print"></div>
+  </main>
+
+<script>
+const $$ = (sel, ctx=document) => Array.from(ctx.querySelectorAll(sel));
+const $ = (sel, ctx=document) => ctx.querySelector(sel);
+const money = n => (n||0).toLocaleString('id-ID', {style:'currency', currency:'IDR'});
+const uid = (p='') => p + Math.random().toString(36).slice(2,8).toUpperCase();
+const todayStr = () => dayjs().format('YYYY-MM-DD');
+
+const DB_KEY = 'posmini:v2';
+const state = {
+  products: [],
+  sales: [],
+  conf: { name:'Dewan Aluminium', addr:'', phone:'', footer:'Terima kasih 🙏', prefix:'INV-', defaultTax:0, defaultDisc:0, tz: 'Asia/Makassar' }
+};
+
+function migrateV1(){
+  const old = localStorage.getItem('posmini:v1');
+  if(!old) return;
+  try {
+    const o = JSON.parse(old);
+    if(o.products && !localStorage.getItem(DB_KEY)){
+      state.products = o.products.map(p=>({
+        id: p.id||uid('P-'),
+        name: p.name, sku: p.sku||'',
+        unitBase: p.unit||'pcs', unitAlt: '', factorBasePerAlt: 0,
+        priceBase: Number(p.price||0), stockBase: Number(p.stock||0)
+      }));
+      state.sales = o.sales||[]; state.conf = {...state.conf, ...(o.conf||{})};
+      save();
+    }
+  }catch(e){ console.warn('Migrasi v1 gagal', e); }
+}
+
+function load(){
+  const raw = localStorage.getItem(DB_KEY);
+  if(raw){ try { Object.assign(state, JSON.parse(raw)); } catch(e){ console.error(e); save(); } }
+  else { save(); }
+  migrateV1();
+}
+function save(){ localStorage.setItem(DB_KEY, JSON.stringify(state)); renderAll(); }
+
+$$('.tab').forEach(b=> b.addEventListener('click',()=>{
+  $$('.tab').forEach(x=>x.classList.remove('active'));
+  b.classList.add('active');
+  $$('.tabview').forEach(v=> v.hidden = true);
+  $('#tab-'+b.dataset.tab).hidden = false;
+}));
+
+function renderProducts(list=state.products){
+  const tb = $('#productBody'); tb.innerHTML='';
+  list.forEach(p=>{
+    const satuan = p.unitAlt ? `${p.unitBase} / ${p.unitAlt} (1 ${p.unitAlt} = ${p.factorBasePerAlt} ${p.unitBase})` : p.unitBase;
+    const tr = document.createElement('tr');
+    tr.innerHTML = `<td>${p.name}</td><td>${p.sku||''}</td><td>${satuan}</td>
+    <td class="right">${money(p.priceBase)}</td><td class="right">${p.stockBase}</td><td class="right">${money((p.priceBase||0)*(p.stockBase||0))}</td>
+    <td class="right">
+      <button class="btn small" data-edit="${p.id}">Edit</button>
+      <button class="btn small danger" data-del="${p.id}">Hapus</button>
+      <button class="btn small" data-in="${p.id}">+ Stok</button>
+      <button class="btn small" data-out="${p.id}">- Stok</button>
+    </td>`;
+    tb.appendChild(tr);
+  });
+}
+
+function upsertProduct(){
+  const name=$('#pName').value.trim(); if(!name) return alert('Nama wajib.');
+  const sku=$('#pSku').value.trim();
+  const unitBase=$('#pUnitBase').value.trim()||'pcs';
+  const unitAlt=$('#pUnitAlt').value.trim();
+  const factor=Number($('#pUnitFactor').value||0);
+  const priceBase=Number($('#pPrice').value||0);
+  const stockBase=Number($('#pStock').value||0);
+  let p = state.products.find(x=> x.sku && sku && x.sku.toUpperCase()===sku.toUpperCase())
+       || state.products.find(x=> x.name.toUpperCase()===name.toUpperCase());
+  if(p){ Object.assign(p, {name, sku, unitBase, unitAlt, factorBasePerAlt: factor||0, priceBase, stockBase: isNaN(stockBase)?p.stockBase:stockBase}); }
+  else { p={id:uid('P-'), name, sku, unitBase, unitAlt, factorBasePerAlt: factor||0, priceBase, stockBase}; state.products.push(p); }
+  save(); clearProductForm(); alert('Disimpan.');
+}
+function clearProductForm(){ ['pName','pSku','pUnitBase','pUnitAlt','pUnitFactor','pPrice','pStock'].forEach(id=>$('#'+id).value=''); }
+
+$('#addProduct').addEventListener('click', upsertProduct);
+$('#resetForm').addEventListener('click', clearProductForm);
+$('#searchProduct').addEventListener('input', e=>{
+  const q=e.target.value.toLowerCase();
+  const res = state.products.filter(p=> [p.name,p.sku].join(' ').toLowerCase().includes(q));
+  renderProducts(res);
+});
+$('#productBody').addEventListener('click', e=>{
+  const id = e.target.dataset.edit||e.target.dataset.del||e.target.dataset.in||e.target.dataset.out; if(!id) return;
+  const p = state.products.find(x=>x.id===id); if(!p) return;
+  if(e.target.dataset.edit){ $('#pName').value=p.name; $('#pSku').value=p.sku||''; $('#pUnitBase').value=p.unitBase||''; $('#pUnitAlt').value=p.unitAlt||''; $('#pUnitFactor').value=p.factorBasePerAlt||0; $('#pPrice').value=p.priceBase||0; $('#pStock').value=p.stockBase||0; window.scrollTo({top:0, behavior:'smooth'}); }
+  if(e.target.dataset.del){ if(confirm('Hapus barang ini?')){ state.products = state.products.filter(x=>x.id!==id); save(); } }
+  if(e.target.dataset.in){ const n=Number(prompt(`Tambah stok (dalam ${p.unitBase})?`,1)||0); if(n>0){ p.stockBase=(p.stockBase||0)+n; save(); } }
+  if(e.target.dataset.out){ const n=Number(prompt(`Kurangi stok (dalam ${p.unitBase})?`,1)||0); if(n>0){ p.stockBase=Math.max(0,(p.stockBase||0)-n); save(); } }
+});
+
+$('#exportData').addEventListener('click', ()=>{
+  const blob = new Blob([JSON.stringify(state,null,2)], {type:'application/json'});
+  const a=document.createElement('a'); a.href=URL.createObjectURL(blob); a.download='backup-pos.json'; a.click(); URL.revokeObjectURL(a.href);
+});
+$('#importFile').addEventListener('change', e=>{
+  const f=e.target.files[0]; if(!f) return;
+  const r=new FileReader(); r.onload=()=>{ try{ const obj=JSON.parse(r.result); Object.assign(state,obj); save(); alert('Pulihkan sukses.'); }catch(err){ alert('File tidak valid.'); } };
+  r.readAsText(f);
+});
+$('#wipeAll').addEventListener('click', ()=>{
+  if(confirm('Hapus SEMUA data?')){ localStorage.removeItem(DB_KEY); location.reload(); }
+});
+
+const cart=[];
+
+function renderItemList(){
+  const q=$('#findItem').value?.toLowerCase()||'';
+  const tb=$('#itemList'); tb.innerHTML='';
+  const list=state.products.filter(p=> [p.name,p.sku].join(' ').toLowerCase().includes(q));
+  list.forEach(p=>{
+    const tr=document.createElement('tr');
+    tr.innerHTML=`<td>${p.name}</td><td>${p.sku||''}</td><td class="right">${money(p.priceBase)}</td><td class="right">${p.stockBase||0}</td>
+    <td class="right"><button class="btn small" data-add="${p.id}">Tambah</button></td>`;
+    tb.appendChild(tr);
+  });
+}
+
+$('#itemList').addEventListener('click', e=>{
+  const id=e.target.dataset.add; if(!id) return;
+  const p = state.products.find(x=>x.id===id); if(!p) return;
+  let c = cart.find(x=>x.productId===id && x.unitChosen===(p.unitAlt?p.unitAlt:p.unitBase));
+  const defaultUnit = p.unitAlt||p.unitBase;
+  const priceEffective = unitToPrice(p, defaultUnit);
+  if(!c){ c={productId:id, name:p.name, sku:p.sku, unitChosen: defaultUnit, qty:1, priceBase: p.priceBase||0, priceEffective}; cart.push(c); }
+  else { c.qty += 1; }
+  renderCart();
+});
+$('#findItem').addEventListener('input', renderItemList);
+$('#scanSku').addEventListener('click', ()=>{
+  const code=prompt('Masukkan/scan SKU:'); if(!code) return;
+  const p=state.products.find(x=> (x.sku||'').toUpperCase()===code.trim().toUpperCase());
+  if(!p) return alert('SKU tidak ditemukan');
+  let c = cart.find(x=>x.productId===p.id && x.unitChosen===(p.unitAlt?p.unitAlt:p.unitBase));
+  const defaultUnit = p.unitAlt||p.unitBase;
+  const priceEffective = unitToPrice(p, defaultUnit);
+  if(!c){ c={productId:p.id, name:p.name, sku:p.sku, unitChosen: defaultUnit, qty:1, priceBase: p.priceBase||0, priceEffective}; cart.push(c); } else { c.qty += 1; }
+  renderCart();
+});
+
+function unitToPrice(p, unit){
+  if(unit===p.unitBase) return p.priceBase||0;
+  if(unit===p.unitAlt && p.factorBasePerAlt>0){
+    return (p.priceBase||0) * (p.factorBasePerAlt||0);
+  }
+  return p.priceBase||0;
+}
+function unitToBaseQty(p, qty, unit){
+  if(unit===p.unitBase) return qty;
+  if(unit===p.unitAlt && p.factorBasePerAlt>0) return qty * p.factorBasePerAlt;
+  return qty;
+}
+
+function renderCart(){
+  const tb=$('#cartBody'); tb.innerHTML='';
+  let subtotal=0; cart.forEach((c,i)=>{
+    const p = state.products.find(x=>x.id===c.productId);
+    const st = (c.qty||0) * (c.priceEffective||0); subtotal += st;
+    const unitOptions = [`<option ${c.unitChosen===p.unitBase?'selected':''} value="${p.unitBase}">${p.unitBase}</option>`]
+      .concat(p.unitAlt? [`<option ${c.unitChosen===p.unitAlt?'selected':''} value="${p.unitAlt}">${p.unitAlt}</option>`] : [])
+      .join('');
+    const tr=document.createElement('tr');
+    tr.innerHTML=`<td>${c.name}</td>
+      <td><select data-unit="${i}">${unitOptions}</select></td>
+      <td class="right"><input type="number" min="1" data-qty="${i}" value="${c.qty}" style="max-width:80px" /></td>
+      <td class="right"><input type="number" min="0" data-price="${i}" value="${c.priceEffective}" style="max-width:110px" /></td>
+      <td class="right">${money(st)}</td>
+      <td class="right"><button class="btn small danger" data-delc="${i}">Hapus</button></td>`;
+    tb.appendChild(tr);
+  });
+  const disc = Number($('#discount').value||state.conf.defaultDisc||0);
+  const tax = Number($('#tax').value||state.conf.defaultTax||0);
+  const afterDisc = subtotal * (1 - (disc/100));
+  const grand = Math.round(afterDisc * (1 + (tax/100)));
+  $('#grandTotal').textContent = money(grand);
+}
+
+$('#cartBody').addEventListener('input', e=>{
+  const qi=e.target.dataset.qty, pi=e.target.dataset.price; 
+  if(qi!==undefined){ cart[Number(qi)].qty = Math.max(1, Number(e.target.value||1)); renderCart(); }
+  if(pi!==undefined){ cart[Number(pi)].priceEffective = Math.max(0, Number(e.target.value||0)); renderCart(); }
+});
+$('#cartBody').addEventListener('change', e=>{
+  const ui=e.target.dataset.unit; if(ui!==undefined){
+    const i=Number(ui); const c=cart[i]; const p=state.products.find(x=>x.id===c.productId);
+    c.unitChosen = e.target.value; c.priceEffective = unitToPrice(p, c.unitChosen); renderCart();
+  }
+});
+$('#cartBody').addEventListener('click', e=>{
+  const i=e.target.dataset.delc; if(i===undefined) return;
+  cart.splice(Number(i),1); renderCart();
+});
+['discount','tax'].forEach(id=> $('#'+id).addEventListener('input', renderCart));
+$('#clearCart').addEventListener('click', ()=>{ cart.length=0; renderCart(); });
+$('#reprintLast').addEventListener('click', ()=>{ const last = state.sales[state.sales.length-1]; if(!last) return alert('Belum ada transaksi.'); printReceipt(last); });
+
+function finalizePayment(printNow=false){
+  if(!cart.length) return alert('Keranjang kosong');
+  for(const c of cart){
+    const p = state.products.find(x=>x.id===c.productId);
+    const needBase = unitToBaseQty(p, c.qty||0, c.unitChosen);
+    if((p.stockBase||0) < needBase) return alert(`Stok tidak cukup untuk ${p.name} (${c.qty} ${c.unitChosen})`);
+  }
+  const subtotal = cart.reduce((a,c)=> a + (c.qty||0)*(c.priceEffective||0), 0);
+  const discount = Number($('#discount').value||state.conf.defaultDisc||0);
+  const tax = Number($('#tax').value||state.conf.defaultTax||0);
+  const afterDisc = subtotal * (1 - (discount/100));
+  const grand = Math.round(afterDisc * (1 + (tax/100)));
+  const pay = Number($('#payAmount').value||grand);
+  const change = Math.max(0, pay - grand);
+
+  const sale = {
+    id: uid(state.conf.prefix||'INV-'),
+    date: $('#saleDate').value || todayStr(),
+    customer: $('#customerName').value.trim(),
+    items: cart.map(c=> {
+      const p=state.products.find(x=>x.id===c.productId);
+      const subtotalBase = unitToBaseQty(p, c.qty||0, c.unitChosen) * (p.priceBase||0);
+      return {...c, priceBase: p.priceBase||0, subtotal: (c.qty||0)*(c.priceEffective||0), subtotalBase};
+    }),
+    discount, tax, note: $('#saleNote').value.trim(),
+    totals: { subtotal, discountAmount: Math.round(subtotal - afterDisc), taxAmount: Math.round(afterDisc*(tax/100)), grand, pay, change }
+  };
+
+  sale.items.forEach(it=>{
+    const p = state.products.find(x=>x.id===it.productId); if(p){ p.stockBase = Math.max(0, (p.stockBase||0) - unitToBaseQty(p, it.qty||0, it.unitChosen)); }
+  });
+  state.sales.push(sale); save();
+  cart.length=0; $('#payAmount').value=''; $('#customerName').value=''; $('#saleNote').value=''; renderCart();
+  alert('Transaksi tersimpan.');
+  if(printNow) printReceipt(sale);
+  return sale;
+}
+
+$('#payBtn').addEventListener('click', ()=> finalizePayment(true));
+$('#printBtn').addEventListener('click', ()=>{
+  if(!cart.length){
+    const last = state.sales[state.sales.length-1];
+    if(!last) return alert('Tidak ada transaksi untuk dicetak.');
+    return printReceipt(last);
+  }
+  finalizePayment(true);
+});
+
+function runReport(){
+  const from=$('#fromDate').value||'1900-01-01';
+  const to=$('#toDate').value||'2999-12-31';
+  const list = state.sales.filter(s=> s.date>=from && s.date<=to);
+  const tb=$('#reportBody'); tb.innerHTML='';
+  let subt=0, disc=0, tax=0, grand=0;
+  list.forEach(s=>{
+    subt += s.totals.subtotal; disc += s.totals.discountAmount; tax += s.totals.taxAmount; grand += s.totals.grand;
+    const tr=document.createElement('tr');
+    tr.innerHTML = `<td>${s.date}</td><td>${s.id}</td><td>${s.customer||'-'}</td>
+      <td class="right">${money(s.totals.subtotal)}</td>
+      <td class="right">${money(s.totals.discountAmount)}</td>
+      <td class="right">${money(s.totals.taxAmount)}</td>
+      <td class="right">${money(s.totals.grand)}</td>`;
+    tb.appendChild(tr);
+  });
+  $('#rSubtotal').textContent=money(subt);
+  $('#rDiscount').textContent=money(disc);
+  $('#rTax').textContent=money(tax);
+  $('#rGrand').textContent=money(grand);
+  renderStockSummary();
+}
+$('#runReport').addEventListener('click', runReport);
+$('#printReport').addEventListener('click', ()=> printReport());
+
+function renderStockSummary(){
+  const tb=$('#stockSummary'); tb.innerHTML='';
+  state.products.forEach(p=>{
+    const tr=document.createElement('tr');
+    tr.innerHTML=`<td>${p.name}</td><td>${p.sku||''}</td><td class="right">${p.stockBase||0}</td><td class="right">${money(p.priceBase||0)}</td><td class="right">${money((p.stockBase||0)*(p.priceBase||0))}</td>`;
+    tb.appendChild(tr);
+  });
+}
+
+function loadConfUI(){
+  $('#confName').value=state.conf.name||'';
+  $('#confAddr').value=state.conf.addr||'';
+  $('#confPhone').value=state.conf.phone||'';
+  $('#confFooter').value=state.conf.footer||'';
+  $('#confPrefix').value=state.conf.prefix||'INV-';
+  $('#confTax').value=state.conf.defaultTax||0;
+  $('#confDisc').value=state.conf.defaultDisc||0;
+  $('#confTZ').value=state.conf.tz||'Asia/Makassar';
+  $('#storeName').textContent=state.conf.name||'Toko';
+}
+$('#saveConf').addEventListener('click', ()=>{
+  state.conf.name=$('#confName').value.trim()||'Toko';
+  state.conf.addr=$('#confAddr').value.trim();
+  state.conf.phone=$('#confPhone').value.trim();
+  state.conf.footer=$('#confFooter').value.trim()||'Terima kasih';
+  state.conf.prefix=$('#confPrefix').value.trim()||'INV-';
+  state.conf.defaultTax=Number($('#confTax').value||0);
+  state.conf.defaultDisc=Number($('#confDisc').value||0);
+  state.conf.tz=$('#confTZ').value.trim()||'Asia/Makassar';
+  save(); alert('Pengaturan disimpan.');
+});
+
+function printReceipt(sale){
+  const area=$('#printArea');
+  const lines = sale.items.map(it=>`
+    <tr>
+      <td>${it.name}<div class="muted" style="font-size:12px;">${it.sku||''}</div></td>
+      <td class="right">${it.qty} ${it.unitChosen}</td>
+      <td class="right">${money(it.priceEffective)}</td>
+      <td class="right">${money(it.subtotal)}</td>
+    </tr>`).join('');
+  area.innerHTML = `
+  <div style="font-family:Inter,Arial;">
+    <div style="text-align:center;">
+      <div style="font-weight:700; font-size:18px;">${state.conf.name}</div>
+      <div style="font-size:12px;">${state.conf.addr||''} ${state.conf.phone?('<br>'+state.conf.phone):''}</div>
+      <hr style="border:none; border-top:1px dashed #9ca3af; margin:8px 0;"/>
+    </div>
+    <div style="font-size:12px; display:flex; justify-content:space-between;">
+      <div>Invoice: <b>${sale.id}</b><br>Tanggal: ${sale.date}<br>Pelanggan: ${sale.customer||'-'}</div>
+      <div style="text-align:right;">Kasir: Admin</div>
+    </div>
+    <table style="width:100%; margin-top:6px;">
+      <thead>
+        <tr><th style="text-align:left;">Item</th><th class="right">Qty</th><th class="right">Harga</th><th class="right">Subtot</th></tr>
+      </thead>
+      <tbody>${lines}</tbody>
+    </table>
+    <hr style="border:none; border-top:1px dashed #9ca3af; margin:6px 0;"/>
+    <table style="width:100%; font-size:14px;">
+      <tr><td>Subtotal</td><td class="right">${money(sale.totals.subtotal)}</td></tr>
+      <tr><td>Diskon</td><td class="right">${money(sale.totals.discountAmount)}</td></tr>
+      <tr><td>Pajak</td><td class="right">${money(sale.totals.taxAmount)}</td></tr>
+      <tr><td><b>Total</b></td><td class="right"><b>${money(sale.totals.grand)}</b></td></tr>
+      <tr><td>Bayar</td><td class="right">${money(sale.totals.pay)}</td></tr>
+      <tr><td>Kembali</td><td class="right">${money(sale.totals.change)}</td></tr>
+    </table>
+    ${sale.note?`<div style="margin-top:6px; font-size:12px;">Catatan: ${sale.note}</div>`:''}
+    <div style="text-align:center; margin-top:8px; font-size:12px;">${state.conf.footer||''}</div>
+  </div>`;
+  window.print();
+}
+
+function printReport(){
+  const from=$('#fromDate').value||'—';
+  const to=$('#toDate').value||'—';
+  const rows=$('#reportBody').innerHTML;
+  const stock=$('#stockSummary').innerHTML;
+  const area=$('#printArea');
+  area.innerHTML = `
+  <div style="font-family:Inter,Arial; width:100mm;">
+    <div style="text-align:center;">
+      <div style="font-weight:700; font-size:18px;">${state.conf.name} — Laporan</div>
+      <div style="font-size:12px;">Periode: ${from} s/d ${to}</div>
+      <hr style="border:none; border-top:1px dashed #9ca3af; margin:8px 0;"/>
+    </div>
+    <div style="font-weight:600; margin-bottom:4px;">Penjualan</div>
+    <table style="width:100%; font-size:12px;">
+      <thead>
+        <tr><th>Tanggal</th><th>Invoice</th><th>Pelanggan</th><th class="right">Subtotal</th><th class="right">Diskon</th><th class="right">Pajak</th><th class="right">Total</th></tr>
+      </thead>
+      <tbody>${rows}</tbody>
+    </table>
+    <hr style="border:none; border-top:1px dashed #9ca3af; margin:8px 0;"/>
+    <div>
+      <table style="width:100%; font-size:14px;">
+        <tr><td>Subtotal</td><td class="right">${$('#rSubtotal').textContent}</td></tr>
+        <tr><td>Diskon</td><td class="right">${$('#rDiscount').textContent}</td></tr>
+        <tr><td>Pajak</td><td class="right">${$('#rTax').textContent}</td></tr>
+        <tr><td><b>Total</b></td><td class="right"><b>${$('#rGrand').textContent}</b></td></tr>
+      </table>
+    </div>
+    <hr style="border:none; border-top:1px dashed #9ca3af; margin:8px 0;"/>
+    <div style="font-weight:600; margin-bottom:4px;">Ringkasan Stok</div>
+    <table style="width:100%; font-size:12px;">
+      <thead><tr><th>Nama</th><th>SKU</th><th class="right">Stok</th><th class="right">Harga</th><th class="right">Nilai</th></tr></thead>
+      <tbody>${stock}</tbody>
+    </table>
+  </div>`;
+  window.print();
+}
+
+function exportReportToExcel(){
+  const from=$('#fromDate').value||'1900-01-01';
+  const to=$('#toDate').value||'2999-12-31';
+  const list = state.sales.filter(s=> s.date>=from && s.date<=to);
+  const rows = [["Tanggal","Invoice","Pelanggan","Subtotal","Diskon","Pajak","Total"]]
+    .concat(list.map(s=>[s.date, s.id, s.customer||'', s.totals.subtotal, s.totals.discountAmount, s.totals.taxAmount, s.totals.grand]));
+  const wb = XLSX.utils.book_new();
+  const ws = XLSX.utils.aoa_to_sheet(rows);
+  XLSX.utils.book_append_sheet(wb, ws, 'Laporan');
+  XLSX.writeFile(wb, `laporan_${from}_sd_${to}.xlsx`);
+}
+$('#exportReportExcel').addEventListener('click', exportReportToExcel);
+
+function exportStockToExcel(){
+  const rows = [["Nama","SKU","Satuan Dasar","Stok (dasar)","Harga/Dasar","Nilai"]]
+    .concat(state.products.map(p=>[p.name, p.sku||'', p.unitBase||'', p.stockBase||0, p.priceBase||0, (p.stockBase||0)*(p.priceBase||0)]));
+  const wb = XLSX.utils.book_new();
+  const ws = XLSX.utils.aoa_to_sheet(rows);
+  XLSX.utils.book_append_sheet(wb, ws, 'Stok');
+  XLSX.writeFile(wb, 'ringkasan_stok.xlsx');
+}
+$('#exportStockExcel').addEventListener('click', exportStockToExcel);
+
+const MANIFEST_JSON = {
+  name: "POS & Stok — Dewan Aluminium",
+  short_name: "POS Stok",
+  start_url: ".",
+  display: "standalone",
+  background_color: "#0f172a",
+  theme_color: "#0f172a",
+  icons: [
+    { src: "icon-192.png", sizes: "192x192", type: "image/png" },
+    { src: "icon-512.png", sizes: "512x512", type: "image/png" }
+  ]
+};
+
+const SW_JS = `
+self.addEventListener('install', e=>{
+  self.skipWaiting();
+  e.waitUntil(caches.open('pos-cache-v1').then(c=> c.addAll(['./','./index.html'])));
+});
+self.addEventListener('activate', e=>{ e.waitUntil(self.clients.claim()); });
+self.addEventListener('fetch', e=>{
+  const url = new URL(e.request.url);
+  if(e.request.method!=='GET') return;
+  e.respondWith(
+    caches.match(e.request).then(res=> res || fetch(e.request).then(r=>{
+      const copy = r.clone();
+      caches.open('pos-cache-v1').then(c=> c.put(e.request, copy));
+      return r;
+    }).catch(()=> caches.match('./index.html')))
+  );
+});`;
+
+async function ensureManifestInline(){
+  try {
+    const resp = await fetch('manifest.webmanifest', {cache:'no-store'});
+    if(!resp.ok){ throw new Error('no manifest'); }
+  } catch(err){
+    const blob = new Blob([JSON.stringify(MANIFEST_JSON)], {type:'application/manifest+json'});
+    const url = URL.createObjectURL(blob);
+    const link = document.getElementById('manifestLink');
+    link.href = url;
+  }
+}
+
+async function registerSW(){
+  if(!('serviceWorker' in navigator)) return;
+  try {
+    const reg = await navigator.serviceWorker.register('./sw.js');
+    console.log('SW registered', reg.scope);
+  } catch(e){ console.warn('SW register failed (unggah sw.js ke repo):', e); }
+}
+
+$('#downloadPWA').addEventListener('click', ()=>{
+  const a1=document.createElement('a'); a1.href=URL.createObjectURL(new Blob([JSON.stringify(MANIFEST_JSON,null,2)],{type:'application/manifest+json'})); a1.download='manifest.webmanifest'; a1.click();
+  const a2=document.createElement('a'); a2.href=URL.createObjectURL(new Blob([SW_JS],{type:'text/javascript'})); a2.download='sw.js'; a2.click();
+});
+
+function renderAll(){
+  $('#saleDate').value = todayStr();
+  $('#discount').value = state.conf.defaultDisc||0;
+  $('#tax').value = state.conf.defaultTax||0;
+  renderProducts();
+  renderItemList();
+  renderCart();
+  loadConfUI();
+}
+
+load();
+renderAll();
+runReport();
+ensureManifestInline();
+registerSW();
+
+</script>
+</body>
+</html>
