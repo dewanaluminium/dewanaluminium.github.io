@@ -1,0 +1,710 @@
+<!doctype html>
+<html lang="id" class="dark">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+  <title>Dewan Aluminium · Stok & Penjualan</title>
+  <meta name="theme-color" content="#0b0f14" />
+  <link rel="manifest" href="./manifest.webmanifest" />
+  <link rel="stylesheet" href="./styles.css" />
+  <style>.hidden{display:none}</style>
+  <meta name="description" content="Aplikasi stok barang & penjualan Dewan Aluminium (PWA, offline, GitHub Pages)." />
+</head>
+<body>
+  <header class="app-header">
+    <div class="brand">
+      <svg width="28" height="28" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 3h18v2H3V3zm2 5h14v2H5V8zm-2 5h18v2H3v-2zm2 5h14v2H5v-2z" fill="currentColor"/></svg>
+      <span>Dewan Aluminium</span>
+    </div>
+    <nav class="topnav">
+      <button class="tab-btn" data-tab="produk">Produk</button>
+      <button class="tab-btn" data-tab="penjualan">Penjualan</button>
+      <button class="tab-btn" data-tab="laporan">Laporan</button>
+      <button class="tab-btn" data-tab="pengaturan">Pengaturan</button>
+    </nav>
+  </header>
+
+  <main id="views">
+    <section id="view-produk" class="view hidden">
+      <div class="card">
+        <h2>Data Produk</h2>
+        <form id="form-produk" class="grid" autocomplete="off">
+          <input type="hidden" id="produk-id" />
+          <label>Nama Produk
+            <input id="produk-nama" required placeholder="Contoh: Aluminium Batang" />
+          </label>
+          <label>SKU/Kode
+            <input id="produk-sku" placeholder="Opsional" />
+          </label>
+          <div class="grid-2">
+            <label>Satuan Dasar
+              <input id="produk-satuan" required placeholder="Contoh: batang / meter" />
+            </label>
+            <label>Stok Awal (dalam satuan dasar)
+              <input id="produk-stok" type="number" min="0" step="0.0001" value="0" />
+            </label>
+          </div>
+          <div class="grid-2">
+            <label>Harga per Satuan Dasar (Rp)
+              <input id="produk-harga" type="number" min="0" step="1" value="0" />
+            </label>
+            <label>Stok Minimum (peringatan)
+              <input id="produk-min" type="number" min="0" step="0.0001" value="0" />
+            </label>
+          </div>
+
+          <details class="details">
+            <summary>Satuan Turunan (opsional)</summary>
+            <p class="muted">Tambahkan daftar satuan turunan…</p>
+            <div id="turunan-list"></div>
+            <button type="button" id="btn-tambah-turunan" class="btn ghost">+ Tambah Satuan Turunan</button>
+          </details>
+
+          <div class="actions">
+            <button type="submit" class="btn primary" id="btn-simpan-produk">Simpan Produk</button>
+            <button type="reset" class="btn" id="btn-reset-produk">Reset</button>
+          </div>
+        </form>
+      </div>
+
+      <div class="card">
+        <div class="card-head">
+          <h3>Daftar Produk</h3>
+          <div class="actions-inline">
+            <div class="search-wrap">
+              <input id="produk-cari" placeholder="Cari nama atau SKU…" />
+            </div>
+            <button class="btn tiny" id="btn-export-xls" type="button">Ekspor Excel (.xls)</button>
+            <button class="btn tiny" id="btn-export-csv" type="button">Ekspor CSV</button>
+          </div>
+        </div>
+        <div class="table-wrap">
+          <table id="tabel-produk">
+            <thead><tr>
+              <th>Nama</th><th>SKU</th><th>Stok</th><th>Harga (Rp)</th><th></th>
+            </tr></thead>
+            <tbody></tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <section id="view-penjualan" class="view hidden">
+      <div class="card">
+        <h2>Input Penjualan</h2>
+        <form id="form-penjualan" class="grid" autocomplete="off">
+          <div class="grid-2">
+            <label>Tanggal
+              <input id="jual-tanggal" type="date" required />
+            </label>
+            <label>Nama Pelanggan (opsional)
+              <input id="jual-pelanggan" placeholder="Umum / Nama pelanggan" />
+            </label>
+          </div>
+
+          <div id="jual-items" class="items"></div>
+          <button type="button" id="btn-tambah-item" class="btn ghost">+ Tambah Item</button>
+
+          <div class="totals">
+            <label>Diskon Nota (Rp)
+              <input id="jual-diskon-nota" type="number" min="0" step="1" value="0" />
+            </label>
+            <div class="total-row">Subtotal: <strong id="subtotal-rp">Rp 0</strong></div>
+            <div class="total-row">Grand Total: <strong id="grandtotal-rp">Rp 0</strong></div>
+          </div>
+
+          <div class="actions">
+            <button type="submit" class="btn primary">Simpan Penjualan</button>
+            <button type="button" id="btn-cetak-nota" class="btn">Cetak Nota</button>
+          </div>
+        </form>
+      </div>
+
+      <div class="card">
+        <div class="card-head">
+          <h3>Penjualan Tersimpan</h3>
+          <div class="search-wrap">
+            <input id="jual-cari" placeholder="Cari pelanggan / no. nota…" />
+          </div>
+        </div>
+        <div class="table-wrap">
+          <table id="tabel-penjualan">
+            <thead><tr>
+              <th>No. Nota</th><th>Tanggal</th><th>Pelanggan</th><th>Total</th><th></th>
+            </tr></thead>
+            <tbody></tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <section id="view-laporan" class="view hidden">
+      <div class="card">
+        <h2>Laporan Penjualan</h2>
+        <form id="form-laporan" class="grid-3" autocomplete="off">
+          <label>Dari Tanggal
+            <input id="lap-dari" type="date" required />
+          </label>
+          <label>Sampai Tanggal
+            <input id="lap-sampai" type="date" required />
+          </label>
+          <div class="actions-inline">
+            <button class="btn" type="button" id="btn-lihat-laporan">Lihat</button>
+            <button class="btn" type="button" id="btn-cetak-laporan">Cetak Laporan</button>
+          </div>
+        </form>
+        <div id="laporan-hasil" class="table-wrap"></div>
+      </div>
+
+      <div class="card">
+        <h3>Ringkasan Stok</h3>
+        <div id="ringkasan-stok" class="table-wrap"></div>
+      </div>
+    </section>
+
+    <section id="view-pengaturan" class="view hidden">
+      <div class="card">
+        <h2>Backup & Pemulihan Data</h2>
+        <div class="grid-2">
+          <button id="btn-backup" class="btn">Unduh Backup (.json)</button>
+          <label class="file-btn">Pulihkan dari File (.json)
+            <input type="file" id="file-restore" accept="application/json" />
+          </label>
+        </div>
+      </div>
+
+      <div class="card">
+        <h2>Info Toko</h2>
+        <form id="form-toko" class="grid" autocomplete="off">
+          <label>Nama Toko
+            <input id="toko-nama" placeholder="Dewan Aluminium" />
+          </label>
+          <label>Alamat / Catatan (muncul di nota)
+            <textarea id="toko-alamat" rows="3" placeholder="Alamat, No. telp, dsb." ></textarea>
+          </label>
+          <div class="actions">
+            <button class="btn primary" type="submit">Simpan</button>
+          </div>
+        </form>
+      </div>
+
+      <div class="card">
+        <h2>PWA & Offline</h2>
+        <p class="muted">Aplikasi ini mendukung PWA…</p>
+        <div id="pwa-status" class="badge">Memeriksa…</div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <button class="tab-btn" data-tab="produk">Produk</button>
+    <button class="tab-btn" data-tab="penjualan">Penjualan</button>
+    <button class="tab-btn" data-tab="laporan">Laporan</button>
+    <button class="tab-btn" data-tab="pengaturan">Pengaturan</button>
+  </footer>
+
+  <template id="tpl-item">
+    <div class="item-row">
+      <select class="itm-produk" required></select>
+      <select class="itm-satuan" required></select>
+      <input type="number" class="itm-qty" min="0" step="0.0001" placeholder="Qty" required />
+      <input type="number" class="itm-harga" min="0" step="1" placeholder="Harga" required />
+      <input type="number" class="itm-diskon" min="0" step="1" placeholder="Diskon (Rp)" value="0" />
+      <div class="itm-sub">Rp 0</div>
+      <button type="button" class="btn icon danger itm-hapus" title="Hapus">×</button>
+    </div>
+  </template>
+
+  <script>
+  window.addEventListener('error', (e) => {
+    const box = document.createElement('div');
+    box.style.cssText = 'position:fixed;z-index:9999;bottom:0;left:0;right:0;background:#300;color:#fff;padding:8px;font:12px ui-sans-serif';
+    box.textContent = 'Error: ' + (e.message||'') + ' @ ' + (e.filename||'') + ':' + (e.lineno||'');
+    document.body.appendChild(box);
+  });
+
+  const $ = sel => document.querySelector(sel);
+  const $$ = sel => Array.from(document.querySelectorAll(sel));
+  const fmtRp = n => new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', maximumFractionDigits: 0 }).format(n||0);
+  const todayISO = () => new Date().toISOString().slice(0,10);
+  const uid = (p="ID") => p + Math.random().toString(36).slice(2,8) + Date.now().toString(36).slice(-4);
+
+  const DBKEY = 'da_app_v2_3';
+  const loadDB = () => {
+    const def = { products: [], sales: [], settings: { shopName: 'Dewan Aluminium', shopNote: '' } };
+    try { return Object.assign(def, JSON.parse(localStorage.getItem(DBKEY) || '{}')); } catch { return def; }
+  }
+  const saveDB = data => localStorage.setItem(DBKEY, JSON.stringify(data));
+  const db = loadDB();
+
+  function showTab(name){
+    $$('.view').forEach(v => v.classList.add('hidden'));
+    const tgt = document.getElementById('view-' + name);
+    if (tgt) tgt.classList.remove('hidden');
+    localStorage.setItem('da_last_tab', name);
+  }
+  $$('.tab-btn').forEach(btn=>btn.addEventListener('click', ()=>showTab(btn.dataset.tab)));
+
+  const formProduk = $('#form-produk');
+  const turunanList = $('#turunan-list');
+  function renderTurunan(rows=[]) {
+    turunanList.innerHTML = '';
+    rows.forEach((r) => addTurunanRow(r.name, r.factor));
+  }
+  function addTurunanRow(name='', factor=''){
+    const wrap = document.createElement('div');
+    wrap.className = 'turunan-row';
+    wrap.innerHTML = `
+      <input class="turunan-nama" placeholder="Nama satuan (mis. meter)" value="${name||''}"/>
+      <input class="turunan-faktor" type="number" step="0.0000001" min="0" placeholder="Faktor ke satuan dasar" value="${factor||''}"/>
+      <button type="button" class="btn icon danger turunan-del">×</button>
+    `;
+    wrap.querySelector('.turunan-del').onclick = ()=> wrap.remove();
+    turunanList.appendChild(wrap);
+  }
+  $('#btn-tambah-turunan').onclick = ()=> addTurunanRow();
+
+  function clearProdukForm(){
+    formProduk.reset();
+    $('#produk-id').value = '';
+    renderTurunan();
+  }
+  $('#btn-reset-produk').onclick = clearProdukForm;
+
+  function getTurunanFromForm(){
+    return Array.from(turunanList.querySelectorAll('.turunan-row')).map(r => ({
+      name: r.querySelector('.turunan-nama').value.trim(),
+      factor: parseFloat(r.querySelector('.turunan-faktor').value || '0')
+    })).filter(x=>x.name && x.factor>0);
+  }
+
+  function renderProdukTable(filter=''){
+    const tb = $('#tabel-produk tbody');
+    tb.innerHTML='';
+    const q = filter.toLowerCase();
+    db.products.filter(p => !q || p.name.toLowerCase().includes(q) || (p.sku||'').toLowerCase().includes(q))
+      .forEach(p=>{
+        const tr = document.createElement('tr');
+        const warn = p.min && p.stock <= p.min ? 'warn' : '';
+        tr.innerHTML = `
+          <td>${p.name} <span class="badge ${warn}">${p.baseUnit}</span></td>
+          <td>${p.sku||'-'}</td>
+          <td>${(p.stock??0).toLocaleString('id-ID')} ${p.baseUnit}</td>
+          <td>${fmtRp(p.priceBase||0)}</td>
+          <td class="right">
+            <button class="btn tiny" data-act="edit">Ubah</button>
+            <button class="btn tiny danger" data-act="del">Hapus</button>
+          </td>`;
+        tr.querySelector('[data-act="edit"]').onclick = ()=>{
+          $('#produk-id').value = p.id;
+          $('#produk-nama').value = p.name;
+          $('#produk-sku').value = p.sku||'';
+          $('#produk-satuan').value = p.baseUnit;
+          $('#produk-stok').value = p.stock||0;
+          $('#produk-harga').value = p.priceBase||0;
+          $('#produk-min').value = p.min||0;
+          renderTurunan(p.derivedUnits||[]);
+          showTab('produk');
+        };
+        tr.querySelector('[data-act="del"]').onclick = ()=>{
+          if(confirm('Hapus produk ini?')){
+            const idx = db.products.findIndex(x=>x.id===p.id);
+            if(idx>-1){ db.products.splice(idx,1); saveDB(db); renderProdukTable($('#produk-cari').value); refreshProdukOptions(); summaryStok(); }
+          }
+        };
+        tb.appendChild(tr);
+      });
+  }
+  $('#produk-cari').addEventListener('input', e=>renderProdukTable(e.target.value));
+
+  formProduk.addEventListener('submit', e=>{
+    e.preventDefault();
+    const id = $('#produk-id').value || uid('P');
+    const data = {
+      id,
+      name: $('#produk-nama').value.trim(),
+      sku: $('#produk-sku').value.trim(),
+      baseUnit: $('#produk-satuan').value.trim(),
+      stock: parseFloat($('#produk-stok').value||'0'),
+      priceBase: parseInt($('#produk-harga').value||'0'),
+      min: parseFloat($('#produk-min').value||'0'),
+      derivedUnits: getTurunanFromForm()
+    };
+    const idx = db.products.findIndex(x=>x.id===id);
+    if(idx>-1) db.products[idx]=data; else db.products.push(data);
+    saveDB(db);
+    clearProdukForm();
+    renderProdukTable($('#produk-cari').value);
+    refreshProdukOptions();
+    summaryStok();
+  });
+
+  function refreshProdukOptions(){
+    const selects = $$('#jual-items .itm-produk');
+    selects.forEach(sel=>{
+      const val = sel.value;
+      sel.innerHTML = '<option value="" disabled selected>Pilih produk…</option>' + db.products.map(p=>`<option value="${p.id}">${p.name}</option>`).join('');
+      if(val) sel.value = val;
+      sel.dispatchEvent(new Event('change'));
+    });
+  }
+
+  const formJual = $('#form-penjualan');
+  const itemsWrap = $('#jual-items');
+  $('#jual-tanggal').value = todayISO();
+
+  function addItemRow(pref={}){
+    const tpl = $('#tpl-item').content.cloneNode(true);
+    const row = tpl.querySelector('.item-row');
+    const selProd = row.querySelector('.itm-produk');
+    const selSat = row.querySelector('.itm-satuan');
+    const qty = row.querySelector('.itm-qty');
+    const harga = row.querySelector('.itm-harga');
+    const diskon = row.querySelector('.itm-diskon');
+    const sub = row.querySelector('.itm-sub');
+
+    selProd.innerHTML = '<option value="" disabled selected>Pilih produk…</option>' + db.products.map(p=>`<option value="${p.id}">${p.name}</option>`).join('');
+    if(pref.productId) selProd.value = pref.productId;
+
+    function updateSatuan(){
+      const p = db.products.find(x=>x.id===selProd.value);
+      selSat.innerHTML = '';
+      if(!p) return;
+      const list = [{name:p.baseUnit, factor:1}].concat(p.derivedUnits||[]);
+      selSat.innerHTML = list.map(u=>`<option value="${u.name}" data-factor="${u.factor}">${u.name}</option>`).join('');
+      const u0 = list[0];
+      const f = parseFloat(selSat.selectedOptions[0]?.dataset.factor || u0.factor||1);
+      harga.value = Math.round((p.priceBase||0) * f);
+      calc();
+    }
+
+    function calc(){
+      const p = db.products.find(x=>x.id===selProd.value);
+      if(!p){ sub.textContent=fmtRp(0); return; }
+      const f = parseFloat(selSat.selectedOptions[0]?.dataset.factor || '1');
+      const q = parseFloat(qty.value||'0');
+      const h = parseInt(harga.value||'0');
+      const d = parseInt(diskon.value||'0');
+      const total = Math.max(0, q*h - d);
+      sub.textContent = fmtRp(total);
+      refreshTotals();
+    }
+
+    selProd.onchange = ()=>{ updateSatuan(); };
+    selSat.onchange = calc;
+    qty.oninput = calc; harga.oninput = calc; diskon.oninput = calc;
+    row.querySelector('.itm-hapus').onclick = ()=>{ row.remove(); refreshTotals(); };
+
+    itemsWrap.appendChild(tpl);
+    updateSatuan();
+  }
+
+  function getItems(){
+    return Array.from(itemsWrap.querySelectorAll('.item-row')).map(row=>{
+      const pid = row.querySelector('.itm-produk').value;
+      const unitOpt = row.querySelector('.itm-satuan').selectedOptions[0];
+      const unit = unitOpt?.value; const factor = parseFloat(unitOpt?.dataset.factor||'1');
+      const qty = parseFloat(row.querySelector('.itm-qty').value||'0');
+      const harga = parseInt(row.querySelector('.itm-harga').value||'0');
+      const diskon = parseInt(row.querySelector('.itm-diskon').value||'0');
+      const subtotal = Math.max(0, qty*harga - diskon);
+      return { productId: pid, unitName: unit, factor, qty, price: harga, discount: diskon, subtotal };
+    }).filter(it=>it.productId && it.qty>0);
+  }
+
+  function refreshTotals(){
+    const items = getItems();
+    const sub = items.reduce((a,b)=>a+b.subtotal,0);
+    $('#subtotal-rp').textContent = fmtRp(sub);
+    const discNota = parseInt($('#jual-diskon-nota').value||'0');
+    const grand = Math.max(0, sub - discNota);
+    $('#grandtotal-rp').textContent = fmtRp(grand);
+  }
+  $('#jual-diskon-nota').oninput = refreshTotals;
+
+  $('#btn-tambah-item').onclick = ()=> addItemRow();
+  if(itemsWrap.children.length===0) addItemRow();
+
+  function adjustStock(items){
+    items.forEach(it=>{
+      const p = db.products.find(x=>x.id===it.productId);
+      if(!p) return;
+      p.stock = (p.stock||0) - (it.qty * it.factor);
+    });
+  }
+
+  function genInvoiceNumber(){
+    const d = new Date();
+    const pad = n=>n.toString().padStart(2,'0');
+    const date = d.getFullYear()+pad(d.getMonth()+1)+pad(d.getDate());
+    return `DA-${date}-${Math.floor(Math.random()*9000+1000)}`;
+  }
+
+  let lastSavedInvoice = null;
+
+  formJual.addEventListener('submit', e=>{
+    e.preventDefault();
+    const items = getItems();
+    if(items.length===0) return alert('Tambah item penjualan terlebih dahulu.');
+    const invNo = genInvoiceNumber();
+    const sale = {
+      id: invNo,
+      date: $('#jual-tanggal').value,
+      customer: $('#jual-pelanggan').value.trim()||'Umum',
+      items,
+      discountInvoice: parseInt($('#jual-diskon-nota').value||'0'),
+      subtotal: items.reduce((a,b)=>a+b.subtotal,0)
+    };
+    sale.total = Math.max(0, sale.subtotal - sale.discountInvoice);
+
+    db.sales.unshift(sale);
+    adjustStock(items);
+    saveDB(db);
+
+    lastSavedInvoice = sale;
+    formJual.reset(); itemsWrap.innerHTML=''; addItemRow(); refreshTotals(); $('#jual-tanggal').value=todayISO();
+    renderSalesTable($('#jual-cari').value);
+    renderProdukTable($('#produk-cari').value);
+    summaryStok();
+    alert('Penjualan tersimpan!');
+  });
+
+  $('#btn-cetak-nota').onclick = ()=>{
+    const target = lastSavedInvoice || db.sales[0];
+    if(!target) return alert('Belum ada penjualan untuk dicetak.');
+    cetakNota(target);
+  }
+
+  function renderSalesTable(filter=''){
+    const tb = $('#tabel-penjualan tbody'); tb.innerHTML='';
+    const q = (filter||'').toLowerCase();
+    db.sales.filter(s => !q || s.id.toLowerCase().includes(q) || (s.customer||'').toLowerCase().includes(q)).forEach(s=>{
+      const tr = document.createElement('tr');
+      tr.innerHTML = `
+        <td>${s.id}</td>
+        <td>${s.date}</td>
+        <td>${s.customer}</td>
+        <td>${fmtRp(s.total)}</td>
+        <td class="right">
+          <button class="btn tiny" data-act="print">Cetak</button>
+          <button class="btn tiny danger" data-act="del">Hapus</button>
+        </td>`;
+      tr.querySelector('[data-act="print"]').onclick = ()=> cetakNota(s);
+      tr.querySelector('[data-act="del"]').onclick = ()=>{
+        if(confirm('Hapus transaksi ini? Stok tidak akan otomatis kembali.')){
+          const idx = db.sales.findIndex(x=>x.id===s.id); if(idx>-1){ db.sales.splice(idx,1); saveDB(db); renderSalesTable($('#jual-cari').value); }
+        }
+      }
+      tb.appendChild(tr);
+    });
+  }
+  $('#jual-cari').addEventListener('input', e=>renderSalesTable(e.target.value));
+
+  function prnStyles(){ return `
+    <style>
+      body{font:14px ui-sans-serif,system-ui;margin:16px;color:#111}
+      h1,h2{margin:0 0 6px}
+      .muted{color:#555}
+      table{width:100%;border-collapse:collapse;margin-top:12px}
+      th,td{border:1px solid #999;padding:6px}
+      th{background:#eee}
+      .right{text-align:right}
+      .tot{margin-top:12px;display:flex;justify-content:flex-end}
+      .toolbar{position:sticky;top:0;background:#fff;border:1px solid #ccc;padding:8px;margin:-8px -8px 8px;display:flex;justify-content:space-between;gap:8px;align-items:center}
+      .btn{padding:8px 10px;border:1px solid #999;border-radius:8px;background:#f4f4f4;cursor:pointer}
+      @media print { .toolbar{display:none} }
+    </style>`; }
+
+  function escScriptClose(s){ return String(s).replace(/<\/script>/gi, "<\/script>"); }
+
+  function cetakNota(sale){
+    const pset = Object.fromEntries(db.products.map(p=>[p.id,p]));
+    const shop = db.settings||{};
+    const w = window.open('', '_blank');
+    const rows = sale.items.map((it,i)=>{
+      const p = pset[it.productId];
+      return `<tr><td>${i+1}</td><td>${p?.name||'-'}</td><td class="right">${it.qty} ${it.unitName}</td><td class="right">${fmtRp(it.price)}</td><td class="right">${fmtRp(it.discount)}</td><td class="right">${fmtRp(it.subtotal)}</td></tr>`;
+    }).join('');
+    const html = `<!doctype html><html><head><meta charset="utf-8"><title>Nota ${sale.id}</title>${prnStyles()}</head><body>
+      <div class="toolbar">
+        <div><strong>Nota #${sale.id}</strong></div>
+        <div>
+          <button class="btn" onclick="window.print()">🖨️ Cetak ke Printer</button>
+          <button class="btn" onclick="window.close()">Tutup</button>
+        </div>
+      </div>
+      <div style="display:flex;justify-content:space-between;align-items:flex-start">
+        <div><h1>${escScriptClose(shop.shopName||'Dewan Aluminium')}</h1><div class="muted">${escScriptClose((shop.shopNote||'').replace(/\n/g,'<br>'))}</div></div>
+        <div>
+          <div><strong>No. Nota:</strong> ${sale.id}</div>
+          <div><strong>Tanggal:</strong> ${sale.date}</div>
+          <div><strong>Pelanggan:</strong> ${escScriptClose(sale.customer||'Umum')}</div>
+        </div>
+      </div>
+      <table><thead><tr><th>No</th><th>Item</th><th class="right">Qty</th><th class="right">Harga</th><th class="right">Diskon</th><th class="right">Subtotal</th></tr></thead><tbody>${rows}</tbody></table>
+      <div class="tot">
+        <table style="width:auto">
+          <tr><td>Subtotal</td><td class="right">${fmtRp(sale.subtotal)}</td></tr>
+          <tr><td>Diskon Nota</td><td class="right">${fmtRp(sale.discountInvoice)}</td></tr>
+          <tr><td><strong>Grand Total</strong></td><td class="right"><strong>${fmtRp(sale.total)}</strong></td></tr>
+        </table>
+      </div>
+      <script>window.onload=()=>{window.focus(); setTimeout(()=>window.print(), 200);}</script>
+    </body></html>`;
+    w.document.write(html); w.document.close();
+  }
+
+  function filterSalesByDate(from,to){
+    const f = new Date(from); const t = new Date(to); t.setHours(23,59,59,999);
+    return db.sales.filter(s=>{ const d = new Date(s.date+'T00:00:00'); return d>=f && d<=t; });
+  }
+
+  function renderLaporan(){
+    const dari = $('#lap-dari').value; const sampai = $('#lap-sampai').value; if(!dari||!sampai) return;
+    const list = filterSalesByDate(dari,sampai);
+    const wrap = $('#laporan-hasil');
+    if(list.length===0){ wrap.innerHTML = '<p class="muted">Tidak ada data.</p>'; return; }
+    const rows = list.map(s=>`<tr><td>${s.id}</td><td>${s.date}</td><td>${escScriptClose(s.customer)}</td><td class="right">${fmtRp(s.total)}</td></tr>`).join('');
+    const total = list.reduce((a,b)=>a+b.total,0);
+    wrap.innerHTML = `<table><thead><tr><th>No. Nota</th><th>Tanggal</th><th>Pelanggan</th><th class="right">Total</th></tr></thead><tbody>${rows}</tbody>
+      <tfoot><tr><th colspan="3" class="right">TOTAL</th><th class="right">${fmtRp(total)}</th></tr></tfoot></table>`;
+  }
+
+  $('#btn-lihat-laporan').onclick = renderLaporan;
+  $('#btn-cetak-laporan').onclick = ()=>{
+    const dari = $('#lap-dari').value; const sampai = $('#lap-sampai').value; if(!dari||!sampai) return alert('Pilih rentang tanggal.');
+    const list = filterSalesByDate(dari,sampai);
+    const w = window.open('', '_blank');
+    const rows = list.map(s=>`<tr><td>${s.id}</td><td>${s.date}</td><td>${escScriptClose(s.customer)}</td><td class="right">${fmtRp(s.total)}</td></tr>`).join('');
+    const total = list.reduce((a,b)=>a+b.total,0);
+    const html = `<!doctype html><html><head><meta charset="utf-8"><title>Laporan ${dari} s.d. ${sampai}</title>${prnStyles()}</head>
+    <body>
+      <div class="toolbar">
+        <div><strong>Laporan Penjualan</strong> · ${dari} s.d. ${sampai}</div>
+        <div>
+          <button class="btn" onclick="window.print()">🖨️ Cetak ke Printer</button>
+          <button class="btn" onclick="window.close()">Tutup</button>
+        </div>
+      </div>
+      <table><thead><tr><th>No. Nota</th><th>Tanggal</th><th>Pelanggan</th><th class="right">Total</th></tr></thead><tbody>${rows}</tbody>
+      <tfoot><tr><th colspan="3" class="right">TOTAL</th><th class="right">${fmtRp(total)}</th></tr></tfoot></table>
+      <script>window.onload=()=>{window.focus(); setTimeout(()=>window.print(), 200);}</script>
+    </body></html>`;
+    w.document.write(html); w.document.close();
+  }
+
+  function summaryStok(){
+    const wrap = $('#ringkasan-stok');
+    if(db.products.length===0){ wrap.innerHTML='<p class="muted">Belum ada produk.</p>'; return; }
+    const rows = db.products.map(p=>`<tr><td>${p.name}</td><td>${p.sku||'-'}</td><td class="right">${(p.stock??0).toLocaleString('id-ID')}</td><td>${p.baseUnit}</td></tr>`).join('');
+    wrap.innerHTML = `<table><thead><tr><th>Produk</th><th>SKU</th><th class="right">Stok</th><th>Satuan</th></tr></thead><tbody>${rows}</tbody></table>`;
+  }
+
+  function exportProductsXLS(){
+    const rows = [['Nama','SKU','Stok','Satuan','Harga (Rp)']]
+      .concat(db.products.map(p=>[p.name, p.sku||'', String(p.stock||0), p.baseUnit, String(p.priceBase||0)]));
+    const toCell = (c) => `<Cell><Data ss:Type="String">${String(c).replace(/&/g,'&amp;').replace(/</g,'&lt;')}</Data></Cell>`;
+    const xml = `<?xml version="1.0"?>
+<?mso-application progid="Excel.Sheet"?>
+<Workbook xmlns="urn:schemas-microsoft-com:office:spreadsheet"
+ xmlns:o="urn:schemas-microsoft-com:office:office"
+ xmlns:x="urn:schemas-microsoft-com:office:excel"
+ xmlns:ss="urn:schemas-microsoft-com:office:spreadsheet">
+ <Worksheet ss:Name="Produk">
+  <Table>
+   ${rows.map(r=>`<Row>${r.map(toCell).join('')}</Row>`).join('')}
+  </Table>
+ </Worksheet>
+</Workbook>`;
+    const blob = new Blob([xml], {type: 'application/vnd.ms-excel'});
+    const a = document.createElement('a');
+    a.href = URL.createObjectURL(blob);
+    a.download = `produk-dewan-aluminium-${todayISO()}.xls`;
+    a.click(); URL.revokeObjectURL(a.href);
+  }
+
+  function exportProductsCSV(){
+    const esc = v => `"${String(v).replace(/"/g,'""')}"`;
+    const rows = [['Nama','SKU','Stok','Satuan','Harga (Rp)']]
+      .concat(db.products.map(p=>[p.name, p.sku||'', (p.stock||0), p.baseUnit, (p.priceBase||0)]));
+    const csv = rows.map(r=>r.map(esc).join(',')).join('\r\n');
+    const blob = new Blob([csv], {type:'text/csv;charset=utf-8'});
+    const a = document.createElement('a');
+    a.href = URL.createObjectURL(blob);
+    a.download = `produk-dewan-aluminium-${todayISO()}.csv`;
+    a.click(); URL.revokeObjectURL(a.href);
+  }
+
+  $('#btn-export-xls').onclick = exportProductsXLS;
+  $('#btn-export-csv').onclick = exportProductsCSV;
+
+  $('#btn-backup').onclick = ()=>{
+    const blob = new Blob([JSON.stringify(db,null,2)], {type:'application/json'});
+    const a = document.createElement('a');
+    const ts = new Date(); const pad=n=>n.toString().padStart(2,'0');
+    const name = `dewan-aluminium-backup-${ts.getFullYear()}${pad(ts.getMonth()+1)}${pad(ts.getDate())}.json`;
+    a.href = URL.createObjectURL(blob); a.download = name; a.click(); URL.revokeObjectURL(a.href);
+  }
+  $('#file-restore').onchange = async (e)=>{
+    const file = e.target.files[0]; if(!file) return;
+    if(!confirm('Pulihkan data dari file ini? Data sekarang akan ditimpa.')) return;
+    try{
+      const txt = await file.text(); const obj = JSON.parse(txt);
+      db.products = obj.products||[]; db.sales = obj.sales||[]; db.settings = obj.settings||db.settings;
+      saveDB(db);
+      clearProdukForm(); renderProdukTable(''); refreshProdukOptions(); renderSalesTable(''); summaryStok();
+      alert('Pemulihan selesai.');
+    }catch(err){ alert('Gagal memulihkan: ' + err.message); }
+  }
+
+  const formToko = $('#form-toko');
+  formToko.addEventListener('submit', e=>{
+    e.preventDefault();
+    db.settings.shopName = $('#toko-nama').value.trim()||'Dewan Aluminium';
+    db.settings.shopNote = $('#toko-alamat').value.trim();
+    saveDB(db);
+    alert('Info toko disimpan.');
+  });
+
+  if('serviceWorker' in navigator){
+    navigator.serviceWorker.register('./sw.js').then(()=>{
+      const el = document.getElementById('pwa-status');
+      if (el) { el.textContent = 'Service Worker aktif'; el.classList.add('ok'); }
+    }).catch(()=>{
+      const el = document.getElementById('pwa-status');
+      if (el) { el.textContent = 'Service Worker gagal'; el.classList.add('err'); }
+    });
+  } else {
+    const el = document.getElementById('pwa-status');
+    if (el) { el.textContent = 'Browser tidak mendukung Service Worker'; el.classList.add('err'); }
+  }
+
+  (function init(){
+    try {
+      document.querySelectorAll('.view').forEach(v=>v.classList.add('hidden'));
+      const last = localStorage.getItem('da_last_tab') || 'penjualan';
+      showTab(last);
+
+      $('#toko-nama').value = db.settings.shopName||'Dewan Aluminium';
+      $('#toko-alamat').value = db.settings.shopNote||'';
+
+      renderProdukTable('');
+      renderSalesTable('');
+      refreshProdukOptions();
+      summaryStok();
+
+      const t = new Date();
+      const first = new Date(t.getFullYear(), t.getMonth(), 1);
+      $('#lap-dari').value = first.toISOString().slice(0,10);
+      $('#lap-sampai').value = todayISO();
+    } catch(err) {
+      console.error(err);
+      const box = document.createElement('pre');
+      box.style.cssText='white-space:pre-wrap;background:#220;padding:10px;border:1px solid #844;color:#fee;margin:10px;border-radius:8px';
+      box.textContent = 'Init error: ' + (err && err.message ? err.message : String(err));
+      document.body.prepend(box);
+    }
+  })();
+  </script>
+</body>
+</html>
