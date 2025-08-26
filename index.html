@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>POS Sederhana</title>
+  <style>
+    body { font-family: system-ui, Arial; margin: 12px; }
+    nav button { margin-right: 8px; }
+    table { border-collapse: collapse; width: 100%; }
+    th, td { border: 1px solid #ddd; padding: 6px; font-size: 14px; }
+    th { background: #f5f5f5; }
+    .row { display: flex; gap: 8px; flex-wrap: wrap; }
+    .card { border: 1px solid #ddd; padding: 10px; border-radius: 8px; margin: 8px 0; }
+    .right { text-align: right; }
+    #nota { display: none; }
+    #status { padding:8px; margin:8px 0; border-radius:6px; background:#f0f7ff; border:1px solid #cfe8ff; font-size:14px; }
+    .error { background:#fff5f5; border-color:#ffd5d5; }
+    @media print {
+      body * { visibility: hidden; }
+      #nota, #nota * { visibility: visible; }
+      #nota { position: absolute; left: 0; top: 0; width: 100%; }
+    }
+  </style>
+</head>
+<body>
+  <h2>POS Sederhana</h2>
+  <div id="status">Memuat aplikasi...</div>
+  <nav>
+    <button onclick="showTab('barang')">Barang</button>
+    <button onclick="showTab('jual')">Penjualan</button>
+    <button onclick="showTab('laporan')">Laporan</button>
+  </nav>
+
+  <section id="barang" class="card">
+    <h3>Data Barang</h3>
+    <div class="row">
+      <input id="b_nama" placeholder="Nama" />
+      <input id="b_satuan" placeholder="Satuan" style="width:90px" />
+      <input id="b_harga" placeholder="Harga" type="number" style="width:120px" />
+      <input id="b_stok" placeholder="Stok" type="number" style="width:90px" />
+      <input id="b_min" placeholder="Min-Stok" type="number" style="width:110px" />
+      <button id="btnSimpanBarang">Simpan/Update</button>
+    </div>
+    <p id="lowStockMsg" style="color:#b00; font-weight:600"></p>
+    <table id="tblBarang"><thead><tr>
+      <th>Nama</th><th>Satuan</th><th class="right">Harga</th><th class="right">Stok</th><th class="right">Min</th>
+    </tr></thead><tbody></tbody></table>
+  </section>
+
+  <section id="jual" class="card" style="display:none">
+    <h3>Penjualan</h3>
+    <div class="row">
+      <input id="cari" placeholder="Cari barang..." />
+      <input id="customer" placeholder="Nama customer (opsional)" style="flex:1" />
+      <input id="diskon" type="number" placeholder="Diskon" style="width:120px" />
+      <button id="btnCheckout">Checkout & Cetak</button>
+    </div>
+    <div id="hasilCari" class="card"></div>
+    <h4>Keranjang</h4>
+    <table id="tblCart"><thead><tr>
+      <th>Barang</th><th class="right">Harga</th><th class="right">Qty</th><th class="right">Total</th><th></th>
+    </tr></thead><tbody></tbody><tfoot>
+      <tr><td colspan="3" class="right">Subtotal</td><td class="right" id="subtotal">0</td><td></td></tr>
+      <tr><td colspan="3" class="right">Diskon</td><td class="right" id="diskonCell">0</td><td></td></tr>
+      <tr><td colspan="3" class="right"><b>Grand Total</b></td><td class="right" id="grand">0</td><td></td></tr>
+    </tfoot></table>
+  </section>
+
+  <section id="laporan" class="card" style="display:none">
+    <h3>Laporan Penjualan</h3>
+    <div class="row">
+      <input id="from" type="date" />
+      <input id="to" type="date" />
+      <button id="btnLoadReport">Tampilkan</button>
+    </div>
+    <table id="tblReport"><thead><tr>
+      <th>Tanggal</th><th>Customer</th><th class="right">Subtotal</th><th class="right">Diskon</th><th class="right">Grand</th>
+    </tr></thead><tbody></tbody><tfoot>
+      <tr><td colspan="4" class="right"><b>Total</b></td><td class="right" id="totalGrand">0</td></tr>
+    </tfoot></table>
+  </section>
+
+  <div id="nota">
+    <h3 style="text-align:center">Nota Penjualan</h3>
+    <div id="notaInfo"></div>
+    <table style="width:100%; border-collapse:collapse" border="1"><thead><tr>
+      <th>Barang</th><th class="right">Harga</th><th class="right">Qty</th><th class="right">Total</th>
+    </tr></thead><tbody id="notaBody"></tbody><tfoot>
+      <tr><td colspan="3" class="right">Subtotal</td><td id="notaSub" class="right"></td></tr>
+      <tr><td colspan="3" class="right">Diskon</td><td id="notaDisc" class="right"></td></tr>
+      <tr><td colspan="3" class="right"><b>Grand</b></td><td id="notaGrand" class="right"></td></tr>
+    </tfoot></table>
+  </div>
+
+  <script src="config.js"></script>
+  <script src="main.js"></script>
+</body>
+</html>
