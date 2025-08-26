@@ -26,11 +26,20 @@
     return j.data;
   }
   async function apiPost(action, body){
-    if (!API_URL) throw new Error('API_URL belum diisi di config.js');
-    const r = await fetch(API_URL, { method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify({action,...body})});
-    const j = await r.json();
-    if (!j.ok) throw new Error(j.message||'API error');
-    return j.data;
+  if (!API_URL) throw new Error('API_URL belum diisi di config.js');
+  const form = new URLSearchParams();
+  form.set('action', action);
+  Object.entries(body||{}).forEach(([k, v])=>{
+    form.set(k, typeof v === 'string' ? v : JSON.stringify(v));
+  });
+  const r = await fetch(API_URL, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8' },
+    body: form.toString()
+  });
+  const j = await r.json();
+  if (!j.ok) throw new Error(j.message||'API error');
+  return j.data;
   }
 
   let items=[]; let cart=[];
@@ -50,6 +59,28 @@
       setStatus('Data barang loaded: '+items.length+' item.');
     }catch(e){ setStatus('Gagal load items: '+e.message,true); alert(e.message); }
   }
+  function renderSearch(q){
+  q = (q||'').toLowerCase();
+  const wrap = document.getElementById('hasilCari');
+  if (!wrap) return;
+  const filtered = items.filter(it => (it.nama||'').toLowerCase().includes(q));
+  wrap.innerHTML = filtered.map(it => (
+    '<button data-nama="'+it.nama.replace(/"/g,'&quot;')+'" data-harga="'+Number(it.harga)+'">'+
+    '+ '+it.nama+' (Rp '+money(it.harga)+')' +
+    '</button>'
+  )).join(' ');
+  wrap.querySelectorAll('button').forEach(btn => {
+    btn.addEventListener('click', function(){
+      const nama = btn.dataset.nama;
+      const harga = Number(btn.dataset.harga);
+      const ex = cart.find(c => c.nama === nama);
+      if (ex) ex.qty += 1; else cart.push({ nama, harga, qty: 1 });
+      renderCart();
+    });
+  });
+}
+// panggil saat init & bind input:
+document.getElementById('cari').addEventListener('input', e => renderSearch(e.target.value||''));
   function bindEvents(){
     const btn = byId('btnSimpanBarang');
     if(btn) btn.addEventListener('click', async ()=>{
