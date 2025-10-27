@@ -186,11 +186,11 @@
             height: 600px;
             background-color: var(--text-secondary);
             border-radius: 8px;
-            background-size: contain;
+            background-size: cover;
             background-position: center;
             
             /* Ganti URL gambar di bawah ini */
-            background-image: url('/img/Logo2.png');
+            background-image: url('/img/workshopai.png');
         }
         
         @media (max-width: 768px) {
@@ -279,13 +279,21 @@
         
         /* Sembunyikan teks asli sebelum JS membaginya */
         .scramble-text {
-            visibility: hidden;
-        }
-        
-        /* Saat JS sudah membaginya, setiap karakter (span.char) akan terlihat */
-        .scramble-text .char {
-            visibility: visible;
-        }
+    visibility: visible; /* Buat teks terlihat kembali */
+}
+
+/* Ini akan menjadi "topeng" untuk setiap baris */
+.scramble-text .line {
+    overflow: hidden;
+    padding-top: 0.1em;
+    padding-bottom: 0.1em;
+}
+
+/* Ini adalah teks di dalam topeng. Kita geser ke bawah */
+.scramble-text .line > div {
+    transform: translateY(110%);
+    visibility: hidden; /* Sembunyikan, GSAP akan menampilkannya */
+}
         
     </style>
 </head>
@@ -377,16 +385,16 @@
         <section id="kontak">
             <div class="container">
                 <h2 class="scramble-text">Wujudkan Proyek Impian Anda.</h2>
-                <a href="https://wa.me/6285150520292?text=Halo%2C%20saya%20tertarik%20dengan%20produk%20Anda" class="cta-link">
+                <a href="https://wa.me/6285150520292?text=Halo%2C%20saya%20tertarik%20dengan%20produk%20Anda" class="cta-link" target="_blank">
                     Mulai Konsultasi (Gratis)
                 </a>
                 <p style="margin-top: 2rem; color: var(--text-secondary);">
                     Atau Kunjungi Sosial Media Kami (
-                    <a href="https://www.facebook.com/dedi.mihardi.5/" class="cta-link">
+                    <a href="https://www.facebook.com/dedi.mihardi.5/" class="cta-link" target="_blank">
                     Facebook
-                </a> / <a href="https://www.instagram.com/dewan.aluminium.soppeng/" class="cta-link">
+                </a> / <a href="https://www.instagram.com/dewan.aluminium.soppeng/" class="cta-link" target="_blank">
                     Instagram
-                </a> / <a href="https://www.tiktok.com/@dewanaluminiumsoppeng" class="cta-link">
+                </a> / <a href="https://www.tiktok.com/@dewanaluminiumsoppeng" class="cta-link" target="_blank">
                     Tiktok
                 </a>)
                 </p>
@@ -439,38 +447,31 @@
             });
 
 
-            // ----------------------------------
-            // ANIMASI 2: TEKS TENGGELAM (SCRAMBLE)
-            // ----------------------------------
+           // ----------------------------------
+// ANIMASI 2: LINE MASK REVEAL
+// ----------------------------------
 
-            // 1. Pecah semua teks yang memiliki kelas .scramble-text
-            const ourText = new SplitType('.scramble-text', { types: 'chars' });
-            const chars = ourText.chars; // Ambil semua karakter
+// 1. Pecah teks menjadi BARIS (bukan karakter)
+const ourText = new SplitType('.scramble-text', { types: 'lines' });
 
-            // 2. Buat animasi GSAP untuk setiap karakter
-            gsap.from(chars, {
-                // Animasi ini terikat dengan scroll (scrub)
-                scrollTrigger: {
-                    trigger: ".scramble-text", // Elemen pemicu umum
-                    start: "top 80%", // Mulai animasi saat 80% dari atas layar
-                    end: "bottom 20%", // Selesaikan animasi saat 20% dari bawah layar
-                    scrub: 1.5, // Animasi terikat ke scroll. Angka 1.5 membuatnya sedikit 'laggy' (mulus)
-                },
-                
-                // Properti animasi "Tenggelam"
-                opacity: 0.1, // Pudar
-                y: () => gsap.utils.random(50, 150), // Tenggelam ke bawah (posisi Y acak)
-                rotation: () => gsap.utils.random(-30, 30), // Berputar sedikit
-                scale: () => gsap.utils.random(0.5, 1.2), // Membesar/mengecil acak
-                
-                // 'stagger' adalah kunci agar setiap huruf bergerak di waktu berbeda
-                stagger: {
-                    amount: 0.5, // Total waktu untuk semua huruf beranimasi
-                    from: "random" // Mulai dari huruf acak (bukan dari kiri ke kanan)
-                }
-            });
+// 'ourText.lines' adalah array dari elemen .line (wrapper topeng)
+// Kita perlu menganimasikan 'div' di *dalam* .line
+ourText.lines.forEach(line => {
+    const innerText = line.querySelector('div'); // Ambil inner div
+    
+    gsap.to(innerText, { // Gunakan .to() untuk 'reveal'
+        y: '0%', // Pindahkan ke posisi semula (dari 110% di CSS)
+        visibility: 'visible',
+        duration: 1.2,
+        ease: 'cubic-bezier(0.19, 1, 0.22, 1)', // Ease yang sangat mulus
+        scrollTrigger: {
+            trigger: line, // Picu per baris
+            start: 'top 90%', // Mulai saat 90% dari atas layar
+            toggleActions: 'play none none none' // Hanya mainkan sekali saat masuk
+        }
+    });
+});
 
-        });
     </script>
 
 </body>
