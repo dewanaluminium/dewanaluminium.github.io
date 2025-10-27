@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dewan Aluminium Kreatif</title>
+    <title>Dewan Aluminium Kreatif - Presisi, Estetika, Inovasi</title>
     
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -78,6 +78,10 @@
             left: 0;
             z-index: 100;
             padding: 2rem 0;
+
+            /* TAMBAHKAN DUA BARIS INI */
+            background-color: rgba(10, 10, 10, 0.5); /* 0.85 = 85% solid */
+            backdrop-filter: blur(8px); /* Efek 'frost glass' */
         }
         
         .navbar .container {
@@ -86,10 +90,18 @@
             align-items: center;
         }
 
-        .logo {
-            font-size: 1.25rem;
-            font-weight: 700;
-        }
+        .logo-container {
+    perspective: 800px; /* Ruang 3D untuk efek putar */
+    display: block;
+}
+
+.logo-image {
+    height: 40px; /* Atur tinggi logo Anda di sini */
+    width: auto; /* Lebar akan mengikuti secara proporsional */
+    display: block;
+    transform-style: preserve-3d; /* Penting untuk 3D */
+    will-change: transform; /* Optimalisasi performa */
+}
 
         .nav-links {
             list-style: none;
@@ -112,9 +124,8 @@
             display: flex;
             align-items: center;
             position: relative;
-            background-size: contain;
+            background-size: contain; /* Ganti ke 'contain' jika ingin lihat seluruh gambar */
             background-position: center;
-            background-repeat: no-repeat;
             
             /* Ganti URL gambar di bawah ini */
             background-image: linear-gradient(rgba(10, 10, 10, 0.85), rgba(10, 10, 10, 0.85)), 
@@ -129,7 +140,7 @@
             position: relative;
         }
 
-        /* Ini adalah wadah untuk animasi pesawat kertas */
+        /* Wadah Pesawat Kertas */
         #airplane-container {
             position: absolute;
             top: 0;
@@ -145,7 +156,7 @@
             position: absolute;
             top: 50%;
             left: 50%;
-            width: 500px; /* Ukuran area terbang */
+            width: 500px;
             height: 500px;
             transform: translate(-50%, -50%);
             overflow: visible;
@@ -190,7 +201,7 @@
             background-position: center;
             
             /* Ganti URL gambar di bawah ini */
-            background-image: url('/img/workshopai.png');
+            background-image: url('/img/workshopai.png);
         }
         
         @media (max-width: 768px) {
@@ -204,7 +215,7 @@
            ================= */
         #layanan h2 {
             font-size: clamp(2.5rem, 6vw, 4.5rem);
-            text-align: center; /* Buat judul di tengah */
+            text-align: center;
             margin-bottom: 4rem;
         }
         
@@ -252,8 +263,8 @@
         }
         
         .cta-link {
-            font-size: clamp(1.5rem, 5vw, 3.5rem);
-            font-weight: 100;
+            font-size: clamp(1.3rem, 4vw, 2.2rem);
+            font-weight: 500;
             text-decoration: underline;
             display: inline-block;
             transition: transform 0.3s ease;
@@ -274,26 +285,25 @@
         }
 
         /* ==================================
-           STYLE UNTUK ANIMASI TEKS
+           CSS UNTUK "LINE MASK REVEAL"
            ================================== */
         
-        /* Sembunyikan teks asli sebelum JS membaginya */
         .scramble-text {
-    visibility: visible; /* Buat teks terlihat kembali */
-}
+            visibility: visible; /* Biarkan teks terlihat by default */
+        }
 
-/* Ini akan menjadi "topeng" untuk setiap baris */
-.scramble-text .line {
-    overflow: hidden;
-    padding-top: 0.1em;
-    padding-bottom: 0.1em;
-}
+        /* Ini adalah "topeng" untuk setiap baris */
+        .scramble-text .line {
+            overflow: hidden;
+            padding-top: 0.1em;
+            padding-bottom: 0.1em;
+        }
 
-/* Ini adalah teks di dalam topeng. Kita geser ke bawah */
-.scramble-text .line > div {
-    transform: translateY(110%);
-    visibility: hidden; /* Sembunyikan, GSAP akan menampilkannya */
-}
+        /* Ini adalah teks di dalam topeng. Kita geser ke bawah */
+        .scramble-text .line > div {
+            transform: translateY(110%);
+            visibility: hidden; /* Sembunyikan, GSAP akan menampilkannya */
+        }
         
     </style>
 </head>
@@ -301,7 +311,9 @@
 
     <header class="navbar">
         <div class="container">
-            <a href="#hero" class="logo">Dewan Aluminium Kreatif</a>
+            <a href="#hero" class="logo-container">
+    <img src="/img/logoputar.png" alt="Logo Dewan Aluminium Kreatif" class="logo-image">
+</a>
             <nav>
                 <ul class="nav-links">
                     <li><a href="#tentang">Tentang</a></li>
@@ -316,8 +328,7 @@
         <section id="hero">
             <div class="container">
                 <h1 class="scramble-text">
-                    <br><br><br>
-                    Presisi, Estetika, Inovasi
+                    Solusi Anti Rayap, Elegan dan Minimalis
                 </h1>
             </div>
             
@@ -337,11 +348,11 @@
                 <div class="content-wrapper">
                     <div>
                         <h2 class="scramble-text">
-                            Kami Mewujudkan Desain Impian Anda.
+                            Kami Mewujudkan Desain Impian.
                         </h2>
                         <p>
                             Lebih dari sekadar toko, Dewan Aluminium Kreatif adalah partner Anda dalam menciptakan ruang yang fungsional dan estetik. 
-                            Kami menggabungkan material aluminium berkualitas premium dengan pengerjaan presisi untuk menghasilkan karya yang tahan lama.
+                            Kami menggabungkan material aluminium dan kaca berkualitas premium dengan pengerjaan presisi untuk menghasilkan karya yang tahan lama.
                         </p>
                         <p>
                             Dari konsultasi awal hingga instalasi akhir, tim kami berdedikasi untuk mewujudkan visi unik Anda.
@@ -389,7 +400,7 @@
                     Mulai Konsultasi Gratis (WA)
                 </a>
                 <p style="margin-top: 2rem; color: var(--text-secondary);">
-                    Atau Kunjungi Sosial Media Kami (
+                    Atau Kunjungi Sosial Media Kami : (
                     <a href="https://www.facebook.com/dedi.mihardi.5/" class="cta-link" target="_blank">
                     Facebook
                 </a> / <a href="https://www.instagram.com/dewan.aluminium.soppeng/" class="cta-link" target="_blank">
@@ -422,56 +433,88 @@
             // Daftarkan semua plugin GSAP
             gsap.registerPlugin(ScrollTrigger, MotionPathPlugin);
 
+
+            // ----------------------------------
+            // ANIMASI 3: LOGO BERPUTAR (BARU - OTOMATIS)
+            // ----------------------------------
+            
+            const logoImage = document.querySelector('.logo-image');
+
+            if (logoImage) {
+                
+                // Langsung mainkan animasi, tanpa 'paused'
+                gsap.to(logoImage, {
+                    rotationY: 360, // Putar 360 derajat
+                    duration: 10,   // Durasi 1x putaran (10 detik agar lambat & elegan)
+                    ease: "none",   // Kecepatan konstan
+                    repeat: -1      // Ulangi selamanya
+                });
+
+            } else {
+                console.warn("GSAP Peringatan: Elemen '.logo-image' tidak ditemukan.");
+            }
             // ----------------------------------
             // ANIMASI 1: PESAWAT KERTAS
             // ----------------------------------
             
-            // Setel posisi dan visibilitas awal pesawat
-            gsap.set("#airplane-icon", {
-                scale: 0.7, 
-                autoAlpha: 1, // autoAlpha = visibility + opacity
-                transformOrigin: "center center"
-            });
+            // Cek dulu apakah elemennya ada sebelum dianimasikan
+            if (document.querySelector("#airplane-icon")) {
+                gsap.set("#airplane-icon", {
+                    scale: 0.7, 
+                    autoAlpha: 1,
+                    transformOrigin: "center center"
+                });
 
-            // Buat animasi Motion Path
-            gsap.to("#airplane-icon", {
-                duration: 15, // Durasi 1 putaran (15 detik)
-                repeat: -1, // Ulangi selamanya
-                ease: "none", // Kecepatan konstan
-                motionPath: {
-                    path: "#fly-path", // ID path SVG yang harus diikuti
-                    align: "#fly-path",
-                    alignOrigin: [0.5, 0.5],
-                    autoRotate: true // Pesawat akan otomatis menghadap ke arah path
-                }
-            });
+                gsap.to("#airplane-icon", {
+                    duration: 15,
+                    repeat: -1,
+                    ease: "none",
+                    motionPath: {
+                        path: "#fly-path",
+                        align: "#fly-path",
+                        alignOrigin: [0.5, 0.5],
+                        autoRotate: true
+                    }
+                });
+            } else {
+                console.warn("GSAP Peringatan: Elemen #airplane-icon tidak ditemukan.");
+            }
 
 
-           // ----------------------------------
-// ANIMASI 2: LINE MASK REVEAL
-// ----------------------------------
+            // ----------------------------------
+            // ANIMASI 2: LINE MASK REVEAL (Per Baris)
+            // ----------------------------------
 
-// 1. Pecah teks menjadi BARIS (bukan karakter)
-const ourText = new SplitType('.scramble-text', { types: 'lines' });
+            // Kita gunakan try...catch untuk keamanan
+            try {
+                // Pecah teks menjadi BARIS
+                const ourText = new SplitType('.scramble-text', { types: 'lines' });
 
-// 'ourText.lines' adalah array dari elemen .line (wrapper topeng)
-// Kita perlu menganimasikan 'div' di *dalam* .line
-ourText.lines.forEach(line => {
-    const innerText = line.querySelector('div'); // Ambil inner div
-    
-    gsap.to(innerText, { // Gunakan .to() untuk 'reveal'
-        y: '0%', // Pindahkan ke posisi semula (dari 110% di CSS)
-        visibility: 'visible',
-        duration: 1.2,
-        ease: 'cubic-bezier(0.19, 1, 0.22, 1)', // Ease yang sangat mulus
-        scrollTrigger: {
-            trigger: line, // Picu per baris
-            start: 'top 90%', // Mulai saat 90% dari atas layar
-            toggleActions: 'play none none none' // Hanya mainkan sekali saat masuk
-        }
-    });
-});
-});
+                // Loop setiap baris yang ditemukan
+                ourText.lines.forEach(line => {
+                    const innerText = line.querySelector('div'); // Ambil inner div
+                    
+                    if (innerText) { // Pastikan innerText ada
+                        gsap.to(innerText, {
+                            y: '0%', // Pindahkan ke posisi semula (dari 110% di CSS)
+                            visibility: 'visible',
+                            duration: 1.2,
+                            ease: 'cubic-bezier(0.19, 1, 0.22, 1)', // Ease yang sangat mulus
+                            scrollTrigger: {
+                                trigger: line, // Picu per baris
+                                start: 'top 90%', // Mulai saat 90% dari atas layar
+                                toggleActions: 'play none none none' // Hanya mainkan sekali
+                            }
+                        });
+                    }
+                });
+            } catch (e) {
+                console.error("SplitType Gagal:", e);
+                // Fallback: Jika SplitType gagal, setidaknya tampilkan teksnya
+                gsap.set(".scramble-text .line > div", { y: '0%', visibility: 'visible' });
+            }
+
+        });
     </script>
 
 </body>
