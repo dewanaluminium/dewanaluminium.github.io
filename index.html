@@ -418,60 +418,60 @@
     <script src="https://unpkg.com/split-type"></script>
     
     <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            
-            // Daftarkan semua plugin GSAP
-            gsap.registerPlugin(ScrollTrigger, MotionPathPlugin);
+        document.addEventListener('DOMContentLoaded', function() {
+            
+            // Daftarkan semua plugin GSAP
+            gsap.registerPlugin(ScrollTrigger, MotionPathPlugin);
 
 
-            // ----------------------------------
-            // ANIMASI 3: LOGO BERPUTAR (BARU - OTOMATIS)
-            // ----------------------------------
-            
-            const logoImage = document.querySelector('.logo-image');
+            // ----------------------------------
+            // ANIMASI 3: LOGO BERPUTAR (BARU - OTOMATIS)
+            // ----------------------------------
+            
+            const logoImage = document.querySelector('.logo-image');
 
-            if (logoImage) {
-                
-                // Langsung mainkan animasi, tanpa 'paused'
-                gsap.to(logoImage, {
-                    rotationY: 360, // Putar 360 derajat
-                    duration: 10,   // Durasi 1x putaran (10 detik agar lambat & elegan)
-                    ease: "none",   // Kecepatan konstan
-                    repeat: -1      // Ulangi selamanya
-                });
+            if (logoImage) {
+                
+                // Langsung mainkan animasi, tanpa 'paused'
+                gsap.to(logoImage, {
+                    rotationY: 360, // Putar 360 derajat
+                    duration: 10,   // Durasi 1x putaran (10 detik agar lambat & elegan)
+                    ease: "none",   // Kecepatan konstan
+                    repeat: -1      // Ulangi selamanya
+                });
 
-            } else {
-                console.warn("GSAP Peringatan: Elemen '.logo-image' tidak ditemukan.");
-            }
-            // ----------------------------------
-            // ANIMASI 1: PESAWAT KERTAS
-            // ----------------------------------
-            
-            // Cek dulu apakah elemennya ada sebelum dianimasikan
-            if (document.querySelector("#airplane-icon")) {
-                gsap.set("#airplane-icon", {
-                    scale: 0.7, 
-                    autoAlpha: 1,
-                    transformOrigin: "center center"
-                });
+            } else {
+                console.warn("GSAP Peringatan: Elemen '.logo-image' tidak ditemukan.");
+            }
+            // ----------------------------------
+            // ANIMASI 1: PESAWAT KERTAS
+            // ----------------------------------
+            
+            // Cek dulu apakah elemennya ada sebelum dianimasikan
+            if (document.querySelector("#airplane-icon")) {
+                gsap.set("#airplane-icon", {
+                    scale: 0.7, 
+                    autoAlpha: 1,
+                    transformOrigin: "center center"
+                });
 
-                gsap.to("#airplane-icon", {
-                    duration: 15,
-                    repeat: -1,
-                    ease: "none",
-                    motionPath: {
-                        path: "#fly-path",
-                        align: "#fly-path",
-                        alignOrigin: [0.5, 0.5],
-                        autoRotate: true
-                    }
-                });
-            } else {
-                console.warn("GSAP Peringatan: Elemen #airplane-icon tidak ditemukan.");
-            }
+                gsap.to("#airplane-icon", {
+                    duration: 15,
+                    repeat: -1,
+                    ease: "none",
+                    motionPath: {
+                        path: "#fly-path",
+                        align: "#fly-path",
+                        alignOrigin: [0.5, 0.5],
+                        autoRotate: true
+            .j.     }
+                });
+            } else {
+                console.warn("GSAP Peringatan: Elemen #airplane-icon tidak ditemukan.");
+            }
 
 
-            // ----------------------------------
+            // ----------------------------------
             // ANIMASI 2: STAGGERED WORD FADE-IN (BARU)
             // ----------------------------------
 
@@ -485,7 +485,7 @@
                     splitText = new SplitType(heading, { types: 'words' });
                     // Buat heading terlihat setelah dipecah
                     gsap.set(heading, { visibility: 'visible' });
-                } catch (e) {
+s               } catch (e) {
                     console.error("SplitType Gagal:", e);
                     // Jika gagal, pastikan teksnya tetap terlihat
                     gsap.set(heading, { visibility: 'visible' });
@@ -495,9 +495,10 @@
                 // Animasikan kata-kata
                 gsap.from(splitText.words, {
                     autoAlpha: 0, // Mengatur opacity dan visibility
+
                     y: 30, // Mulai dari 30px ke bawah
                     duration: 0.8,
-              M     ease: 'power2.out',
+                    ease: 'power2.out', // <-- HURUF 'M' DIHAPUS
                     stagger: 0.05, // Jarak animasi antar kata
                     scrollTrigger: {
                         trigger: heading, // Pemicunya adalah heading itu sendiri
@@ -505,10 +506,11 @@
                         toggleActions: 'play none none none' // Mainkan sekali
                     }
                 });
-              });
+              });
+            }); // <-- HURUF 'D' DIHAPUS
 
-        });
-    </script>
+        });
+    </script>
 
 </body>
 </html>
