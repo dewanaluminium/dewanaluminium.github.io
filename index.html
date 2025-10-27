@@ -3,20 +3,20 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dewan Aluminium Kreatif - Spesialis Aluminium & Kaca</title>
+    <title>Dewan Aluminium Kreatif</title>
     
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     
     <style>
         /* =================
            RESET & GLOBAL
            ================= */
         :root {
-            --bg-color: #111111; /* Hitam pekat, seperti referensi */
-            --text-color: #f0f0f0; /* Putih gading, tidak terlalu menyilaukan */
-            --text-secondary: #555; /* Abu-abu untuk footer/detail */
+            --bg-color: #0A0A0A; /* Hitam yang sangat pekat */
+            --text-color: #EAEAEA;
+            --text-secondary: #666;
         }
 
         * {
@@ -30,30 +30,31 @@
         }
 
         body {
-            font-family: 'Inter', 'Poppins', sans-serif; /* Fallback ke Poppins dari desain sblmnya */
+            font-family: 'Inter', sans-serif;
             background-color: var(--bg-color);
             color: var(--text-color);
-            line-height: 1.4;
+            line-height: 1.6;
             overflow-x: hidden;
             -webkit-font-smoothing: antialiased;
             -moz-osx-font-smoothing: grayscale;
         }
 
         .container {
-            width: 90%; /* Menggunakan persentase untuk layout yang lebih 'fluid' */
+            width: 90%;
             max-width: 1200px;
             margin: 0 auto;
         }
 
-        h1, h2, h3, h4, h5, h6 {
-            font-weight: 600;
+        h1, h2, h3 {
+            font-weight: 700;
             line-height: 1.2;
         }
         
         p {
             font-size: 1.1rem;
-            max-width: 60ch; /* Batasi lebar paragraf agar mudah dibaca */
+            max-width: 65ch;
             color: #b0b0b0;
+            margin-bottom: 1.5rem;
         }
 
         a {
@@ -62,13 +63,9 @@
             transition: color 0.3s ease;
         }
         
-        a:hover {
-            color: var(--text-secondary);
-        }
-
         section {
-            /* Padding besar untuk menciptakan banyak ruang negatif (whitespace) */
-            padding: 10rem 0;
+            padding: 8rem 0;
+            position: relative;
         }
 
         /* =================
@@ -99,17 +96,13 @@
             display: flex;
         }
 
-        .nav-links li {
-            margin-left: 2rem;
-        }
+        .nav-links li { margin-left: 2rem; }
         .nav-links a {
             font-size: 1rem;
             font-weight: 500;
-            color: var(--text-secondary); /* Dibuat lebih subtil */
+            color: var(--text-secondary);
         }
-        .nav-links a:hover {
-            color: var(--text-color);
-        }
+        .nav-links a:hover { color: var(--text-color); }
 
         /* =================
            HERO SECTION
@@ -118,65 +111,156 @@
             height: 100vh;
             display: flex;
             align-items: center;
+            position: relative;
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            
+            /* Ganti URL gambar di bawah ini */
+            background-image: linear-gradient(rgba(10, 10, 10, 0.85), rgba(10, 10, 10, 0.85)), 
+                              url('/img/Logo2.png');
         }
 
         #hero h1 {
-            font-size: clamp(2.5rem, 8vw, 6rem); /* Font responsif yang besar */
-            font-weight: 600;
-            max-width: 15ch; /* Batasi 15 karakter per baris */
+            font-size: clamp(3rem, 8vw, 7rem); /* Lebih besar dan berani */
+            font-weight: 800;
+            max-width: 15ch;
+            z-index: 2;
+            position: relative;
+        }
+
+        /* Ini adalah wadah untuk animasi pesawat kertas */
+        #airplane-container {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 1;
+            overflow: hidden;
+            opacity: 0.3;
+        }
+
+        #airplane-svg {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 500px; /* Ukuran area terbang */
+            height: 500px;
+            transform: translate(-50%, -50%);
+            overflow: visible;
+        }
+        
+        #airplane-icon {
+            fill: var(--text-color);
+            visibility: hidden; /* Sembunyikan, GSAP akan menampilkannya */
+        }
+        
+        #fly-path {
+            fill: none;
+            stroke: none; /* Path tidak terlihat */
         }
 
         /* =================
            TENTANG KAMI
            ================= */
+        #tentang {
+            padding-bottom: 4rem;
+        }
+       
+        #tentang .content-wrapper {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 4rem;
+            align-items: center;
+        }
+
         #tentang h2 {
-            font-size: clamp(2rem, 5vw, 3.5rem);
+            font-size: clamp(2.5rem, 6vw, 4.5rem);
             margin-bottom: 2rem;
             max-width: 20ch;
+        }
+        
+        .visual-placeholder {
+            width: 100%;
+            height: 600px;
+            background-color: var(--text-secondary);
+            border-radius: 8px;
+            background-size: cover;
+            background-position: center;
+            
+            /* Ganti URL gambar di bawah ini */
+            background-image: url('/img/Logo2.png');
+        }
+        
+        @media (max-width: 768px) {
+            #tentang .content-wrapper {
+                grid-template-columns: 1fr;
+            }
         }
 
         /* =================
            LAYANAN / PRODUK
            ================= */
+        #layanan h2 {
+            font-size: clamp(2.5rem, 6vw, 4.5rem);
+            text-align: center; /* Buat judul di tengah */
+            margin-bottom: 4rem;
+        }
         
-        #layanan .service-list {
+        .service-list {
             list-style: none;
-            margin-top: 4rem;
             border-top: 1px solid var(--text-secondary);
         }
         
-        #layanan .service-list li {
+        .service-list li {
             border-bottom: 1px solid var(--text-secondary);
+            padding: 2.5rem 0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
         }
         
-        /* Ini adalah tautan di dalam list, dibuat besar */
-        #layanan .service-list a {
-            display: block;
-            padding: 2.5rem 0;
-            font-size: clamp(2rem, 6vw, 4rem);
+        .service-list .service-title {
+            font-size: clamp(1.8rem, 5vw, 3.5rem);
             font-weight: 600;
-            color: #ddd; /* Sedikit lebih redup */
+            color: #ddd;
             transition: all 0.4s ease;
         }
         
-        #layanan .service-list a:hover {
+        .service-list li:hover .service-title {
             color: var(--text-color);
-            transform: translateX(20px); /* Efek hover simpel */
+            transform: translateX(20px);
         }
-
+        
+        .service-list .service-description {
+            font-size: 1rem;
+            color: var(--text-secondary);
+            max-width: 30ch;
+        }
 
         /* =================
            KONTAK
            ================= */
+        #kontak {
+            text-align: center;
+        }
+        
         #kontak h2 {
-            font-size: clamp(2.5rem, 8vw, 6rem);
+            font-size: clamp(3rem, 8vw, 7rem);
             margin-bottom: 2rem;
         }
         
-        #kontak .email-link {
+        .cta-link {
             font-size: clamp(1.5rem, 5vw, 3.5rem);
             font-weight: 500;
             text-decoration: underline;
+            display: inline-block;
+            transition: transform 0.3s ease;
+        }
+        
+        .cta-link:hover {
+            transform: scale(1.05);
         }
 
         /* =================
@@ -186,46 +270,22 @@
             padding: 4rem 0;
             text-align: center;
             color: var(--text-secondary);
+            border-top: 1px solid #222;
         }
 
         /* ==================================
-           EFEK REVEAL (THE "FUTURETHREE" STYLE)
+           STYLE UNTUK ANIMASI TEKS
            ================================== */
         
-        /* 1. Wrapper (Topeng)
-           Ini adalah "kotak" tak terlihat yang akan memotong teks.
-           'overflow: hidden' adalah properti kuncinya.
-        */
-        .reveal-clip {
-            overflow: hidden;
-            /* Beri sedikit padding untuk menghindari pemotongan font */
-            padding-top: 2px;
-            padding-bottom: 2px;
+        /* Sembunyikan teks asli sebelum JS membaginya */
+        .scramble-text {
+            visibility: hidden;
         }
         
-        /* 2. Konten yang akan dianimasikan
-           Secara default, kita geser ke bawah 110% (keluar dari wrapper).
-        */
-        .reveal-content {
-            transform: translateY(110%);
-            transition: transform 1.2s cubic-bezier(0.19, 1, 0.22, 1); /* Transisi ease-out-expo yang mulus */
-            will-change: transform; /* Hint untuk browser agar optimasi */
+        /* Saat JS sudah membaginya, setiap karakter (span.char) akan terlihat */
+        .scramble-text .char {
+            visibility: visible;
         }
-
-        /* 3. State Aktif
-           Saat wrapper (.reveal-clip) mendapat kelas 'active' (dari JS),
-           kita geser konten (.reveal-content) kembali ke posisi 0.
-           Ini menciptakan efek "meluncur ke atas".
-        */
-        .reveal-clip.active .reveal-content {
-            transform: translateY(0);
-        }
-
-        /* Menambahkan delay berbeda untuk efek yang lebih dinamis */
-        .reveal-delay-100 { transition-delay: 0.1s; }
-        .reveal-delay-200 { transition-delay: 0.2s; }
-        .reveal-delay-300 { transition-delay: 0.3s; }
-        .reveal-delay-400 { transition-delay: 0.4s; }
         
     </style>
 </head>
@@ -247,52 +307,67 @@
     <main>
         <section id="hero">
             <div class="container">
-                <div class="reveal-clip">
-                    <h1 class="reveal-content">
-                        Presisi dalam Aluminium, Estetika dalam Kaca.
-                    </h1>
-                </div>
+                <h1 class="scramble-text">
+                    Solusi Anti Rayap. Tampilan Minimalis dan Elegan
+                </h1>
+            </div>
+            
+            <div id="airplane-container">
+                <svg id="airplane-svg" viewBox="0 0 500 500">
+                    <path id="fly-path" d="M 250, 50 a 200,100 0 1,0 1,0 z"/>
+                    
+                    <g id="airplane-icon">
+                        <path d="M2,21 L22,12 L2,3 L2,10 L17,12 L2,14 L2,21 Z" />
+                    </g>
+                </svg>
             </div>
         </section>
 
         <section id="tentang">
             <div class="container">
-                <div class="reveal-clip">
-                    <h2 class="reveal-content">
-                        Kami adalah Dewan Aluminium Kreatif.
-                    </h2>
-                </div>
-                <div class="reveal-clip">
-                    <p class="reveal-content reveal-delay-200">
-                        Kami mengubah ruang dengan material premium. Dari desain modern hingga instalasi presisi, 
-                        kami berfokus pada pengerjaan kusen, lemari, jendela, dan partisi yang tidak 
-                        hanya fungsional tetapi juga tahan lama dan bernilai seni tinggi.
-                    </p>
+                <div class="content-wrapper">
+                    <div>
+                        <h2 class="scramble-text">
+                            Kami Mewujudkan Desain Impian Anda.
+                        </h2>
+                        <p>
+                            Lebih dari sekadar toko, Dewan Aluminium Kreatif adalah partner Anda dalam menciptakan ruang yang fungsional dan estetik. 
+                            Kami menggabungkan material aluminium berkualitas premium dengan pengerjaan presisi untuk menghasilkan karya yang tahan lama.
+                        </p>
+                        <p>
+                            Dari konsultasi awal hingga instalasi akhir, tim kami berdedikasi untuk mewujudkan visi unik Anda.
+                        </p>
+                    </div>
+                    
+                    <div class="visual-placeholder"></div>
                 </div>
             </div>
         </section>
 
         <section id="layanan">
             <div class="container">
-                <div class="reveal-clip">
-                    <h2 class="reveal-content">Layanan & Produk</h2>
-                </div>
+                <h2 class="scramble-text">Inovasi di Setiap Detail.</h2>
                 
                 <ul class="service-list">
-                    <li class="reveal-clip">
-                        <a href="#layanan" class="reveal-content reveal-delay-100">Lemari & Kitchen Set</a>
+                    <li>
+                        <span class="service-title">Lemari Kustom & Kitchen Set</span>
+                        <span class="service-description">Solusi penyimpanan elegan yang memaksimalkan ruang Anda.</span>
                     </li>
-                    <li class="reveal-clip">
-                        <a href="#layanan" class="reveal-content reveal-delay-200">Kusen, Pintu & Jendela</a>
+                    <li>
+                        <span class="service-title">Kusen, Pintu & Jendela</span>
+                        <span class="service-description">Kekuatan dan keindahan minimalis untuk fasad dan interior.</span>
                     </li>
-                    <li class="reveal-clip">
-                        <a href="#layanan" class="reveal-content reveal-delay-300">Partisi Kaca & Aluminium</a>
+                    <li>
+                        <span class="service-title">Partisi Aluminium & Kaca</span>
+                        <span class="service-description">Membagi ruang tanpa mengorbankan cahaya dan kesan luas.</span>
                     </li>
-                    <li class="reveal-clip">
-                        <a href="#layanan" class="reveal-content reveal-delay-400">Pemasangan Kaca & ACP</a>
+                    <li>
+                        <span class="service-title">Pemasangan Kaca</span>
+                        <span class="service-description">Instalasi presisi untuk Kaca Tempered dan Railing Tangga.</span>
                     </li>
-                    <li class="reveal-clip">
-                        <a href="#layanan" class="reveal-content reveal-delay-400">Aksesoris Lemari</a>
+                    <li>
+                        <span class="service-title">Aksesoris Premium</span>
+                        <span class="service-description">Engsel, rel, dan gagang berkualitas untuk daya tahan maksimal.</span>
                     </li>
                 </ul>
             </div>
@@ -300,58 +375,100 @@
 
         <section id="kontak">
             <div class="container">
-                <div class="reveal-clip">
-                    <h2 class="reveal-content">Mulai Proyek Anda.</h2>
-                </div>
-                <div class="reveal-clip">
-                    <a href="mailto:[EMAIL_ANDA]" class="email-link reveal-content reveal-delay-200">
-                        [Email.Anda@gmail.com]
-                    </a>
-                </div>
-                <div class="reveal-clip">
-                    <p style="margin-top: 2rem;" class="reveal-content reveal-delay-300">
-                        Atau hubungi kami via WhatsApp: [Nomor.HP.Anda]
-                    </p>
-                </div>
+                <h2 class="scramble-text">Wujudkan Proyek Impian Anda.</h2>
+                <a href="https://wa.me/6285150520292?text=Halo%2C%20saya%20tertarik%20dengan%20produk%20Anda" class="cta-link">
+                    Mulai Konsultasi (Gratis)
+                </a>
+                <p style="margin-top: 2rem; color: var(--text-secondary);">
+                    Atau Kunjungi Sosial Media Kami (
+                    <a href="https://www.facebook.com/dedi.mihardi.5/" class="cta-link">
+                    Facebook
+                </a> / <a href="https://www.instagram.com/dewan.aluminium.soppeng/" class="cta-link">
+                    Instagram
+                </a> / <a href="https://www.tiktok.com/@dewanaluminiumsoppeng" class="cta-link">
+                    Tiktok
+                </a>)
+                </p>
             </div>
         </section>
     </main>
 
     <footer>
         <div class="container">
-            <p>&copy; 2025 Dewan Aluminium Kreatif. Berlokasi di [Kota Anda].</p>
+            <p>&copy; 2019 Dewan Aluminium Kreatif. Inovasi, Presisi, Kualitas.</p>
         </div>
     </footer>
 
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/MotionPathPlugin.min.js"></script>
+    
+    <script src="https://unpkg.com/split-type"></script>
+    
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             
-            // 1. Pilih semua elemen dengan class 'reveal-clip'
-            const revealElements = document.querySelectorAll('.reveal-clip');
+            // Daftarkan semua plugin GSAP
+            gsap.registerPlugin(ScrollTrigger, MotionPathPlugin);
 
-            const revealOptions = {
-                root: null,
-                threshold: 0.2, // Elemen harus terlihat 20% sebelum animasi dimulai
-                rootMargin: "0px"
-            };
-
-            const revealObserver = new IntersectionObserver(function(entries, observer) {
-                entries.forEach(entry => {
-                    if (entry.isIntersecting) {
-                        // 2. Tambahkan class 'active' ke .reveal-clip
-                        // Ini akan memicu transisi CSS pada .reveal-content di dalamnya
-                        entry.target.classList.add('active');
-                        
-                        // 3. Hentikan pengamatan agar animasi tidak berulang
-                        observer.unobserve(entry.target);
-                    }
-                });
-            }, revealOptions);
-
-            // 4. Terapkan observer ke setiap elemen
-            revealElements.forEach(el => {
-                revealObserver.observe(el);
+            // ----------------------------------
+            // ANIMASI 1: PESAWAT KERTAS
+            // ----------------------------------
+            
+            // Setel posisi dan visibilitas awal pesawat
+            gsap.set("#airplane-icon", {
+                scale: 0.7, 
+                autoAlpha: 1, // autoAlpha = visibility + opacity
+                transformOrigin: "center center"
             });
+
+            // Buat animasi Motion Path
+            gsap.to("#airplane-icon", {
+                duration: 15, // Durasi 1 putaran (15 detik)
+                repeat: -1, // Ulangi selamanya
+                ease: "none", // Kecepatan konstan
+                motionPath: {
+                    path: "#fly-path", // ID path SVG yang harus diikuti
+                    align: "#fly-path",
+                    alignOrigin: [0.5, 0.5],
+                    autoRotate: true // Pesawat akan otomatis menghadap ke arah path
+                }
+            });
+
+
+            // ----------------------------------
+            // ANIMASI 2: TEKS TENGGELAM (SCRAMBLE)
+            // ----------------------------------
+
+            // 1. Pecah semua teks yang memiliki kelas .scramble-text
+            const ourText = new SplitType('.scramble-text', { types: 'chars' });
+            const chars = ourText.chars; // Ambil semua karakter
+
+            // 2. Buat animasi GSAP untuk setiap karakter
+            gsap.from(chars, {
+                // Animasi ini terikat dengan scroll (scrub)
+                scrollTrigger: {
+                    trigger: ".scramble-text", // Elemen pemicu umum
+                    start: "top 80%", // Mulai animasi saat 80% dari atas layar
+                    end: "bottom 20%", // Selesaikan animasi saat 20% dari bawah layar
+                    scrub: 1.5, // Animasi terikat ke scroll. Angka 1.5 membuatnya sedikit 'laggy' (mulus)
+                },
+                
+                // Properti animasi "Tenggelam"
+                opacity: 0.1, // Pudar
+                y: () => gsap.utils.random(50, 150), // Tenggelam ke bawah (posisi Y acak)
+                rotation: () => gsap.utils.random(-30, 30), // Berputar sedikit
+                scale: () => gsap.utils.random(0.5, 1.2), // Membesar/mengecil acak
+                
+                // 'stagger' adalah kunci agar setiap huruf bergerak di waktu berbeda
+                stagger: {
+                    amount: 0.5, // Total waktu untuk semua huruf beranimasi
+                    from: "random" // Mulai dari huruf acak (bukan dari kiri ke kanan)
+                }
+            });
+
         });
     </script>
 
