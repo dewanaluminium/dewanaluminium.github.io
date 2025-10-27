@@ -80,7 +80,7 @@
             padding: 2rem 0;
 
             /* TAMBAHKAN DUA BARIS INI */
-            background-color: rgba(10, 10, 10, 0.5); /* 0.85 = 85% solid */
+            background-color: rgba(10, 10, 10, 0.2); /* 0.85 = 85% solid */
             backdrop-filter: blur(8px); /* Efek 'frost glass' */
         }
         
@@ -96,7 +96,7 @@
 }
 
 .logo-image {
-    height: 40px; /* Atur tinggi logo Anda di sini */
+    height: 100px; /* Atur tinggi logo Anda di sini */
     width: auto; /* Lebar akan mengikuti secara proporsional */
     display: block;
     transform-style: preserve-3d; /* Penting untuk 3D */
@@ -289,21 +289,9 @@
            ================================== */
         
         .scramble-text {
-            visibility: visible; /* Biarkan teks terlihat by default */
-        }
-
-        /* Ini adalah "topeng" untuk setiap baris */
-        .scramble-text .line {
-            overflow: hidden;
-            padding-top: 0.1em;
-            padding-bottom: 0.1em;
-        }
-
-        /* Ini adalah teks di dalam topeng. Kita geser ke bawah */
-        .scramble-text .line > div {
-            transform: translateY(110%);
-            visibility: hidden; /* Sembunyikan, GSAP akan menampilkannya */
-        }
+            /* Sembunyikan teks awalnya untuk menghindari "flash" */
+            visibility: hidden; 
+        }
         
     </style>
 </head>
@@ -318,6 +306,8 @@
                 <ul class="nav-links">
                     <li><a href="#tentang">Tentang</a></li>
                     <li><a href="#layanan">Layanan</a></li>
+                    <li><a href="https://www.google.com/">Gallery</a></li>
+                    <li><a href="https://cari-bahan-dewan.netlify.app/">Cari Bahan</a></li>
                     <li><a href="#kontak">Kontak</a></li>
                 </ul>
             </nav>
@@ -482,37 +472,40 @@
 
 
             // ----------------------------------
-            // ANIMASI 2: LINE MASK REVEAL (Per Baris)
-            // ----------------------------------
+            // ANIMASI 2: STAGGERED WORD FADE-IN (BARU)
+            // ----------------------------------
 
-            // Kita gunakan try...catch untuk keamanan
-            try {
-                // Pecah teks menjadi BARIS
-                const ourText = new SplitType('.scramble-text', { types: 'lines' });
+            // Kita target semua elemen .scramble-text
+            const headings = gsap.utils.toArray('.scramble-text');
 
-                // Loop setiap baris yang ditemukan
-                ourText.lines.forEach(line => {
-                    const innerText = line.querySelector('div'); // Ambil inner div
-                    
-                    if (innerText) { // Pastikan innerText ada
-                        gsap.to(innerText, {
-                            y: '0%', // Pindahkan ke posisi semula (dari 110% di CSS)
-                            visibility: 'visible',
-                            duration: 1.2,
-                            ease: 'cubic-bezier(0.19, 1, 0.22, 1)', // Ease yang sangat mulus
-                            scrollTrigger: {
-                                trigger: line, // Picu per baris
-                                start: 'top 90%', // Mulai saat 90% dari atas layar
-                                toggleActions: 'play none none none' // Hanya mainkan sekali
-                            }
-                        });
-                    }
-                });
-            } catch (e) {
-                console.error("SplitType Gagal:", e);
-                // Fallback: Jika SplitType gagal, setidaknya tampilkan teksnya
-                gsap.set(".scramble-text .line > div", { y: '0%', visibility: 'visible' });
-            }
+            headings.forEach(heading => {
+                let splitText;
+                try {
+                    // Pecah teks menjadi KATA (bukan baris)
+                    splitText = new SplitType(heading, { types: 'words' });
+                    // Buat heading terlihat setelah dipecah
+                    gsap.set(heading, { visibility: 'visible' });
+                } catch (e) {
+                    console.error("SplitType Gagal:", e);
+                    // Jika gagal, pastikan teksnya tetap terlihat
+                    gsap.set(heading, { visibility: 'visible' });
+                    return; // Hentikan animasi untuk heading ini jika gagal
+                }
+
+                // Animasikan kata-kata
+                gsap.from(splitText.words, {
+                    autoAlpha: 0, // Mengatur opacity dan visibility
+                    y: 30, // Mulai dari 30px ke bawah
+                    duration: 0.8,
+              M     ease: 'power2.out',
+                    stagger: 0.05, // Jarak animasi antar kata
+                    scrollTrigger: {
+                        trigger: heading, // Pemicunya adalah heading itu sendiri
+                        start: 'top 85%', // Mulai saat 85% dari atas layar
+                        toggleActions: 'play none none none' // Mainkan sekali
+                    }
+                });
+              });
 
         });
     </script>
