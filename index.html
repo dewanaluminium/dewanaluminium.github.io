@@ -6,18 +6,13 @@
   <title>Dewan Aluminium Kreatif</title>
   <meta name="description" content="Dewan Aluminium Kreatif: spesialis lemari, kitchen set, kusen, jendela, partisi, kaca tempered, ACP. Cek layanan, galeri, dan kontak kami."/>
 
-  <!-- Fonts & libs -->
+  <!-- Fonts & libs CSS -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Audiowide&family=Montserrat:wght@300;400;600;800&display=swap" rel="stylesheet">
   <link href="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.css" rel="stylesheet"/>
 
   <style>
-    :root{--bg:#0a0a0a;--bg2:#121314;--silver:#cfd2d6;--stroke:rgba(255,255,255,.15);--glass:rgba(255,255,255,.06);--accent:#b6fbff}
-    /* Blur-up helper */
-    .blur{filter:blur(12px);transform:scale(1.02);transition:filter .5s ease, transform .5s ease}
-    img:not(.blur){filter:none;transform:none}
-
     :root{--bg:#0a0a0a;--bg2:#121314;--silver:#cfd2d6;--stroke:rgba(255,255,255,.15);--glass:rgba(255,255,255,.06);--accent:#b6fbff}
     *{box-sizing:border-box}
     html,body{margin:0;background:var(--bg);color:#fff;font-family:Montserrat,system-ui;scroll-behavior:smooth}
@@ -26,26 +21,20 @@
     .muted{color:#b5bbc2}
 
     /* NAVBAR */
-    .nav{position:sticky;top:0;z-index:60;backdrop-filter:blur(10px);border-bottom:1px solid var(--stroke);
-         background:linear-gradient(180deg,rgba(0,0,0,.55),rgba(0,0,0,.35))}
-    .nav-inner{max-width:1150px;margin:auto;display:flex;align-items:center;gap:14px;padding:10px 16px}
+    .nav{position:sticky;top:0;z-index:60;backdrop-filter:blur(10px);border-bottom:1px solid var(--stroke);background:linear-gradient(180deg,rgba(0,0,0,.55),rgba(0,0,0,.35))}
+    .nav-inner{max-width:1150px;margin:auto;display:flex;align-items:center;justify-content:space-between;padding:10px 16px}
     .brand{display:flex;align-items:center;gap:10px}
-    .logo{width:36px;height:36px;border-radius:10px;background:radial-gradient(circle,#cfd2d6,#7a7d81);display:grid;place-items:center;box-shadow:0 0 16px rgba(182,251,255,.25)}
-    .logo svg{width:22px;height:22px;fill:#0a0a0a}
+    .brand img{width:28px;height:auto;display:block;border-radius:6px;box-shadow:0 0 10px rgba(182,251,255,.25)}
     .brand-title{font:800 14px/1 Audiowide;letter-spacing:.5px}
-    .spacer{flex:1}
-    .menu{display:flex;gap:10px;flex-wrap:wrap}
+    .menu{display:flex;gap:10px;flex-wrap:wrap;margin-left:auto}
     .menu a{font-weight:700;font-size:13px;padding:8px 10px;border-radius:10px;border:1px solid transparent;transition:all .2s ease}
     .menu a:hover{border-color:var(--stroke);background:rgba(255,255,255,.06)}
     .menu a.active{background:rgba(255,255,255,.12);border-color:var(--stroke);box-shadow:0 0 0 3px rgba(182,251,255,.08) inset}
 
     /* HERO */
-    header{position:relative;min-height:76vh;display:grid;place-items:center;overflow:hidden;
-      background:radial-gradient(120% 120% at 20% 20%,#18191a,#0a0a0a)}
-    header:before{content:"";position:absolute;inset:-20%;background:conic-gradient(from 0deg,#1a1b1d, #0f1113, #1a1b1d);
-      filter:blur(60px) saturate(120%);animation:glassShift 16s linear infinite;opacity:.65}
+    header{position:relative;min-height:76vh;display:grid;place-items:center;overflow:hidden;background:radial-gradient(120% 120% at 20% 20%,#18191a,#0a0a0a)}
+    header:before{content:"";position:absolute;inset:-20%;background:conic-gradient(from 0deg,#1a1b1d,#0f1113,#1a1b1d);filter:blur(60px) saturate(120%);animation:glassShift 16s linear infinite;opacity:.65}
     @keyframes glassShift{to{transform:rotate(360deg)}}
-
     .hero{max-width:900px;text-align:center;padding:28px 16px;position:relative;z-index:2}
     .kicker{letter-spacing:.24em;text-transform:uppercase;color:#9ea2a8;font-weight:700;font-size:12px}
 
@@ -57,10 +46,10 @@
     section{padding:90px 16px;max-width:1150px;margin:auto;scroll-margin-top:90px}
     .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:18px}
     .card{background:rgba(255,255,255,.05);border:1px solid var(--stroke);padding:16px;border-radius:16px;box-shadow:0 10px 30px rgba(0,0,0,.45);position:relative;overflow:hidden}
-    .card img{width:100%;border-radius:12px;display:block}
+    .card img{width:100%;height:auto;aspect-ratio:16/11;object-fit:cover;border-radius:12px;display:block}
     .tag{position:absolute;top:12px;left:12px;background:var(--silver);color:#0a0a0a;font-weight:800;font-size:11px;padding:6px 10px;border-radius:999px}
 
-    /* KEUNGGULAN */
+    /* FEATURES */
     .features{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:16px;margin-top:14px}
     .feat{position:relative;padding:18px;border-radius:16px;border:1px solid var(--stroke);background:linear-gradient(180deg,rgba(255,255,255,.05),rgba(255,255,255,.02));overflow:hidden}
     .feat .ico{width:42px;height:42px;border-radius:12px;display:grid;place-items:center;background:radial-gradient(circle,#cfd2d6,#7a7d81);box-shadow:0 0 16px rgba(182,251,255,.25);margin-bottom:10px}
@@ -76,20 +65,22 @@
     .gitem{min-width:320px;max-width:320px}
     .gitem .card{height:100%}
     .shine{position:relative}
-    .shine:before{content:"";position:absolute;inset:-20%;background:linear-gradient(75deg,transparent 45%,rgba(255,255,255,.35) 50%,transparent 55%);
-      transform:translateX(-120%) rotate(0.001deg);filter:blur(6px)}
+    .shine:before{content:"";position:absolute;inset:-20%;background:linear-gradient(75deg,transparent 45%,rgba(255,255,255,.35) 50%,transparent 55%);transform:translateX(-120%) rotate(0.001deg);filter:blur(6px)}
     .shine.run:before{animation:shineSweep 1.8s ease-in}
     @keyframes shineSweep{to{transform:translateX(120%)}}
 
-    /* FULLSCREEN LIGHTBOX (blur background) */
+    /* LIGHTBOX */
     .lb-overlay{position:fixed;inset:0;display:none;place-items:center;background:rgba(0,0,0,.55);backdrop-filter:blur(12px);z-index:9999}
     .lb-overlay.active{display:grid}
-    .lb-frame{max-width:min(92vw,1200px);max-height:86vh;border-radius:16px;overflow:hidden;border:1px solid var(--stroke);background:var(--bg);box-shadow:0 30px 90px rgba(0,0,0,.6)}
+    .lb-frame{max-width:min(92vw,1200px);max-height:86vh;border-radius:16px;overflow:hidden;border:1px solid var(--stroke);background:var(--bg);box-shadow:0 30px 90px rgba(0,0,0,.6);position:relative}
     .lb-media{display:grid;place-items:center;background:radial-gradient(120% 120% at 20% 20%,#151617,#0a0a0a);transform:scale(.92);opacity:0;transition:transform .35s ease, opacity .35s ease}
     .lb-overlay.active .lb-media{transform:scale(1);opacity:1}
     .lb-media img{max-width:100%;max-height:80vh;display:block}
     .lb-caption{padding:12px 16px;border-top:1px solid var(--stroke);color:#cfd2d6}
-    .lb-close{position:absolute;top:12px;right:12px;background:rgba(255,255,255,.08);border:1px solid var(--stroke);backdrop-filter:blur(6px);color:#fff;padding:10px 12px;border-radius:12px;cursor:pointer}
+    .lb-close,.lb-prev,.lb-next{position:absolute;background:rgba(255,255,255,.08);border:1px solid var(--stroke);backdrop-filter:blur(6px);color:#fff;padding:10px 12px;border-radius:12px;cursor:pointer}
+    .lb-close{top:12px;right:12px}
+    .lb-prev{left:12px;top:50%;transform:translateY(-50%)}
+    .lb-next{right:12px;top:50%;transform:translateY(-50%)}
 
     /* MAP & Socials */
     .map-frame{border:1px solid var(--stroke);border-radius:16px;overflow:hidden;height:360px;background:#0f1012}
@@ -98,39 +89,43 @@
     .socials svg{width:18px;height:18px}
 
     /* Floating WhatsApp CTA */
-    .fab-wa{position:fixed;right:18px;bottom:18px;z-index:80;display:inline-flex;align-items:center;gap:10px;
-      padding:12px 16px;border-radius:999px;border:1px solid var(--stroke);background:linear-gradient(180deg,#cfd2d6,#8e9399);color:#0a0a0a;
-      box-shadow:0 12px 30px rgba(0,0,0,.45);font-weight:900}
+    .fab-wa{position:fixed;right:18px;bottom:18px;z-index:80;display:inline-flex;align-items:center;gap:10px;padding:12px 16px;border-radius:999px;border:1px solid var(--stroke);background:linear-gradient(180deg,#cfd2d6,#8e9399);color:#0a0a0a;box-shadow:0 12px 30px rgba(0,0,0,.45);font-weight:900}
     .fab-wa .dot{width:9px;height:9px;border-radius:50%;background:var(--accent);box-shadow:0 0 16px var(--accent)}
 
     footer{padding:50px 16px;border-top:1px solid var(--stroke);text-align:center;color:#aab1b7}
 
-    @media (max-width:640px){header{min-height:64vh}.gitem{min-width:260px;max-width:260px}}
-  /* Reserve height for gallery images (prevents collapse before lazy-load) */
-    .gitem .card img{width:100%;height:auto;aspect-ratio:16/11;object-fit:cover}
-
-    /* Blur-up helper */
-    .blur{filter:blur(12px);transform:scale(1.02);transition:filter .5s ease, transform .5s ease}
-    img:not(.blur){filter:none;transform:none}
+    /* Mobile tweaks */
+    @media (max-width:640px){
+      header{min-height:58vh}
+      .gitem{min-width:200px;max-width:200px}
+      section{padding:50px 12px}
+      .hero h1{font-size:clamp(26px,7vw,40px)}
+      .menu a{font-size:11px;padding:6px 8px}
+      .menu{gap:6px}
+      .particles{display:none!important}
+      #layanan .grid{grid-template-columns:repeat(auto-fit,minmax(170px,1fr))}
+      #layanan .card{padding:12px}
+      #layanan .tag{font-size:10px;padding:5px 8px}
+    }
   </style>
 </head>
 <body>
   <!-- NAVBAR -->
   <div class="nav">
-<div class="nav-inner">
-<a href="#home" class="brand">
-<img src="img/logoputar.png" alt="Logo Dewan Aluminium Kreatif">
-<div class="brand-title">Dewan Aluminium Kreatif</div>
-</a>
-<nav class="menu">
-<a href="#layanan">Layanan</a>
-<a href="#gallery">Gallery</a>
-<a href="#kontak">Kontak</a>
-</nav>
-</div>
-</div>
+    <div class="nav-inner">
+      <a href="#home" class="brand">
+        <img src="https://dewanaluminium.github.io/img/logoputar.png" alt="Logo Dewan Aluminium Kreatif">
+        <div class="brand-title">Dewan Aluminium Kreatif</div>
+      </a>
+      <nav class="menu">
+        <a href="#layanan">Layanan</a>
+        <a href="#gallery">Gallery</a>
+        <a href="#kontak">Kontak</a>
+      </nav>
+    </div>
+  </div>
 
-  <!-- HERO dengan partikel & parallax -->
+  <!-- HERO -->
   <header id="home">
     <div class="particles" id="particles"></div>
     <div class="hero" data-aos="fade-up">
@@ -141,7 +136,7 @@
     </div>
   </header>
 
-  <!-- KEUNGGULAN KAMI -->
+  <!-- KEUNGGULAN -->
   <section id="keunggulan">
     <h2 data-aos="fade-right">Keunggulan Kami</h2>
     <p class="muted" data-aos="fade-left">Kualitas material, presisi pemasangan, dan servis yang bisa diandalkan.</p>
@@ -149,7 +144,7 @@
       <div class="feat">
         <div class="ico"><svg viewBox="0 0 24 24"><path d="M12 2l7 4v6c0 5-3.1 9.4-7 10-3.9-.6-7-5-7-10V6l7-4Z"/></svg></div>
         <h4>Profesional</h4>
-        <p class="muted">Pengerjaan dan Pemasangan yang mengutamakan Kepuasan Pelanggan.</p>
+        <p class="muted">Pengerjaan dan pemasangan mengutamakan kepuasan pelanggan.</p>
       </div>
       <div class="feat">
         <div class="ico"><svg viewBox="0 0 24 24"><path d="M12 7l9 4-9 4-9-4 9-4m0 6l6.5 2.9L12 19l-6.5-3.1L12 13Z"/></svg></div>
@@ -169,75 +164,32 @@
     <h2 data-aos="fade-right">Layanan</h2>
     <p class="muted" data-aos="fade-left">Pilih kebutuhan Anda — semua bisa custom ukuran & warna.</p>
     <div class="grid" data-aos="fade-up">
-      <div class="card">
-        <span class="tag">Lemari</span>
-        <img class="lazy blur" loading="lazy" data-src="https://placehold.co/600x400?text=Lemari" src="https://placehold.co/60x40?text=+" alt="Lemari Aluminium"/>
-        <h4>Lemari Aluminium</h4>
-        <p class="muted">Finishing silver, anti rayap, tahan lembab, opsi cermin.</p>
-      </div>
-      <div class="card">
-        <span class="tag">Kitchen Set</span>
-        <img class="lazy blur" loading="lazy" data-src="https://placehold.co/600x400?text=Kitchen+Set" src="https://placehold.co/60x40?text=+" alt="Kitchen Set Aluminium"/>
-        <h4>Kitchen Set</h4>
-        <p class="muted">Modular, soft-close, top table rapi, lighting LED.</p>
-      </div>
-      <div class="card">
-        <span class="tag">Kusen & Jendela</span>
-        <img class="lazy blur" loading="lazy" data-src="https://placehold.co/600x400?text=Kusen+%26+Jendela" src="https://placehold.co/60x40?text=+" alt="Kusen & Jendela"/>
-        <h4>Kusen & Jendela</h4>
-        <p class="muted">Sliding/ayun, kaca tempered, kerapatan tinggi.</p>
-      </div>
-      <div class="card">
-        <span class="tag">Partisi</span>
-        <img class="lazy blur" loading="lazy" data-src="https://placehold.co/600x400?text=Partisi" src="https://placehold.co/60x40?text=+" alt="Partisi"/>
-        <h4>Partisi & Pintu</h4>
-        <p class="muted">Kantor, kafe, showroom; kombinasi kaca & ACP.</p>
-      </div>
-      <div class="card">
-        <span class="tag">Kaca Tempered</span>
-        <img class="lazy blur" loading="lazy" data-src="https://placehold.co/600x400?text=Kaca+Tempered" src="https://placehold.co/60x40?text=+" alt="Kaca Tempered"/>
-        <h4>Pemasangan Kaca Tempered</h4>
-        <p class="muted">Pengukuran akurat, hardware kuat, pemasangan rapi.</p>
-      </div>
-      <div class="card">
-        <span class="tag">Material</span>
-        <img class="lazy blur" loading="lazy" data-src="https://placehold.co/600x400?text=ACP+%26+Aksesoris" src="https://placehold.co/60x40?text=+" alt="ACP & Aksesoris"/>
-        <h4>ACP & Aksesoris</h4>
-        <p class="muted">Supplier ACP, engsel, handle, rel, serta bahan aluminium.</p>
-      </div>
+      <div class="card"><span class="tag">Lemari</span><img src="img/workshopai.png" alt="Lemari Aluminium"/><h4>Lemari Aluminium</h4></div>
+      <div class="card"><span class="tag">Kitchen Set</span><img src="img/workshopai.png" alt="Kitchen Set"/><h4>Kitchen Set</h4></div>
+      <div class="card"><span class="tag">Kusen & Jendela</span><img src="img/workshopai.png" alt="Kusen & Jendela"/><h4>Kusen & Jendela</h4></div>
+      <div class="card"><span class="tag">Partisi</span><img src="img/workshopai.png" alt="Partisi"/><h4>Partisi & Pintu</h4></div>
+      <div class="card"><span class="tag">Kaca Tempered</span><img src="img/workshopai.png" alt="Kaca Tempered"/><h4>Pemasangan Kaca Tempered</h4></div>
+      <div class="card"><span class="tag">Material</span><img src="img/workshopai.png" alt="ACP & Aksesoris"/><h4>ACP & Aksesoris</h4></div>
     </div>
   </section>
 
-  <!-- GALLERY: horizontal auto-scroll + fullscreen blur on click -->
+  <!-- GALLERY -->
   <section id="gallery">
     <h2 data-aos="fade-right">Gallery</h2>
-    <p class="muted" data-aos="fade-left">Deretan foto bergerak otomatis ke kanan. Klik foto untuk **fullscreen** dengan latar blur. Sekarang mendukung **Next/Prev**.</p>
-
     <div class="hwrap hmask" data-aos="zoom-in">
       <div class="htrack" id="gtrack">
-        <!-- Satu set item saja; JS akan menggandakan untuk loop mulus -->
-        <div class="gitem"><div class="card shine"><a href="/img/workshopai.png" class="lb" data-caption="Proyek 1 — Partisi kaca tempered."><img class="lazy blur" loading="lazy" data-src="/img/workshopai.png" src="/img/workshopai.png" alt="Proyek 1"/></a></div></div>
-        <div class="gitem"><div class="card shine"><a href="/img/workshopai.png" class="lb" data-caption="Proyek 2 — Kitchen set minimalis."><img class="lazy blur" loading="lazy" data-src="/img/workshopai.png" src="/img/workshopai.png" alt="Proyek 2"/></a></div></div>
-        <div class="gitem"><div class="card shine"><a href="/img/workshopai.png" class="lb" data-caption="Proyek 3 — Kusen & jendela sliding."><img class="lazy blur" loading="lazy" data-src="/img/workshopai.png" src="/img/workshopai.png" alt="Proyek 3"/></a></div></div>
-        <div class="gitem"><div class="card shine"><a href="/img/workshopai.png" class="lb" data-caption="Proyek 4 — Lemari aluminium cermin."><img class="lazy blur" loading="lazy" data-src="/img/workshopai.png" src="/img/workshopai.png" alt="Proyek 4"/></a></div></div>
-        <div class="gitem"><div class="card shine"><a href="/img/workshopai.png" class="lb" data-caption="Proyek 5 — Fasade ACP."><img class="lazy blur" loading="lazy" data-src="/img/workshopai.png" src="/img/workshopai.png" alt="Proyek 5"/></a></div></div>
-        <div class="gitem"><div class="card shine"><a href="/img/workshopai.png" class="lb" data-caption="Proyek 6 — Railing kaca."><img class="lazy blur" loading="lazy" data-src="/img/workshopai.png" src="/img/workshopai.png" alt="Proyek 6"/></a></div></div>
+        <!-- Base items (JS akan duplikasi 1x untuk loop mulus) -->
+        <div class="gitem"><div class="card shine"><a href="img/workshopai.png" class="lb" data-caption="Proyek 1 — Partisi kaca tempered."><img src="img/workshopai.png" alt="Proyek 1"/></a></div></div>
+        <div class="gitem"><div class="card shine"><a href="img/workshopai.png" class="lb" data-caption="Proyek 2 — Kitchen set minimalis."><img src="img/workshopai.png" alt="Proyek 2"/></a></div></div>
+        <div class="gitem"><div class="card shine"><a href="img/workshopai.png" class="lb" data-caption="Proyek 3 — Kusen & jendela sliding."><img src="img/workshopai.png" alt="Proyek 3"/></a></div></div>
+        <div class="gitem"><div class="card shine"><a href="img/workshopai.png" class="lb" data-caption="Proyek 4 — Lemari aluminium cermin."><img src="img/workshopai.png" alt="Proyek 4"/></a></div></div>
+        <div class="gitem"><div class="card shine"><a href="img/workshopai.png" class="lb" data-caption="Proyek 5 — Fasade ACP."><img src="img/workshopai.png" alt="Proyek 5"/></a></div></div>
+        <div class="gitem"><div class="card shine"><a href="img/workshopai.png" class="lb" data-caption="Proyek 6 — Railing kaca."><img src="img/workshopai.png" alt="Proyek 6"/></a></div></div>
       </div>
-    </div>
-
-    <!-- Fullscreen Overlay -->
-    <div class="lb-overlay" id="lightbox" aria-hidden="true">
-      <button class="lb-close" aria-label="Tutup">✕</button>
-      <button class="lb-prev" aria-label="Sebelumnya" style="position:absolute;left:12px;top:50%;transform:translateY(-50%);background:rgba(255,255,255,.08);border:1px solid var(--stroke);backdrop-filter:blur(6px);color:#fff;padding:10px 12px;border-radius:12px;cursor:pointer">◀</button>
-      <div class="lb-frame">
-        <div class="lb-media"><img id="lb-img" alt="Preview"/></div>
-        <div class="lb-caption" id="lb-cap">&nbsp;</div>
-      </div>
-      <button class="lb-next" aria-label="Berikutnya" style="position:absolute;right:12px;top:50%;transform:translateY(-50%);background:rgba(255,255,255,.08);border:1px solid var(--stroke);backdrop-filter:blur(6px);color:#fff;padding:10px 12px;border-radius:12px;cursor:pointer">▶</button>
     </div>
   </section>
 
-  <!-- KONTAK dengan Google Maps + Social Links -->
+  <!-- KONTAK -->
   <section id="kontak">
     <h2 data-aos="fade-right">Kontak</h2>
     <p class="muted" data-aos="fade-left">Hubungi kami di media sosial atau WhatsApp (klik Tombol di Sudut Kiri Bawah). Kunjungi toko pada peta di bawah ini.</p>
@@ -279,175 +231,157 @@
     <span class="dot"></span> Chat WhatsApp
   </a>
 
-  <!-- Scripts -->
+  <!-- Lightbox overlay ditempatkan DI LUAR section dan SEBELUM script -->
+  <div class="lb-overlay" id="lightbox" aria-hidden="true">
+    <button class="lb-close" aria-label="Tutup">✕</button>
+    <button class="lb-prev" aria-label="Sebelumnya">◀</button>
+    <div class="lb-frame">
+      <div class="lb-media"><img id="lb-img" alt="Preview"/></div>
+      <div class="lb-caption" id="lb-cap">&nbsp;</div>
+    </div>
+    <button class="lb-next" aria-label="Berikutnya">▶</button>
+  </div>
+
+  <!-- Libs JS -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.js"></script>
-  <script>
-    // AOS init
-    AOS.init({ once:true, duration:800, easing:'ease-out-quart' });
-    document.getElementById('year').textContent = new Date().getFullYear();
 
-    // Partikel aluminium (random drift + parallax)
-    (function(){
-      const wrap=document.getElementById('particles');
-      const N=60; const W=wrap.clientWidth||window.innerWidth; const H=wrap.clientHeight||400;
-      for(let i=0;i<N;i++){ const s=document.createElement('span'); s.className='p'; s.style.left=Math.random()*W+'px'; s.style.top=Math.random()*H+'px'; wrap.appendChild(s); }
-      gsap.utils.toArray('.p').forEach((el)=>{
-        gsap.to(el,{x:'random(-40,40)', y:'random(-30,30)', duration:gsap.utils.random(6,12), repeat:-1, yoyo:true, ease:'sine.inOut'});
+  <!-- Effects & Logic -->
+  <script>
+    document.addEventListener('DOMContentLoaded', function(){
+
+      // AOS init
+      AOS.init({ once:true, duration:800, easing:'ease-out-quart' });
+      document.getElementById('year').textContent = new Date().getFullYear();
+
+      // Partikel aluminium (skip di mobile)
+      (function(){
+        const wrap = document.getElementById('particles');
+        if(!wrap || window.matchMedia('(max-width: 640px)').matches){
+          console.warn('[Particles] skipped on mobile or missing container.');
+          return;
+        }
+        const N = 60;
+        const W = wrap.clientWidth || window.innerWidth;
+        const H = wrap.clientHeight || 400;
+        for(let i=0;i<N;i++){
+          const s=document.createElement('span');
+          s.className='p';
+          s.style.left=Math.random()*W+'px';
+          s.style.top=Math.random()*H+'px';
+          wrap.appendChild(s);
+        }
+        gsap.utils.toArray('.p').forEach((el)=>{
+          gsap.to(el,{x:'random(-40,40)', y:'random(-30,30)', duration:gsap.utils.random(6,12), repeat:-1, yoyo:true, ease:'sine.inOut'});
+        });
+        gsap.to('.particles',{scrollTrigger:{trigger:'#home',start:'top top',end:'bottom top',scrub:true}, yPercent:-12});
+      })();
+
+      // Section & cards slide-in
+      gsap.utils.toArray('section').forEach((sec)=>{
+        gsap.from(sec,{scrollTrigger:{trigger:sec,start:'top 85%'}, y:30, opacity:0, duration:.9, ease:'power3.out'});
+        gsap.from(sec.querySelectorAll('.card'),{scrollTrigger:{trigger:sec,start:'top 80%'}, y:24, opacity:0, duration:.7, ease:'power2.out', stagger:.06});
       });
-      gsap.to('.particles',{scrollTrigger:{trigger:'#home',start:'top top',end:'bottom top',scrub:true}, yPercent:-12});
-    })();
 
-    // Section & cards slide-in
-    gsap.utils.toArray('section').forEach((sec)=>{
-      gsap.from(sec,{scrollTrigger:{trigger:sec,start:'top 85%'}, y:30, opacity:0, duration:.9, ease:'power3.out'});
-      gsap.from(sec.querySelectorAll('.card'),{scrollTrigger:{trigger:sec,start:'top 80%'}, y:24, opacity:0, duration:.7, ease:'power2.out', stagger:.06});
-    });
+      // Navbar reveal on scroll up
+      (function(){
+        let lastY = window.scrollY; const nav = document.querySelector('.nav');
+        window.addEventListener('scroll',()=>{ const y = window.scrollY; nav.style.transform = (y>lastY && y>120) ? 'translateY(-100%)' : 'translateY(0)'; lastY = y; });
+      })();
 
-    // Navbar reveal on scroll up
-    (function(){
-      let lastY = window.scrollY; const nav = document.querySelector('.nav');
-      window.addEventListener('scroll',()=>{ const y = window.scrollY; nav.style.transform = (y>lastY && y>120) ? 'translateY(-100%)' : 'translateY(0)'; lastY = y; });
-    })();
+      // Scrollspy for navbar
+      (function(){
+        const links = Array.from(document.querySelectorAll('.menu a'));
+        const sections = links.map(a=>document.querySelector(a.getAttribute('href'))).filter(Boolean);
+        const byId = Object.fromEntries(links.map(a=>[a.getAttribute('href'), a]));
+        const io = new IntersectionObserver((entries)=>{
+          entries.forEach(ent=>{
+            if(ent.isIntersecting){
+              links.forEach(l=>l.classList.remove('active'));
+              const id = '#' + ent.target.id;
+              if(byId[id]) byId[id].classList.add('active');
+            }
+          });
+        }, {rootMargin:'-40% 0px -50% 0px', threshold:[0, .2, .5, .8, 1]});
+        sections.forEach(sec=>io.observe(sec));
+      })();
 
-    // Lightbox (fullscreen blur) — dengan Next/Prev
-    (function(){
-      const getLinks = ()=>Array.from(document.querySelectorAll('#gtrack a.lb'));
-      const overlay = document.getElementById('lightbox');
-      const img = document.getElementById('lb-img');
-      const cap = document.getElementById('lb-cap');
-      const btnClose = overlay.querySelector('.lb-close');
-      const btnPrev = overlay.querySelector('.lb-prev');
-      const btnNext = overlay.querySelector('.lb-next');
-      let index = 0;
-      function open(i){ const L=getLinks(); index=(i+L.length)%L.length; const a=L[index]; if(!a) return;
-        img.src=a.href; cap.textContent=a.dataset.caption||''; overlay.classList.add('active'); overlay.setAttribute('aria-hidden','false'); document.body.style.overflow='hidden'; }
-      function close(){ overlay.classList.remove('active'); overlay.setAttribute('aria-hidden','true'); img.removeAttribute('src'); document.body.style.overflow='auto'; }
-      function prev(){ open(index-1); }
-      function next(){ open(index+1); }
-      document.addEventListener('click',(e)=>{ const a=e.target.closest('a.lb'); if(!a) return; e.preventDefault(); const L=getLinks(); open(L.indexOf(a)); });
-      btnClose.addEventListener('click', close);
-      btnPrev.addEventListener('click', prev);
-      btnNext.addEventListener('click', next);
-      overlay.addEventListener('click',(e)=>{ if(e.target===overlay) close(); });
-      window.addEventListener('keydown',(e)=>{ if(!overlay.classList.contains('active')) return; if(e.key==='Escape') close(); if(e.key==='ArrowLeft') prev(); if(e.key==='ArrowRight') next(); });
-    })();
-
-    // Horizontal auto-scroll + shine sweep + robust measure
-    (function(){
-      const wrap = document.querySelector('.hwrap');
-      const track = document.getElementById('gtrack');
-      const base = Array.from(track.children).map(el=>el.cloneNode(true));
-      track.innerHTML=''; base.forEach(n=>track.appendChild(n.cloneNode(true))); base.forEach(n=>track.appendChild(n.cloneNode(true))); // 2x
-      let pos=0, speed=0.6, half=0, raf;
-      function measure(){ half = track.scrollWidth/2; pos=-half; track.style.transform = `translateX(${pos}px)`; }
-      function loop(){ pos += speed; if(pos>=0) pos=-half; track.style.transform = `translateX(${pos}px)`; raf=requestAnimationFrame(loop); }
-      function start(){ cancelAnimationFrame(raf); measure(); loop(); }
-      // Recalc after images load (lazy)
-      const imgs = track.querySelectorAll('img');
-      let loaded=0; imgs.forEach(img=>{ if(img.complete) loaded++; else img.addEventListener('load', ()=>{ loaded++; if(loaded===imgs.length) start(); }, {once:true}); });
-      if(loaded===imgs.length){ start(); } else { // fallback start anyway, then re-measure later
-        start(); setTimeout(start, 1200); setTimeout(start, 2500);
-      }
-      // Shine sweep
-      setInterval(()=>{ const cards = track.querySelectorAll('.shine'); const pick = cards[Math.floor(Math.random()*cards.length)]; if(pick){ pick.classList.remove('run'); void pick.offsetWidth; pick.classList.add('run'); } }, 1600);
-      // Pause on hover (optional)
-      wrap.addEventListener('mouseenter', ()=>{ speed = Math.abs(speed)*-1; });
-      wrap.addEventListener('mouseleave', ()=>{ speed = Math.abs(speed); });
-      window.addEventListener('resize', start);
-    })();
-      // Lazy-loading + blur-up (semua img[data-src])
-    (function(){
-      const els = document.querySelectorAll('img.lazy[data-src]');
-      const io = new IntersectionObserver((entries)=>{
-        entries.forEach(entry=>{
-          if(entry.isIntersecting){ const img=entry.target; img.src=img.dataset.src; img.removeAttribute('data-src'); img.addEventListener('load',()=>{ img.classList.remove('blur'); }, {once:true}); io.unobserve(img); }
-        });
-      }, {rootMargin:'200px'});
-      els.forEach(img=>io.observe(img));
-    })();
-  </script>
-  <script>
-    // ---- PATCH-IN: Reliable Lazy-load + Gallery Auto-Scroll + Lightbox Prev/Next ----
-    (function(){
-      // 1) Lazy-loading + blur-up (works even if IntersectionObserver missing)
-      function lazyInit(){
-        const els = document.querySelectorAll('img.lazy[data-src]');
-        function loadOne(img){ if(!img || !img.dataset.src) return; img.src = img.dataset.src; img.removeAttribute('data-src'); img.addEventListener('load',()=>img.classList.remove('blur'), {once:true}); }
-        if('IntersectionObserver' in window){
-          const io = new IntersectionObserver((entries)=>{
-            entries.forEach(entry=>{ if(entry.isIntersecting){ loadOne(entry.target); io.unobserve(entry.target); } });
-          }, {rootMargin:'200px'});
-          els.forEach(img=>io.observe(img));
-        } else { els.forEach(loadOne); }
-        // Eager load gallery thumbs as safety (for some static hosts/previews)
-        window.addEventListener('load', ()=>{
-          document.querySelectorAll('#gtrack img.lazy[data-src]').forEach(loadOne);
-        });
-      }
-
-      // 2) Horizontal auto-scroll (robust) with duplication & re-measure
-      function marqueeInit(){
-        const track = document.getElementById('gtrack'); if(!track) return;
-        // Cancel previous loop if we created one earlier
-        if(track._raf){ cancelAnimationFrame(track._raf); track._raf=null; }
-        // If not duplicated yet, duplicate children to make seamless loop
-        if(!track.dataset.duplicated){
-          const base = Array.from(track.children).map(el=>el.cloneNode(true));
-          track.innerHTML='';
-          base.forEach(n=>track.appendChild(n.cloneNode(true)));
-          base.forEach(n=>track.appendChild(n.cloneNode(true))); // duplicate once
-          track.dataset.duplicated='1';
-        }
-        let pos=0, speed=0.6, half=0;
-        function measure(){ half = track.scrollWidth/2; pos=-half; track.style.transform = `translateX(${pos}px)`; }
-        function loop(){ pos += speed; if(pos>=0) pos=-half; track.style.transform = `translateX(${pos}px)`; track._raf=requestAnimationFrame(loop); }
-        function start(){ if(track._raf) cancelAnimationFrame(track._raf); measure(); loop(); }
-        // Start immediately, then re-measure after images load & a couple of delays
-        start();
-        const imgs = track.querySelectorAll('img'); let loaded=0;
-        imgs.forEach(img=>{ if(img.complete) loaded++; else img.addEventListener('load', ()=>{ loaded++; if(loaded===imgs.length) start(); }, {once:true}); });
-        setTimeout(start, 1200); setTimeout(start, 2500);
-        // Optional: reverse on hover
-        const wrap = document.querySelector('.hwrap');
-        if(wrap){
-          wrap.addEventListener('mouseenter', ()=>{ speed = Math.abs(speed)*-1; });
-          wrap.addEventListener('mouseleave', ()=>{ speed = Math.abs(speed); });
-        }
-        window.addEventListener('resize', start);
-        // Shine sweep
-        setInterval(()=>{ const pick = track.querySelectorAll('.shine')[Math.floor(Math.random()*track.querySelectorAll('.shine').length)]; if(pick){ pick.classList.remove('run'); void pick.offsetWidth; pick.classList.add('run'); } }, 1600);
-      }
-
-      // 3) Lightbox with Prev/Next + keyboard + click outside
-      function lightboxInit(){
-        const overlay = document.getElementById('lightbox'); if(!overlay) return;
-        // Ensure prev/next buttons exist (patch if missing)
-        if(!overlay.querySelector('.lb-prev')){ const b=document.createElement('button'); b.className='lb-prev'; b.textContent='◀'; b.setAttribute('aria-label','Sebelumnya'); b.style.cssText='position:absolute;left:12px;top:50%;transform:translateY(-50%);background:rgba(255,255,255,.08);border:1px solid var(--stroke);backdrop-filter:blur(6px);color:#fff;padding:10px 12px;border-radius:12px;cursor:pointer'; overlay.appendChild(b); }
-        if(!overlay.querySelector('.lb-next')){ const b=document.createElement('button'); b.className='lb-next'; b.textContent='▶'; b.setAttribute('aria-label','Berikutnya'); b.style.cssText='position:absolute;right:12px;top:50%;transform:translateY(-50%);background:rgba(255,255,255,.08);border:1px solid var(--stroke);backdrop-filter:blur(6px);color:#fff;padding:10px 12px;border-radius:12px;cursor:pointer'; overlay.appendChild(b); }
+      // Lightbox (fullscreen blur) — Prev/Next + keyboard
+      (function(){
+        const getLinks = ()=>Array.from(document.querySelectorAll('#gtrack a.lb'));
+        const overlay = document.getElementById('lightbox');
         const img = document.getElementById('lb-img');
         const cap = document.getElementById('lb-cap');
         const btnClose = overlay.querySelector('.lb-close');
         const btnPrev = overlay.querySelector('.lb-prev');
         const btnNext = overlay.querySelector('.lb-next');
         let index = 0;
-        const getLinks = ()=>Array.from(document.querySelectorAll('#gtrack a.lb'));
-        function open(i){ const L=getLinks(); if(!L.length) return; index=(i+L.length)%L.length; const a=L[index]; img.src=a.href; cap.textContent=a.dataset.caption||''; overlay.classList.add('active'); overlay.setAttribute('aria-hidden','false'); document.body.style.overflow='hidden'; }
+
+        function open(i){
+          const L=getLinks(); if(!L.length) return;
+          index=(i+L.length)%L.length; const a=L[index];
+          img.src=a.href; cap.textContent=a.dataset.caption||'';
+          overlay.classList.add('active'); overlay.setAttribute('aria-hidden','false'); document.body.style.overflow='hidden';
+        }
         function close(){ overlay.classList.remove('active'); overlay.setAttribute('aria-hidden','true'); img.removeAttribute('src'); document.body.style.overflow='auto'; }
         function prev(){ open(index-1); }
         function next(){ open(index+1); }
-        document.addEventListener('click',(e)=>{ const a=e.target.closest('a.lb'); if(!a) return; e.preventDefault(); const L=getLinks(); open(L.indexOf(a)); });
-        btnClose && btnClose.addEventListener('click', close);
-        btnPrev && btnPrev.addEventListener('click', prev);
-        btnNext && btnNext.addEventListener('click', next);
-        overlay.addEventListener('click', (e)=>{ if(e.target===overlay) close(); });
-        window.addEventListener('keydown', (e)=>{ if(!overlay.classList.contains('active')) return; if(e.key==='Escape') close(); if(e.key==='ArrowLeft') prev(); if(e.key==='ArrowRight') next(); });
-      }
 
-      // Init sequence
-      lazyInit(); marqueeInit(); lightboxInit();
-    })();
+        document.addEventListener('click',(e)=>{
+          const a=e.target.closest('a.lb'); if(!a) return;
+          e.preventDefault();
+          const L=getLinks();
+          open(L.indexOf(a));
+        });
+        btnClose.addEventListener('click', close);
+        btnPrev.addEventListener('click', prev);
+        btnNext.addEventListener('click', next);
+        overlay.addEventListener('click',(e)=>{ if(e.target===overlay) close(); });
+        window.addEventListener('keydown',(e)=>{ if(!overlay.classList.contains('active')) return; if(e.key==='Escape') close(); if(e.key==='ArrowLeft') prev(); if(e.key==='ArrowRight') next(); });
+      })();
+
+      // Horizontal auto-scroll (seamless) + shine
+      (function(){
+        const wrap = document.querySelector('.hwrap');
+        const track = document.getElementById('gtrack');
+        if(!wrap || !track) return;
+
+        // Duplikasi sekali untuk loop mulus
+        if(!track.dataset.duplicated){
+          const base = Array.from(track.children).map(el=>el.cloneNode(true));
+          base.forEach(n=>track.appendChild(n));
+          track.dataset.duplicated='1';
+        }
+
+        let pos=0, speed=0.9, half=0, raf;
+        function measure(){ half = track.scrollWidth/2; pos=-half; track.style.transform = `translateX(${pos}px)`; }
+        function loop(){ pos += speed; if(pos>=0) pos=-half; track.style.transform = `translateX(${pos}px)`; raf=requestAnimationFrame(loop); }
+        function start(){ cancelAnimationFrame(raf); measure(); loop(); }
+        start();
+        window.addEventListener('resize', start);
+
+        // Shine sweep random
+        setInterval(()=>{ const cards = track.querySelectorAll('.shine'); if(!cards.length) return; const pick = cards[Math.floor(Math.random()*cards.length)]; pick.classList.remove('run'); void pick.offsetWidth; pick.classList.add('run'); }, 1600);
+
+        // Reverse on hover hanya di desktop (bukan HP)
+        if (window.matchMedia('(hover: hover) and (pointer: fine)').matches) {
+          wrap.addEventListener('mouseenter', ()=>{ speed = Math.abs(speed)*-1; });
+          wrap.addEventListener('mouseleave', ()=>{ speed = Math.abs(speed); });
+        }
+      })();
+
+      // Mini self-tests (log ke console)
+      (function(){
+        console.group('%cSelf-tests','color:#b6fbff');
+        console.assert(!!document.getElementById('particles'), 'Test: #particles harus ada');
+        console.assert(!!document.getElementById('gtrack'), 'Test: #gtrack harus ada');
+        console.assert(!!document.getElementById('lightbox'), 'Test: #lightbox harus ada');
+        console.assert(document.querySelectorAll('#gtrack .gitem').length>=6, 'Test: minimal 6 item galeri');
+        console.groupEnd();
+      })();
+
+    });
   </script>
 </body>
 </html>
