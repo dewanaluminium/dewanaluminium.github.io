@@ -1,516 +1,380 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dewan Aluminium Kreatif - Presisi, Estetika, Inovasi</title>
-    
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-    
-    <style>
-        /* =================
-           RESET & GLOBAL
-           ================= */
-        :root {
-            --bg-color: #0A0A0A; /* Hitam yang sangat pekat */
-            --text-color: #EAEAEA;
-            --text-secondary: #666;
-        }
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Dewan Aluminium Kreatif</title>
+  <meta name="description" content="Dewan Aluminium Kreatif: spesialis lemari, kitchen set, kusen, jendela, partisi, kaca tempered, ACP. Cek layanan, galeri, dan kontak kami."/>
 
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+  <!-- Fonts & libs -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Audiowide&family=Montserrat:wght@300;400;600;800&display=swap" rel="stylesheet">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.css" rel="stylesheet"/>
 
-        html {
-            scroll-behavior: smooth;
-        }
+  <style>
+    :root{--bg:#0a0a0a;--bg2:#121314;--silver:#cfd2d6;--stroke:rgba(255,255,255,.15);--glass:rgba(255,255,255,.06);--accent:#b6fbff}
+    /* Blur-up helper */
+    .blur{filter:blur(12px);transform:scale(1.02);transition:filter .5s ease, transform .5s ease}
+    img:not(.blur){filter:none;transform:none}
 
-        body {
-            font-family: 'Inter', sans-serif;
-            background-color: var(--bg-color);
-            color: var(--text-color);
-            line-height: 1.6;
-            overflow-x: hidden;
-            -webkit-font-smoothing: antialiased;
-            -moz-osx-font-smoothing: grayscale;
-        }
+    :root{--bg:#0a0a0a;--bg2:#121314;--silver:#cfd2d6;--stroke:rgba(255,255,255,.15);--glass:rgba(255,255,255,.06);--accent:#b6fbff}
+    *{box-sizing:border-box}
+    html,body{margin:0;background:var(--bg);color:#fff;font-family:Montserrat,system-ui;scroll-behavior:smooth}
+    h1,h2,h3,h4{font-family:Audiowide;background:linear-gradient(125deg,#f5f7fa,#aeb4bb,#7f868d);-webkit-background-clip:text;color:transparent}
+    a{color:inherit;text-decoration:none}
+    .muted{color:#b5bbc2}
 
-        .container {
-            width: 90%;
-            max-width: 1200px;
-            margin: 0 auto;
-        }
+    /* NAVBAR */
+    .nav{position:sticky;top:0;z-index:60;backdrop-filter:blur(10px);border-bottom:1px solid var(--stroke);
+         background:linear-gradient(180deg,rgba(0,0,0,.55),rgba(0,0,0,.35))}
+    .nav-inner{max-width:1150px;margin:auto;display:flex;align-items:center;gap:14px;padding:10px 16px}
+    .brand{display:flex;align-items:center;gap:10px}
+    .logo{width:36px;height:36px;border-radius:10px;background:radial-gradient(circle,#cfd2d6,#7a7d81);display:grid;place-items:center;box-shadow:0 0 16px rgba(182,251,255,.25)}
+    .logo svg{width:22px;height:22px;fill:#0a0a0a}
+    .brand-title{font:800 14px/1 Audiowide;letter-spacing:.5px}
+    .spacer{flex:1}
+    .menu{display:flex;gap:10px;flex-wrap:wrap}
+    .menu a{font-weight:700;font-size:13px;padding:8px 10px;border-radius:10px;border:1px solid transparent;transition:all .2s ease}
+    .menu a:hover{border-color:var(--stroke);background:rgba(255,255,255,.06)}
+    .menu a.active{background:rgba(255,255,255,.12);border-color:var(--stroke);box-shadow:0 0 0 3px rgba(182,251,255,.08) inset}
 
-        h1, h2, h3 {
-            font-weight: 700;
-            line-height: 1.2;
-        }
-        
-        p {
-            font-size: 1.1rem;
-            max-width: 65ch;
-            color: #b0b0b0;
-            margin-bottom: 1.5rem;
-        }
+    /* HERO */
+    header{position:relative;min-height:76vh;display:grid;place-items:center;overflow:hidden;
+      background:radial-gradient(120% 120% at 20% 20%,#18191a,#0a0a0a)}
+    header:before{content:"";position:absolute;inset:-20%;background:conic-gradient(from 0deg,#1a1b1d, #0f1113, #1a1b1d);
+      filter:blur(60px) saturate(120%);animation:glassShift 16s linear infinite;opacity:.65}
+    @keyframes glassShift{to{transform:rotate(360deg)}}
 
-        a {
-            color: var(--text-color);
-            text-decoration: none;
-            transition: color 0.3s ease;
-        }
-        
-        section {
-            padding: 8rem 0;
-            position: relative;
-        }
+    .hero{max-width:900px;text-align:center;padding:28px 16px;position:relative;z-index:2}
+    .kicker{letter-spacing:.24em;text-transform:uppercase;color:#9ea2a8;font-weight:700;font-size:12px}
 
-        /* =================
-           HEADER/NAV MINIMALIS
-           ================= */
-        .navbar {
-            position: fixed;
-            width: 100%;
-            top: 0;
-            left: 0;
-            z-index: 100;
-            padding: 2rem 0;
+    /* Partikel aluminium */
+    .particles{position:absolute;inset:0;pointer-events:none;z-index:1}
+    .p{position:absolute;width:3px;height:3px;border-radius:50%;background:radial-gradient(circle,#e6f7ff,#8fb6c1 60%,transparent 61%);opacity:.8;filter:blur(.2px)}
 
-            /* TAMBAHKAN DUA BARIS INI */
-            background-color: rgba(10, 10, 10, 0.2); /* 0.85 = 85% solid */
-            backdrop-filter: blur(8px); /* Efek 'frost glass' */
-        }
-        
-        .navbar .container {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
+    /* LAYOUT */
+    section{padding:90px 16px;max-width:1150px;margin:auto;scroll-margin-top:90px}
+    .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:18px}
+    .card{background:rgba(255,255,255,.05);border:1px solid var(--stroke);padding:16px;border-radius:16px;box-shadow:0 10px 30px rgba(0,0,0,.45);position:relative;overflow:hidden}
+    .card img{width:100%;border-radius:12px;display:block}
+    .tag{position:absolute;top:12px;left:12px;background:var(--silver);color:#0a0a0a;font-weight:800;font-size:11px;padding:6px 10px;border-radius:999px}
 
-        .logo-container {
-    perspective: 800px; /* Ruang 3D untuk efek putar */
-    display: block;
-}
+    /* KEUNGGULAN */
+    .features{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:16px;margin-top:14px}
+    .feat{position:relative;padding:18px;border-radius:16px;border:1px solid var(--stroke);background:linear-gradient(180deg,rgba(255,255,255,.05),rgba(255,255,255,.02));overflow:hidden}
+    .feat .ico{width:42px;height:42px;border-radius:12px;display:grid;place-items:center;background:radial-gradient(circle,#cfd2d6,#7a7d81);box-shadow:0 0 16px rgba(182,251,255,.25);margin-bottom:10px}
+    .feat svg{width:22px;height:22px;fill:#0a0a0a}
 
-.logo-image {
-    height: 50px; /* Atur tinggi logo Anda di sini */
-    width: auto; /* Lebar akan mengikuti secara proporsional */
-    display: block;
-    transform-style: preserve-3d; /* Penting untuk 3D */
-    will-change: transform; /* Optimalisasi performa */
-}
+    /* HORIZONTAL GALLERY + SHINE */
+    .hwrap{position:relative;overflow:hidden;border-radius:16px;border:1px solid var(--stroke);background:linear-gradient(180deg,rgba(255,255,255,.05),rgba(255,255,255,.02))}
+    .hwrap:after{content:"";position:absolute;inset:-2px;pointer-events:none;border-radius:18px;box-shadow:0 0 28px rgba(182,251,255,.25), inset 0 0 22px rgba(255,255,255,.06)}
+    .hmask:before,.hmask:after{content:"";position:absolute;top:0;bottom:0;width:90px;z-index:2;pointer-events:none}
+    .hmask:before{left:0;background:linear-gradient(90deg,var(--bg) 0%,rgba(10,10,10,0) 100%)}
+    .hmask:after{right:0;background:linear-gradient(270deg,var(--bg) 0%,rgba(10,10,10,0) 100%)}
+    .htrack{display:flex;gap:12px;align-items:stretch;will-change:transform}
+    .gitem{min-width:320px;max-width:320px}
+    .gitem .card{height:100%}
+    .shine{position:relative}
+    .shine:before{content:"";position:absolute;inset:-20%;background:linear-gradient(75deg,transparent 45%,rgba(255,255,255,.35) 50%,transparent 55%);
+      transform:translateX(-120%) rotate(0.001deg);filter:blur(6px)}
+    .shine.run:before{animation:shineSweep 1.8s ease-in}
+    @keyframes shineSweep{to{transform:translateX(120%)}}
 
-        .nav-links {
-            list-style: none;
-            display: flex;
-        }
+    /* FULLSCREEN LIGHTBOX (blur background) */
+    .lb-overlay{position:fixed;inset:0;display:none;place-items:center;background:rgba(0,0,0,.55);backdrop-filter:blur(12px);z-index:9999}
+    .lb-overlay.active{display:grid}
+    .lb-frame{max-width:min(92vw,1200px);max-height:86vh;border-radius:16px;overflow:hidden;border:1px solid var(--stroke);background:var(--bg);box-shadow:0 30px 90px rgba(0,0,0,.6)}
+    .lb-media{display:grid;place-items:center;background:radial-gradient(120% 120% at 20% 20%,#151617,#0a0a0a);transform:scale(.92);opacity:0;transition:transform .35s ease, opacity .35s ease}
+    .lb-overlay.active .lb-media{transform:scale(1);opacity:1}
+    .lb-media img{max-width:100%;max-height:80vh;display:block}
+    .lb-caption{padding:12px 16px;border-top:1px solid var(--stroke);color:#cfd2d6}
+    .lb-close{position:absolute;top:12px;right:12px;background:rgba(255,255,255,.08);border:1px solid var(--stroke);backdrop-filter:blur(6px);color:#fff;padding:10px 12px;border-radius:12px;cursor:pointer}
 
-        .nav-links li { margin-left: 2rem; }
-        .nav-links a {
-            font-size: 1rem;
-            font-weight: 500;
-            color: var(--text-secondary);
-        }
-        .nav-links a:hover { color: var(--text-color); }
+    /* MAP & Socials */
+    .map-frame{border:1px solid var(--stroke);border-radius:16px;overflow:hidden;height:360px;background:#0f1012}
+    .socials{display:flex;gap:10px;flex-wrap:wrap}
+    .socials a{display:inline-flex;align-items:center;gap:8px;border:1px solid var(--stroke);padding:10px 14px;border-radius:12px;background:rgba(255,255,255,.05);font-weight:800}
+    .socials svg{width:18px;height:18px}
 
-        /* =================
-           HERO SECTION
-           ================= */
-        #hero {
-            height: 100vh;
-            display: flex;
-            align-items: center;
-            position: relative;
-            background-size: contain; /* Ganti ke 'contain' jika ingin lihat seluruh gambar */
-            background-position: center;
-            
-            /* Ganti URL gambar di bawah ini */
-            background-image: linear-gradient(rgba(10, 10, 10, 0.85), rgba(10, 10, 10, 0.85)), 
-                              url('/img/Logo2.png');
-        }
+    /* Floating WhatsApp CTA */
+    .fab-wa{position:fixed;right:18px;bottom:18px;z-index:80;display:inline-flex;align-items:center;gap:10px;
+      padding:12px 16px;border-radius:999px;border:1px solid var(--stroke);background:linear-gradient(180deg,#cfd2d6,#8e9399);color:#0a0a0a;
+      box-shadow:0 12px 30px rgba(0,0,0,.45);font-weight:900}
+    .fab-wa .dot{width:9px;height:9px;border-radius:50%;background:var(--accent);box-shadow:0 0 16px var(--accent)}
 
-        #hero h1 {
-            font-size: clamp(3rem, 8vw, 7rem); /* Lebih besar dan berani */
-            font-weight: 800;
-            max-width: 15ch;
-            z-index: 2;
-            position: relative;
-        }
+    footer{padding:50px 16px;border-top:1px solid var(--stroke);text-align:center;color:#aab1b7}
 
-        /* Wadah Pesawat Kertas */
-        #airplane-container {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            z-index: 1;
-            overflow: hidden;
-            opacity: 0.3;
-        }
-
-        #airplane-svg {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            width: 500px;
-            height: 500px;
-            transform: translate(-50%, -50%);
-            overflow: visible;
-        }
-        
-        #airplane-icon {
-            fill: var(--text-color);
-            visibility: hidden; /* Sembunyikan, GSAP akan menampilkannya */
-        }
-        
-        #fly-path {
-            fill: none;
-            stroke: none; /* Path tidak terlihat */
-        }
-
-        /* =================
-           TENTANG KAMI
-           ================= */
-        #tentang {
-            padding-bottom: 4rem;
-        }
-       
-        #tentang .content-wrapper {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 4rem;
-            align-items: center;
-        }
-
-        #tentang h2 {
-            font-size: clamp(2.5rem, 6vw, 4.5rem);
-            margin-bottom: 2rem;
-            max-width: 20ch;
-        }
-        
-        .visual-placeholder {
-            width: 100%;
-            height: 600px;
-            background-color: var(--text-secondary);
-            border-radius: 8px;
-            background-size: cover;
-            background-position: center;
-            
-            /* Ganti URL gambar di bawah ini */
-            background-image: url('/img/workshopai.png');
-        }
-        
-        @media (max-width: 768px) {
-            #tentang .content-wrapper {
-                grid-template-columns: 1fr;
-            }
-        }
-
-        /* =================
-           LAYANAN / PRODUK
-           ================= */
-        #layanan h2 {
-            font-size: clamp(2.5rem, 6vw, 4.5rem);
-            text-align: center;
-            margin-bottom: 4rem;
-        }
-        
-        .service-list {
-            list-style: none;
-            border-top: 1px solid var(--text-secondary);
-        }
-        
-        .service-list li {
-            border-bottom: 1px solid var(--text-secondary);
-            padding: 2.5rem 0;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-        
-        .service-list .service-title {
-            font-size: clamp(1.8rem, 5vw, 3.5rem);
-            font-weight: 600;
-            color: #ddd;
-            transition: all 0.4s ease;
-        }
-        
-        .service-list li:hover .service-title {
-            color: var(--text-color);
-            transform: translateX(20px);
-        }
-        
-        .service-list .service-description {
-            font-size: 1rem;
-            color: var(--text-secondary);
-            max-width: 30ch;
-        }
-
-        /* =================
-           KONTAK
-           ================= */
-        #kontak {
-            text-align: center;
-        }
-        
-        #kontak h2 {
-            font-size: clamp(3rem, 8vw, 7rem);
-            margin-bottom: 2rem;
-        }
-        
-        .cta-link {
-            font-size: clamp(1.3rem, 4vw, 2.2rem);
-            font-weight: 500;
-            text-decoration: underline;
-            display: inline-block;
-            transition: transform 0.3s ease;
-        }
-        
-        .cta-link:hover {
-            transform: scale(1.05);
-        }
-
-        /* =================
-           FOOTER
-           ================= */
-        footer {
-            padding: 4rem 0;
-            text-align: center;
-            color: var(--text-secondary);
-            border-top: 1px solid #222;
-        }
-
-        /* ==================================
-           CSS UNTUK "LINE MASK REVEAL"
-           ================================== */
-        
-        .scramble-text {
-            /* Sembunyikan teks awalnya untuk menghindari "flash" */
-            visibility: hidden; 
-        }
-        
-    </style>
+    @media (max-width:640px){header{min-height:64vh}.gitem{min-width:260px;max-width:260px}}
+  </style>
 </head>
 <body>
-
-    <header class="navbar">
-        <div class="container">
-            <a href="#hero" class="logo-container">
-    <img src="/img/logoputar.png" alt="Logo Dewan Aluminium Kreatif" class="logo-image">
-</a>
-            <nav>
-                <ul class="nav-links">
-                    <li><a href="#tentang">Tentang</a></li>
-                    <li><a href="#layanan">Layanan</a></li>
-                    <li><a href="https://gallery-dewan.netlify.app/">Gallery</a></li>
-                    <li><a href="https://cari-bahan-dewan.netlify.app/">Cari Bahan</a></li>
-                    <li><a href="#kontak">Kontak</a></li>
-                </ul>
-            </nav>
+  <!-- NAVBAR -->
+  <div class="nav">
+    <div class="nav-inner">
+      <a href="#home" class="brand">
+        <div class="logo" aria-hidden="true">
+          <svg viewBox="0 0 64 64">
+            <linearGradient id="steel" x1="0" x2="1" y1="0" y2="1">
+              <stop offset="0%" stop-color="#e8eaed"/>
+              <stop offset="60%" stop-color="#aeb4bb"/>
+              <stop offset="100%" stop-color="#7f868d"/>
+            </linearGradient>
+            <g fill="url(#steel)">
+              <path d="M10 48V16h10c10 0 18 8 18 16s-8 16-18 16H10Zm10-8h2c6 0 10-4 10-8s-4-8-10-8h-2v16Z"/>
+              <path d="M36 16h8l10 32h-8l-2-6H38l-2 6h-8l8-24h8l4 12h-8l2-6h-4"/>
+            </g>
+          </svg>
         </div>
-    </header>
+        <div class="brand-title">Dewan Aluminium Kreatif</div>
+      </a>
+      <div class="spacer"></div>
+      <nav class="menu">
+        <a class="nav-link" href="#layanan">Layanan</a>
+        <a class="nav-link" href="#gallery">Gallery</a>
+        <a class="nav-link" href="#kontak">Kontak</a>
+      </nav>
+    </div>
+  </div>
 
-    <main>
-        <section id="hero">
-            <div class="container">
-                <h1 class="scramble-text">
-                    Solusi Anti Rayap, Elegan dan Minimalis
-                </h1>
-            </div>
-            
-            <div id="airplane-container">
-                <svg id="airplane-svg" viewBox="0 0 500 500">
-                    <path id="fly-path" d="M 250, 50 a 200,100 0 1,0 1,0 z"/>
-                    
-                    <g id="airplane-icon">
-                        <path d="M2,21 L22,12 L2,3 L2,10 L17,12 L2,14 L2,21 Z" />
-                    </g>
-                </svg>
-            </div>
-        </section>
+  <!-- HERO dengan partikel & parallax -->
+  <header id="home">
+    <div class="particles" id="particles"></div>
+    <div class="hero" data-aos="fade-up">
+      <p class="kicker">Spesialis Aluminium & Kaca</p>
+      <h1>Solusi Premium untuk Hunian & Bisnis</h1>
+      <p class="muted">Kami melayani pembuatan & pemasangan <b>Lemari, Kitchen Set, Kusen, Jendela, Partisi, Kaca Tempered, ACP</b> hingga <b>Aksesoris & Bahan Aluminium</b>. Desain presisi, material terkurasi, hasil rapi & bergaransi.</p>
+      <p style="margin-top:16px"><a class="menu-cta" href="#kontak" style="font-weight:800;border:1px solid var(--stroke);padding:10px 14px;border-radius:12px;background:rgba(255,255,255,.05)">Konsultasi & Penawaran</a></p>
+    </div>
+  </header>
 
-        <section id="tentang">
-            <div class="container">
-                <div class="content-wrapper">
-                    <div>
-                        <h2 class="scramble-text">
-                            Kami Mewujudkan Desain Impian.
-                        </h2>
-                        <p>
-                            Lebih dari sekadar toko, Dewan Aluminium Kreatif adalah partner Anda dalam menciptakan ruang yang fungsional dan estetik. 
-                            Kami menggabungkan material aluminium dan kaca berkualitas premium dengan pengerjaan presisi untuk menghasilkan karya yang tahan lama.
-                        </p>
-                        <p>
-                            Dari konsultasi awal hingga instalasi akhir, tim kami berdedikasi untuk mewujudkan visi unik Anda.
-                        </p>
-                    </div>
-                    
-                    <div class="visual-placeholder"></div>
-                </div>
-            </div>
-        </section>
+  <!-- KEUNGGULAN KAMI -->
+  <section id="keunggulan">
+    <h2 data-aos="fade-right">Keunggulan Kami</h2>
+    <p class="muted" data-aos="fade-left">Kualitas material, presisi pemasangan, dan servis yang bisa diandalkan.</p>
+    <div class="features" data-aos="zoom-in">
+      <div class="feat">
+        <div class="ico"><svg viewBox="0 0 24 24"><path d="M12 2l7 4v6c0 5-3.1 9.4-7 10-3.9-.6-7-5-7-10V6l7-4Z"/></svg></div>
+        <h4>Profesional</h4>
+        <p class="muted">Pengerjaan dan Pemasangan yang Profesional</p>
+      </div>
+      <div class="feat">
+        <div class="ico"><svg viewBox="0 0 24 24"><path d="M12 7l9 4-9 4-9-4 9-4m0 6l6.5 2.9L12 19l-6.5-3.1L12 13Z"/></svg></div>
+        <h4>Material Berkualitas</h4>
+        <p class="muted">Aluminium & hardware berkualitas.</p>
+      </div>
+      <div class="feat">
+        <div class="ico"><svg viewBox="0 0 24 24"><path d="M7 17l-4-4 1.4-1.4L7 14.2l12.6-12.6L21 3l-14 14Z"/></svg></div>
+        <h4>Survey Gratis</h4>
+        <p class="muted">Konsultasi & pengukuran awal tanpa biaya.</p>
+      </div>
+    </div>
+  </section>
 
-        <section id="layanan">
-            <div class="container">
-                <h2 class="scramble-text">Inovasi di Setiap Detail.</h2>
-                
-                <ul class="service-list">
-                    <li>
-                        <span class="service-title">Lemari Kustom & Kitchen Set</span>
-                        <span class="service-description">Solusi penyimpanan elegan yang memaksimalkan ruang Anda.</span>
-                    </li>
-                    <li>
-                        <span class="service-title">Kusen, Pintu & Jendela</span>
-                        <span class="service-description">Kekuatan dan keindahan minimalis untuk fasad dan interior.</span>
-                    </li>
-                    <li>
-                        <span class="service-title">Partisi Aluminium & Kaca</span>
-                        <span class="service-description">Membagi ruang tanpa mengorbankan cahaya dan kesan luas.</span>
-                    </li>
-                    <li>
-                        <span class="service-title">Pemasangan Kaca</span>
-                        <span class="service-description">Instalasi presisi untuk Kaca Tempered dan Railing Tangga.</span>
-                    </li>
-                    <li>
-                        <span class="service-title">Aksesoris Premium</span>
-                        <span class="service-description">Engsel, rel, dan gagang berkualitas untuk daya tahan maksimal.</span>
-                    </li>
-                </ul>
-            </div>
-        </section>
+  <!-- LAYANAN -->
+  <section id="layanan">
+    <h2 data-aos="fade-right">Layanan</h2>
+    <p class="muted" data-aos="fade-left">Pilih kebutuhan Anda — semua bisa custom ukuran & warna.</p>
+    <div class="grid" data-aos="fade-up">
+      <div class="card">
+        <span class="tag">Lemari</span>
+        <img class="lazy blur" loading="lazy" data-src="https://placehold.co/600x400?text=Lemari" src="https://placehold.co/60x40?text=+" alt="Lemari Aluminium"/>
+        <h4>Lemari Aluminium</h4>
+        <p class="muted">Anti rayap, tahan lembab, opsi cermin.</p>
+      </div>
+      <div class="card">
+        <span class="tag">Kitchen Set</span>
+        <img class="lazy blur" loading="lazy" data-src="https://placehold.co/600x400?text=Kitchen+Set" src="https://placehold.co/60x40?text=+" alt="Kitchen Set Aluminium"/>
+        <h4>Kitchen Set</h4>
+        <p class="muted">Modular, soft-close, rapi, lighting LED.</p>
+      </div>
+      <div class="card">
+        <span class="tag">Kusen & Jendela</span>
+        <img class="lazy blur" loading="lazy" data-src="https://placehold.co/600x400?text=Kusen+%26+Jendela" src="https://placehold.co/60x40?text=+" alt="Kusen & Jendela"/>
+        <h4>Kusen & Jendela</h4>
+        <p class="muted">Sliding/ayun, kaca tempered, kerapatan tinggi.</p>
+      </div>
+      <div class="card">
+        <span class="tag">Partisi</span>
+        <img class="lazy blur" loading="lazy" data-src="https://placehold.co/600x400?text=Partisi" src="https://placehold.co/60x40?text=+" alt="Partisi"/>
+        <h4>Partisi & Pintu</h4>
+        <p class="muted">Kantor, kafe, showroom; kombinasi kaca & ACP.</p>
+      </div>
+      <div class="card">
+        <span class="tag">Kaca Tempered</span>
+        <img class="lazy blur" loading="lazy" data-src="https://placehold.co/600x400?text=Kaca+Tempered" src="https://placehold.co/60x40?text=+" alt="Kaca Tempered"/>
+        <h4>Pemasangan Kaca Tempered</h4>
+        <p class="muted">Pengukuran akurat, hardware kuat, pemasangan rapi.</p>
+      </div>
+      <div class="card">
+        <span class="tag">Material</span>
+        <img class="lazy blur" loading="lazy" data-src="https://placehold.co/600x400?text=ACP+%26+Aksesoris" src="https://placehold.co/60x40?text=+" alt="ACP & Aksesoris"/>
+        <h4>ACP & Aksesoris</h4>
+        <p class="muted">Kaca, ACP, engsel, handle, rel, serta bahan aluminium.</p>
+      </div>
+    </div>
+  </section>
 
-        <section id="kontak">
-            <div class="container">
-                <h2 class="scramble-text">Wujudkan Proyek Impian Anda.</h2>
-                <a href="https://wa.me/6285150520292?text=Halo%2C%20saya%20tertarik%20dengan%20produk%20Anda" class="cta-link" target="_blank">
-                    Mulai Konsultasi Gratis (WA)
-                </a>
-                <p style="margin-top: 2rem; color: var(--text-secondary);">
-                    Atau Kunjungi Sosial Media Kami : (
-                    <a href="https://www.facebook.com/dedi.mihardi.5/" class="cta-link" target="_blank">
-                    Facebook
-                </a> / <a href="https://www.instagram.com/dewan.aluminium.soppeng/" class="cta-link" target="_blank">
-                    Instagram
-                </a> / <a href="https://www.tiktok.com/@dewanaluminiumsoppeng" class="cta-link" target="_blank">
-                    Tiktok
-                </a>)
-                </p>
-            </div>
-        </section>
-    </main>
+  <!-- GALLERY: horizontal auto-scroll + fullscreen blur on click -->
+  <section id="gallery">
+    <h2 data-aos="fade-right">Gallery</h2>
+    <p class="muted" data-aos="fade-left">Deretan foto bergerak otomatis ke kanan. Klik foto untuk **fullscreen** dengan latar blur. Sekarang mendukung **Next/Prev**.</p>
 
-    <footer>
-        <div class="container">
-            <p>&copy; 2019 Dewan Aluminium Kreatif. Inovasi, Presisi, Kualitas.</p>
+    <div class="hwrap hmask" data-aos="zoom-in">
+      <div class="htrack" id="gtrack">
+        <!-- Satu set item saja; JS akan menggandakan untuk loop mulus -->
+        <div class="gitem"><div class="card shine"><a href="https://placehold.co/1200x800?text=Proyek+1" class="lb" data-caption="Proyek 1 — Partisi kaca tempered."><img class="lazy blur" loading="lazy" data-src="https://placehold.co/320x220?text=Proyek+1" src="https://placehold.co/32x22?text=+" alt="Proyek 1"/></a></div></div>
+        <div class="gitem"><div class="card shine"><a href="https://placehold.co/1200x800?text=Proyek+2" class="lb" data-caption="Proyek 2 — Kitchen set minimalis."><img class="lazy blur" loading="lazy" data-src="https://placehold.co/320x220?text=Proyek+2" src="https://placehold.co/32x22?text=+" alt="Proyek 2"/></a></div></div>
+        <div class="gitem"><div class="card shine"><a href="https://placehold.co/1200x800?text=Proyek+3" class="lb" data-caption="Proyek 3 — Kusen & jendela sliding."><img class="lazy blur" loading="lazy" data-src="https://placehold.co/320x220?text=Proyek+3" src="https://placehold.co/32x22?text=+" alt="Proyek 3"/></a></div></div>
+        <div class="gitem"><div class="card shine"><a href="https://placehold.co/1200x800?text=Proyek+4" class="lb" data-caption="Proyek 4 — Lemari aluminium cermin."><img class="lazy blur" loading="lazy" data-src="https://placehold.co/320x220?text=Proyek+4" src="https://placehold.co/32x22?text=+" alt="Proyek 4"/></a></div></div>
+        <div class="gitem"><div class="card shine"><a href="https://placehold.co/1200x800?text=Proyek+5" class="lb" data-caption="Proyek 5 — Fasade ACP."><img class="lazy blur" loading="lazy" data-src="https://placehold.co/320x220?text=Proyek+5" src="https://placehold.co/32x22?text=+" alt="Proyek 5"/></a></div></div>
+        <div class="gitem"><div class="card shine"><a href="https://placehold.co/1200x800?text=Proyek+6" class="lb" data-caption="Proyek 6 — Railing kaca."><img class="lazy blur" loading="lazy" data-src="https://placehold.co/320x220?text=Proyek+6" src="https://placehold.co/32x22?text=+" alt="Proyek 6"/></a></div></div>
+      </div>
+    </div>
+
+    <!-- Fullscreen Overlay -->
+    <div class="lb-overlay" id="lightbox" aria-hidden="true">
+      <button class="lb-close" aria-label="Tutup">✕</button>
+      <button class="lb-prev" aria-label="Sebelumnya" style="position:absolute;left:12px;top:50%;transform:translateY(-50%);background:rgba(255,255,255,.08);border:1px solid var(--stroke);backdrop-filter:blur(6px);color:#fff;padding:10px 12px;border-radius:12px;cursor:pointer">◀</button>
+      <div class="lb-frame">
+        <div class="lb-media"><img id="lb-img" alt="Preview"/></div>
+        <div class="lb-caption" id="lb-cap">&nbsp;</div>
+      </div>
+      <button class="lb-next" aria-label="Berikutnya" style="position:absolute;right:12px;top:50%;transform:translateY(-50%);background:rgba(255,255,255,.08);border:1px solid var(--stroke);backdrop-filter:blur(6px);color:#fff;padding:10px 12px;border-radius:12px;cursor:pointer">▶</button>
+    </div>
+  </section>
+
+  <!-- KONTAK dengan Google Maps + Social Links -->
+  <section id="kontak">
+    <h2 data-aos="fade-right">Kontak</h2>
+    <p class="muted" data-aos="fade-left">Hubungi kami di media sosial atau WhatsApp. Kunjungi toko pada peta di bawah ini.</p>
+    <div class="grid" data-aos="fade-up">
+      <div class="card">
+        <h4>Sosial Media</h4>
+        <div class="socials">
+          <a href="https://www.facebook.com/dedi.mihardi.5/" target="_blank" rel="noopener">
+            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M22 12a10 10 0 1 0-11.6 9.9v-7h-2v-3h2v-2.3c0-2 1.2-3.1 3-3.1.9 0 1.8.16 1.8.16v2h-1c-1 0-1.3.62-1.3 1.3V12h2.3l-.37 3h-1.9v7A10 10 0 0 0 22 12"/></svg>
+            Facebook
+          </a>
+          <a href="https://www.instagram.com/dewan.aluminium.soppeng/" target="_blank" rel="noopener">
+            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M7 2h10a5 5 0 0 1 5 5v10a5 5 0 0 1-5 5H7a5 5 0 0 1-5-5V7a5 5 0 0 1 5-5m10 2H7a3 3 0 0 0-3 3v10a3 3 0 0 0 3 3h10a3 3 0 0 0 3-3V7a3 3 0 0 0-3-3m-5 3a5 5 0 1 1 0 10 5 5 0 0 1 0-10m6.5-.25a1.25 1.25 0 1 1-2.5 0 1.25 1.25 0 0 1 2.5 0Z"/></svg>
+            Instagram
+          </a>
+          <a href="https://www.tiktok.com/@dewanaluminiumsoppeng" target="_blank" rel="noopener">
+            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M13 3h3.1a5.9 5.9 0 0 0 5.9 5.9V12A9 9 0 1 1 13 3m0 6v6.6a3.6 3.6 0 1 1-3-3.6"/></svg>
+            TikTok
+          </a>
         </div>
-    </footer>
+        <p class="muted" style="margin-top:10px">WhatsApp: <a href="https://wa.me/6285150520292" target="_blank" rel="noopener">+62 812‑3456‑7890</a></p>
+      </div>
+      <div class="card">
+        <h4>Lokasi Toko</h4>
+        <div class="map-frame">
+          <iframe title="Peta Lokasi" width="100%" height="100%" style="border:0" loading="lazy" allowfullscreen
+            src="https://www.google.com/maps?q=Dewan+Aluminium+Kreatif&output=embed"></iframe>
+        </div>
+        <p class="muted" style="margin-top:10px">Buka: Senin–Sabtu 08:00–17:00 WITA • Telepon: <a href="tel:+6285150520292">+62 812‑3456‑7890</a></p>
+      </div>
+    </div>
+  </section>
 
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
-    
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
-    
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/MotionPathPlugin.min.js"></script>
-    
-    <script src="https://unpkg.com/split-type"></script>
-    
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            
-            // Daftarkan semua plugin GSAP
-            gsap.registerPlugin(ScrollTrigger, MotionPathPlugin);
+  <footer>
+    <small>© <span id="year"></span> Dewan Aluminium Kreatif — Semua Hak Dilindungi.</small>
+  </footer>
 
+  <!-- Floating WhatsApp CTA -->
+  <a class="fab-wa" href="https://wa.me/6285150520292" target="_blank" rel="noopener" aria-label="Chat WhatsApp Dewan Aluminium Kreatif">
+    <span class="dot"></span> Chat WhatsApp
+  </a>
 
-            // ----------------------------------
-            // ANIMASI 3: LOGO BERPUTAR (BARU - OTOMATIS)
-            // ----------------------------------
-            
-            const logoImage = document.querySelector('.logo-image');
+  <!-- Scripts -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.js"></script>
+  <script>
+    // AOS init
+    AOS.init({ once:true, duration:800, easing:'ease-out-quart' });
+    document.getElementById('year').textContent = new Date().getFullYear();
 
-            if (logoImage) {
-                
-                // Langsung mainkan animasi, tanpa 'paused'
-                gsap.to(logoImage, {
-                    rotationY: 360, // Putar 360 derajat
-                    duration: 10,   // Durasi 1x putaran (10 detik agar lambat & elegan)
-                    ease: "none",   // Kecepatan konstan
-                    repeat: -1      // Ulangi selamanya
-                });
+    // Partikel aluminium (random drift + parallax)
+    (function(){
+      const wrap=document.getElementById('particles');
+      const N=60; const W=wrap.clientWidth||window.innerWidth; const H=wrap.clientHeight||400;
+      for(let i=0;i<N;i++){ const s=document.createElement('span'); s.className='p'; s.style.left=Math.random()*W+'px'; s.style.top=Math.random()*H+'px'; wrap.appendChild(s); }
+      gsap.utils.toArray('.p').forEach((el)=>{
+        gsap.to(el,{x:'random(-40,40)', y:'random(-30,30)', duration:gsap.utils.random(6,12), repeat:-1, yoyo:true, ease:'sine.inOut'});
+      });
+      gsap.to('.particles',{scrollTrigger:{trigger:'#home',start:'top top',end:'bottom top',scrub:true}, yPercent:-12});
+    })();
 
-            } else {
-                console.warn("GSAP Peringatan: Elemen '.logo-image' tidak ditemukan.");
-            }
-            // ----------------------------------
-            // ANIMASI 1: PESAWAT KERTAS
-            // ----------------------------------
-            
-            // Cek dulu apakah elemennya ada sebelum dianimasikan
-            if (document.querySelector("#airplane-icon")) {
-                gsap.set("#airplane-icon", {
-                    scale: 0.7, 
-                    autoAlpha: 1,
-                    transformOrigin: "center center"
-                });
+    // Section & cards slide-in
+    gsap.utils.toArray('section').forEach((sec)=>{
+      gsap.from(sec,{scrollTrigger:{trigger:sec,start:'top 85%'}, y:30, opacity:0, duration:.9, ease:'power3.out'});
+      gsap.from(sec.querySelectorAll('.card'),{scrollTrigger:{trigger:sec,start:'top 80%'}, y:24, opacity:0, duration:.7, ease:'power2.out', stagger:.06});
+    });
 
-                gsap.to("#airplane-icon", {
-                    duration: 15,
-                    repeat: -1,
-                    ease: "none",
-                    motionPath: {
-                        path: "#fly-path",
-                        align: "#fly-path",
-                        alignOrigin: [0.5, 0.5],
-                        autoRotate: true
-            .j.     }
-                });
-            } else {
-                console.warn("GSAP Peringatan: Elemen #airplane-icon tidak ditemukan.");
-            }
+    // Navbar reveal on scroll up
+    (function(){
+      let lastY = window.scrollY; const nav = document.querySelector('.nav');
+      window.addEventListener('scroll',()=>{ const y = window.scrollY; nav.style.transform = (y>lastY && y>120) ? 'translateY(-100%)' : 'translateY(0)'; lastY = y; });
+    })();
 
+    // Lightbox (fullscreen blur) — dengan Next/Prev
+    (function(){
+      const getLinks = ()=>Array.from(document.querySelectorAll('#gtrack a.lb'));
+      const overlay = document.getElementById('lightbox');
+      const img = document.getElementById('lb-img');
+      const cap = document.getElementById('lb-cap');
+      const btnClose = overlay.querySelector('.lb-close');
+      const btnPrev = overlay.querySelector('.lb-prev');
+      const btnNext = overlay.querySelector('.lb-next');
+      let index = 0;
+      function open(i){ const L=getLinks(); index=(i+L.length)%L.length; const a=L[index]; if(!a) return;
+        img.src=a.href; cap.textContent=a.dataset.caption||''; overlay.classList.add('active'); overlay.setAttribute('aria-hidden','false'); document.body.style.overflow='hidden'; }
+      function close(){ overlay.classList.remove('active'); overlay.setAttribute('aria-hidden','true'); img.removeAttribute('src'); document.body.style.overflow='auto'; }
+      function prev(){ open(index-1); }
+      function next(){ open(index+1); }
+      document.addEventListener('click',(e)=>{ const a=e.target.closest('a.lb'); if(!a) return; e.preventDefault(); const L=getLinks(); open(L.indexOf(a)); });
+      btnClose.addEventListener('click', close);
+      btnPrev.addEventListener('click', prev);
+      btnNext.addEventListener('click', next);
+      overlay.addEventListener('click',(e)=>{ if(e.target===overlay) close(); });
+      window.addEventListener('keydown',(e)=>{ if(!overlay.classList.contains('active')) return; if(e.key==='Escape') close(); if(e.key==='ArrowLeft') prev(); if(e.key==='ArrowRight') next(); });
+    })();
 
-            // ----------------------------------
-            // ANIMASI 2: STAGGERED WORD FADE-IN (BARU)
-            // ----------------------------------
-
-            // Kita target semua elemen .scramble-text
-            const headings = gsap.utils.toArray('.scramble-text');
-
-            headings.forEach(heading => {
-                let splitText;
-                try {
-                    // Pecah teks menjadi KATA (bukan baris)
-                    splitText = new SplitType(heading, { types: 'words' });
-                    // Buat heading terlihat setelah dipecah
-                    gsap.set(heading, { visibility: 'visible' });
-s               } catch (e) {
-                    console.error("SplitType Gagal:", e);
-                    // Jika gagal, pastikan teksnya tetap terlihat
-                    gsap.set(heading, { visibility: 'visible' });
-                    return; // Hentikan animasi untuk heading ini jika gagal
-                }
-
-                // Animasikan kata-kata
-                gsap.from(splitText.words, {
-                    autoAlpha: 0, // Mengatur opacity dan visibility
-
-                    y: 30, // Mulai dari 30px ke bawah
-                    duration: 0.8,
-                    ease: 'power2.out', // <-- HURUF 'M' DIHAPUS
-                    stagger: 0.05, // Jarak animasi antar kata
-                    scrollTrigger: {
-                        trigger: heading, // Pemicunya adalah heading itu sendiri
-                        start: 'top 85%', // Mulai saat 85% dari atas layar
-                        toggleActions: 'play none none none' // Mainkan sekali
-                    }
-                });
-              });
-            }); // <-- HURUF 'D' DIHAPUS
-
-        });
-    </script>
-
+    // Horizontal auto-scroll + shine sweep + robust measure
+    (function(){
+      const wrap = document.querySelector('.hwrap');
+      const track = document.getElementById('gtrack');
+      const base = Array.from(track.children).map(el=>el.cloneNode(true));
+      track.innerHTML=''; base.forEach(n=>track.appendChild(n.cloneNode(true))); base.forEach(n=>track.appendChild(n.cloneNode(true))); // 2x
+      let pos=0, speed=0.6, half=0, raf;
+      function measure(){ half = track.scrollWidth/2; pos=-half; track.style.transform = `translateX(${pos}px)`; }
+      function loop(){ pos += speed; if(pos>=0) pos=-half; track.style.transform = `translateX(${pos}px)`; raf=requestAnimationFrame(loop); }
+      function start(){ cancelAnimationFrame(raf); measure(); loop(); }
+      // Recalc after images load (lazy)
+      const imgs = track.querySelectorAll('img');
+      let loaded=0; imgs.forEach(img=>{ if(img.complete) loaded++; else img.addEventListener('load', ()=>{ loaded++; if(loaded===imgs.length) start(); }, {once:true}); });
+      if(loaded===imgs.length){ start(); } else { // fallback start anyway, then re-measure later
+        start(); setTimeout(start, 1200); setTimeout(start, 2500);
+      }
+      // Shine sweep
+      setInterval(()=>{ const cards = track.querySelectorAll('.shine'); const pick = cards[Math.floor(Math.random()*cards.length)]; if(pick){ pick.classList.remove('run'); void pick.offsetWidth; pick.classList.add('run'); } }, 1600);
+      // Pause on hover (optional)
+      wrap.addEventListener('mouseenter', ()=>{ speed = Math.abs(speed)*-1; });
+      wrap.addEventListener('mouseleave', ()=>{ speed = Math.abs(speed); });
+      window.addEventListener('resize', start);
+    })();
+      // Lazy-loading + blur-up (semua img[data-src])
+    (function(){
+      const els = document.querySelectorAll('img.lazy[data-src]');
+      const io = new IntersectionObserver((entries)=>{
+        entries.forEach(entry=>{
+          if(entry.isIntersecting){ const img=entry.target; img.src=img.dataset.src; img.removeAttribute('data-src'); img.addEventListener('load',()=>{ img.classList.remove('blur'); }, {once:true}); io.unobserve(img); }
+        });
+      }, {rootMargin:'200px'});
+      els.forEach(img=>io.observe(img));
+    })();
+  </script>
 </body>
 </html>
