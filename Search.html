@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Pencarian Barang Dewan Aluminium</title>
+  <style>
+    /* --- TEMA HITAM KEREN (DARK MODE) --- */
+    :root {
+      --bg-color: #1a1a1a;
+      --surface-color: #2a2a2a;
+      --text-color: #e0e0e0;
+      --border-color: #444;
+      --accent-color: #007bff;
+      --header-bg: #1f3a5f;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      margin: 0;
+      padding: 20px;
+      background-color: var(--bg-color);
+      color: var(--text-color);
+    }
+
+    h1 {
+      text-align: center;
+      color: #ffffff;
+      border-bottom: 2px solid var(--accent-color);
+      padding-bottom: 10px;
+    }
+
+    input[type="text"] {
+      font-size: 1.1em;
+      padding: 12px 15px;
+      width: 100%;
+      max-width: 500px; /* Batas lebar di layar besar */
+      display: block;
+      margin: 20px auto; /* Otomatis ke tengah */
+      background-color: var(--surface-color);
+      color: var(--text-color);
+      border: 2px solid var(--border-color);
+      border-radius: 8px; /* Sudut melengkung */
+      box-sizing: border-box; /* Padding tidak merusak layout */
+      transition: all 0.3s ease;
+    }
+
+    input[type="text"]:focus {
+      border-color: var(--accent-color);
+      box-shadow: 0 0 10px rgba(0,123,255, 0.5);
+      outline: none;
+    }
+
+    /* --- UTAMA: MEMBUAT TABEL RESPONSIVE --- */
+    #results {
+      margin-top: 20px;
+      width: 100%;
+      overflow-x: auto; /* Ini kuncinya! */
+      border-radius: 8px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+    }
+    /* ----------------------------------------- */
+    
+    .loading { 
+      font-style: italic; 
+      color: #888; 
+      text-align: center;
+      padding: 20px;
+    }
+
+    table {
+      width: 100%;
+      /* Penting: Atur lebar minimum agar tidak terlalu "gepeng" */
+      min-width: 600px; 
+      border-collapse: collapse;
+      background-color: var(--surface-color);
+    }
+
+    th, td {
+      padding: 12px 15px;
+      text-align: left;
+      border-bottom: 1px solid var(--border-color);
+      white-space: nowrap; /* Agar teks tidak turun baris */
+    }
+
+    th {
+      background-color: var(--header-bg);
+      color: #ffffff;
+      font-weight: 600;
+      position: sticky; /* Header tabel menempel saat scroll vertikal */
+      top: 0;
+    }
+
+    tbody tr {
+      transition: background-color 0.2s ease;
+    }
+
+    /* Efek hover yang keren */
+    tbody tr:hover {
+      background-color: #3a3a3a;
+    }
+
+    /* Menghilangkan border di baris terakhir */
+    tbody tr:last-child td {
+      border-bottom: none;
+    }
+
+    /* Bonus: Scrollbar yang lebih keren (untuk Chrome/Edge/Safari) */
+    #results::-webkit-scrollbar {
+      height: 8px;
+    }
+    #results::-webkit-scrollbar-track {
+      background: #222;
+      border-radius: 4px;
+    }
+    #results::-webkit-scrollbar-thumb {
+      background-color: #555;
+      border-radius: 4px;
+    }
+    #results::-webkit-scrollbar-thumb:hover {
+      background-color: #777;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>Pencarian Barang</h1>
+  <input type="text" id="searchInput" placeholder="Ketik nama barang...">
+  <div id="results"></div>
+
+  <script>
+    // --- KONFIGURASI ---
+    const WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbxcXnRPIUzCEWqK_zssMjDGxiZr_ymS5Js2pDgX8IT8aP5Az7YTV3hSgLxNueBbx36ZJQ/exec';
+    const API_KEY = 'dewan123'; // Samakan dengan API_KEY di Apps Script
+    const SHEET_NAME = 'Barang'; // Ganti dengan nama sheet Anda
+    // -------------------
+
+    const searchInput = document.getElementById('searchInput');
+    const resultsDiv = document.getElementById('results');
+    let allData = []; // Variabel untuk menyimpan semua data dari sheet
+
+    // 1. Fungsi untuk mengambil data
+    function fetchData() {
+      resultsDiv.innerHTML = '<div class="loading">Memuat data...</div>';
+      const script = document.createElement('script');
+      
+      // Kita tambahkan '&action=search' untuk memicu logika baru di GAS
+      script.src = `${WEB_APP_URL}?action=search&key=${API_KEY}&sheet=${SHEET_NAME}&callback=handleData`;
+      
+      script.onerror = function() {
+        resultsDiv.innerHTML = '<div style="color: red;">Gagal memuat data.</div>';
+      };
+      document.body.appendChild(script);
+    }
+
+    // 2. Fungsi callback yang dipanggil oleh GAS
+    function handleData(data) {
+      // .slice(1) akan membuang baris pertama (Baris 1)
+      allData = data.slice(1); 
+      
+      resultsDiv.innerHTML = `Data siap. ${allData.length} baris barang dimuat.`;
+      
+      // Menghapus tag skrip lama
+      const oldScript = document.querySelector(`script[src*="${WEB_APP_URL}"]`);
+      if (oldScript) oldScript.remove();
+    }
+
+    // 3. Fungsi untuk melakukan pencarian
+    function performSearch() {
+      const searchTerm = searchInput.value.toLowerCase().trim();
+      
+      if (searchTerm.length < 2) {
+        resultsDiv.innerHTML = 'Ketik minimal 2 huruf...';
+        return;
+      }
+
+      // Logika filter tetap sama (mencari di row[1] atau Kolom B)
+      const filteredResults = allData.filter(row => {
+        const dataKolomB = (row[1] || '').toLowerCase(); 
+        return dataKolomB.includes(searchTerm);
+      });
+      
+      // 4. Tampilkan hasil
+      if (filteredResults.length === 0) {
+        resultsDiv.innerHTML = 'Barang tidak ditemukan.';
+      } else {
+        // Mulai membangun string HTML untuk tabel
+        let html = `<table>
+                      <thead>
+                        <tr>
+                          <th>Barang</th>
+                          <th>Satuan</th>
+                          <th>Harga Jual</th>
+                          <th>Stok</th>
+                          <th>Lokasi/Rak</th>
+                        </tr>
+                      </thead>
+                      <tbody>`;
+
+        // Loop melalui hasil filter dan buat baris tabel (<tr>)
+        filteredResults.forEach(row => {
+          // Ingat: row[0] = Kolom A, row[1] = Kolom B, dst.
+          html += `<tr>
+                     <td>${row[1] || ''}</td>
+                     <td>${row[2] || ''}</td>
+                     <td>${row[4] || ''}</td>
+                     <td>${row[6] || ''}</td>
+                     <td>${row[7] || ''}</td>
+                   </tr>`;
+        });
+
+        // Tutup tabel
+        html += `  </tbody>
+                  </table>`;
+        
+        // Tampilkan tabel ke halaman
+        resultsDiv.innerHTML = html;
+      }
+    }
+    
+    // 5. Jalankan listener
+    let searchTimeout;
+    searchInput.addEventListener('keyup', () => {
+      clearTimeout(searchTimeout);
+      searchTimeout = setTimeout(performSearch, 300); 
+    });
+
+    // 6. Muat data saat halaman pertama kali dibuka
+    fetchData();
+
+  </script>
+</body>
+</html>

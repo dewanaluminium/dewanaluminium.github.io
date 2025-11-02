@@ -1,0 +1,338 @@
+<!doctype html>
+<html lang="id">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Dewan Aluminum Gallery</title>
+  <style>
+    :root { --bg:#0b0b0c; --card:#141416; --muted:#b5b8c5; }
+    *{box-sizing:border-box}
+    html,body{margin:0;font-family:ui-sans-serif,system-ui,-apple-system,"Segoe UI",Roboto,Helvetica,Arial,"Apple Color Emoji","Segoe UI Emoji";-webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility}
+
+    /* ========== RESPONSIVE SWITCH ========== */
+    body{background:#fff;color:#111;margin:0}
+    .page,.square-stage{display:none}
+    .mobile-shell{display:block}
+
+    @media(min-width:768px){
+      html,body{background:#000;color:#fff;overflow-y:auto}
+      .page{display:block;padding:40px 20px 120px}
+      .square-stage{display:grid;width:100%;max-width:1200px;margin:0 auto;grid-template-columns:repeat(10,1fr);grid-auto-rows:220px;grid-auto-flow:dense;gap:16px}
+      .mobile-shell{display:none}
+    }
+
+    /* ========== DESKTOP MOZAIK: 10 KOLOM – BESAR & ESTETIK ========== */
+    .cell{position:relative;overflow:hidden;border-radius:20px;background:var(--card);cursor:zoom-in;box-shadow:0 6px 16px rgba(0,0,0,.5);transition:all .3s ease}
+    .cell:hover{transform:translateY(-6px);box-shadow:0 12px 24px rgba(0,0,0,.6)}
+    .cell img{width:100%;height:100%;object-fit:cover;display:block;transition:transform .4s ease}
+    @media(hover:hover) and (pointer:fine){.cell:hover img{transform:scale(1.1)}}
+
+    /* ========== LIGHTBOX ========== */
+    .lightbox{position:fixed;inset:0;background:rgba(0,0,0,.95);display:none;align-items:center;justify-content:center;z-index:50;backdrop-filter:blur(12px)}
+    .lightbox.open{display:flex}
+    .lb-track{position:relative;width:100vw;height:100dvh;overflow:hidden;touch-action:pan-y pinch-zoom;display:flex;align-items:center;justify-content:center}
+    .lb-strip{display:flex;height:100%;transition:transform .35s ease}
+    .lb-slide{min-width:100%;display:grid;place-items:center}
+    .lb-slide img{max-width:96vw;max-height:96dvh;width:auto;height:auto;object-fit:contain;user-select:none}
+    .lb-close,.lb-prev,.lb-next{position:absolute;top:50%;transform:translateY(-50%);background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.3);width:56px;height:56px;border-radius:999px;display:grid;place-items:center;cursor:pointer;backdrop-filter:blur(10px);font-weight:900;color:#fff;font-size:24px}
+    .lb-prev{left:24px;z-index:5}
+    .lb-next{right:24px;z-index:5}
+    .lb-close{top:24px;right:24px;transform:none;z-index:6}
+
+    /* ========== MOBILE ========== */
+    .m-topbar{position:sticky;top:0;z-index:10;background:#fff;padding:10px 14px;display:flex;align-items:center;gap:10px;border-bottom:1px solid #eee}
+    .m-avatar{width:64px;height:64px;border-radius:999px;background:linear-gradient(135deg,#555,#222);display:grid;place-items:center;font-weight:700;color:#fff;font-size:20px}
+    .m-names{display:grid}
+    .m-name{font-weight:700;color:#111;font-size:15px}
+    .m-id{color:#666;font-size:12px}
+
+    .m-stats-table{width:calc(100% - 88px);border-collapse:collapse;table-layout:fixed;background:#fff;margin:6px 0 4px 14px}
+    .m-stats-table td{padding:2px 10px 2px 6px;text-align:left;vertical-align:top}
+    .m-stats-table .num{font-weight:800;font-size:16px;color:#111;display:block}
+    .m-stats-table .lbl{font-size:11px;color:#666;display:block;margin-top:2px}
+
+    .m-bio{padding:6px 14px 10px;font-size:14px;color:#111;background:#fff;text-align:left}
+    .m-cta{display:grid;grid-template-columns:1fr 1fr 44px;gap:8px;padding:8px 14px 12px;background:#fff}
+    .btn{height:40px;border-radius:10px;border:1px solid transparent;display:grid;place-items:center;font-weight:600;cursor:pointer;font-size:18px}
+    .btn-red{background:#ff3b30;color:#fff}
+    .btn-gray{background:#f2f2f2;color:#111;border-color:#e5e7eb}
+
+    .m-tabs{display:flex;gap:18px;padding:10px 14px;background:#fff;border-bottom:1px solid #e5e7eb}
+    .m-tab.active{color:#111;position:relative}
+    .m-tab.active::after{content:'';position:absolute;bottom:-1px;left:0;right:0;height:2px;background:#111}
+
+    .m-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:2px;background:#fff;padding:2px}
+    .m-tile{aspect-ratio:1/1;position:relative;overflow:hidden;cursor:pointer}
+    .m-tile img{width:100%;height:100%;object-fit:cover;display:block}
+
+    /* ========== FEED ========== */
+    .feed{position:fixed;inset:0;background:#000;display:none;z-index:9999;overflow-y:scroll;scroll-snap-type:y mandatory}
+    .feed.open{display:block}
+    .feed-item{min-height:100dvh;display:grid;place-items:center;scroll-snap-align:start;position:relative}
+    .feed-item img{max-height:100dvh;max-width:100vw;object-fit:contain}
+
+    .icon-col{position:absolute;right:8px;bottom:80px;display:grid;gap:12px;justify-items:center}
+    .icon-stack{display:grid;gap:4px;justify-items:center}
+    .icon-count{color:#fff;font-size:12px;line-height:1;opacity:.95}
+    .icon-plain{width:48px;height:48px;display:grid;place-items:center;border:none;background:transparent;cursor:pointer}
+    .icon-plain svg{width:26px;height:26px;stroke:#fff;fill:none;stroke-width:1.8}
+    .icon-avatar{width:48px;height:48px;border-radius:999px;background-size:cover;background-position:center;border:1px solid rgba(255,255,255,.6);cursor:pointer}
+    .caption{position:absolute;left:14px;right:88px;bottom:88px;color:#fff;font-size:15px;line-height:1.4;text-align:left;font-weight:700;background:rgba(0,0,0,.6);padding:10px 14px;border-radius:10px}
+
+    .feed-close{position:fixed;top:14px;right:14px;width:40px;height:40px;border-radius:999px;background:rgba(255,255,255,.15);border:1px solid rgba(255,0,0,.35);display:grid;place-items:center;z-index:10000;cursor:pointer}
+
+    .feed-bottombar{position:fixed;left:0;right:0;bottom:0;z-index:10001;background:rgba(0,0,0,.6);backdrop-filter:blur(6px);border-top:1px solid rgba(255,255,255,.22);padding:8px 14px 10px}
+    .feed-bottombar .bar{display:grid;grid-template-columns:repeat(5,1fr);align-items:end;justify-items:center;gap:8px}
+    .feed-bottombar .bar .item{display:grid;justify-items:center}
+    .feed-bottombar .bar button{width:42px;height:42px;border-radius:12px;background:transparent;border:none;display:grid;place-items:center;transition:transform .15s ease;cursor:pointer}
+    .feed-bottombar .bar button:active{transform:scale(.96)}
+    .feed-bottombar svg{width:24px;height:24px;stroke:#fff;fill:none;stroke-width:1.8;opacity:.95}
+    .feed-bottombar .label{font-size:9px;line-height:1;color:#fff;opacity:.95;text-align:center;margin-top:2px}
+    .feed-bottombar .item:nth-child(3) .label{display:none}
+    .feed-sep{position:fixed;left:0;right:0;bottom:56px;height:1px;background:rgba(255,255,255,.22);z-index:10000}
+
+    .feed.open ~ .mobile-shell .m-tabs{display:none!important}
+  </style>
+</head>
+<body>
+  <!-- DESKTOP VIEW: 10 KOLOM – BESAR -->
+  <main class="page">
+    <section class="square-stage" id="stage"></section>
+  </main>
+
+  <!-- LIGHTBOX -->
+  <div class="lightbox" id="lightbox" aria-hidden="true">
+    <button class="lb-close" id="lbClose" aria-label="Tutup">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6 6 18M6 6l12 12"/></svg>
+    </button>
+    <div class="lb-track" id="lbTrack">
+      <div class="lb-strip" id="lbStrip"></div>
+      <button class="lb-prev" id="lbPrev" aria-label="Sebelumnya"><</button>
+      <button class="lb-next" id="lbNext" aria-label="Berikutnya">></button>
+    </div>
+  </div>
+
+  <!-- MOBILE VIEW -->
+  <div class="mobile-shell">
+    <div class="m-topbar">
+      <div class="m-avatar">AL</div>
+      <div class="m-names">
+        <div class="m-name" id="shopName">Dewan Aluminium</div>
+        <div class="m-id" id="shopId">@@dewanaluminiumsoppeng</div>
+      </div>
+    </div>
+
+    <table class="m-stats-table">
+      <tr>
+        <td><span class="num" id="statFollowing">0</span></td>
+        <td><span class="num" id="statFollowers">0</span></td>
+        <td><span class="num" id="statLikes">0</span></td>
+      </tr>
+      <tr>
+        <td><span class="lbl">Mengikuti</span></td>
+        <td><span class="lbl">Pengikut</span></td>
+        <td><span class="lbl">Suka</span></td>
+      </tr>
+    </table>
+
+    <div class="m-bio" id="shopBio">Konsultasi GRATIS! #Aluminium #KitchenSet #Lemari #Kusen #Pintu #Jendela #ACPTerbaik</div>
+    <div class="m-cta">
+      <button class="btn btn-red" id="btnFollow">Ikuti</button>
+      <button class="btn btn-gray" id="btnMessage">Chat WA</button>
+      <button class="btn btn-gray" id="btnMore">V</button>
+    </div>
+
+    <div class="m-tabs">
+      <div class="m-tab active">Post</div>
+    </div>
+    <div class="m-grid" id="mGrid"></div>
+  </div>
+
+  <!-- FEED -->
+  <button class="feed-close" id="feedClose" aria-label="Tutup" style="display:none">
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#ff3b30" stroke-width="2"><path d="M18 6 6 18M6 6l12 12"/></svg>
+  </button>
+  <div class="feed" id="feed"></div>
+
+  <script>
+    // ======= CAPTION: TIKTOK STYLE + #HASHTAG =======
+    const TIKTOK_CAPTIONS = [
+      "Aluminium Anti Karat #AluminiumPremium #TahanLama",
+      "ACP Aesthetic #EksteriorRumah #TahanCuaca",
+      "Bahan Import #KualitasTerjamin #AluminiumAsli",
+      "Konsultasi GRATIS #FreeSurvey #PengukuranRumah",
+      "Pemasangan Rapi #TimProfesional #HasilMaksimal",
+      "Anti Jamur & Rayap #BebasPerawatan #HematBiaya",
+      "Desain Custom #SesuaiSelera #UnikBanget",
+      "Hemat Energi #EcoFriendly #RumahAdem",
+      "Harga Terjangkau #MurahTapiKeren #WorthIt",
+      "Warna Awet #TidakPudar #TetapBaru",
+      "Investasi Cerdas #NilaiJualNaik #PropertiIdaman"
+    ];
+
+    // ======= 61 GAMBAR + CAPTION TIKTOK =======
+    const IMAGES = Array.from({length: 61}, (_, i) => {
+      const num = i + 1;
+      const caption = TIKTOK_CAPTIONS[i % TIKTOK_CAPTIONS.length];
+      return { src: `img/gbr${num}.jpg`, caption };
+    });
+
+    // ======= AVATAR LOKAL =======
+    const getLocalAvatar = () => `img/avatar/${Math.floor(Math.random() * 10) + 1}.jpg`;
+
+    // ======= DESKTOP: 10 KOLOM – BESAR & ESTETIK =======
+    const stage = document.getElementById('stage');
+    function buildDesktopGridMosaic(){
+      if(!stage) return;
+      stage.innerHTML = '';
+      
+      const colSizes = [2,2,3,3,4]; // lebih besar
+      const rowSizes = [1,2,2,3];   // lebih tinggi
+
+      IMAGES.forEach((img, i) => {
+        const cell = document.createElement('div');
+        cell.className = 'cell';
+        
+        const cw = colSizes[Math.floor(Math.random() * colSizes.length)];
+        const rh = rowSizes[Math.floor(Math.random() * rowSizes.length)];
+        
+        cell.style.gridColumn = `span ${cw}`;
+        cell.style.gridRow = `span ${rh}`;
+        
+        const el = document.createElement('img');
+        el.loading = i < 6 ? 'eager' : 'lazy';
+        el.decoding = 'async';
+        el.src = img.src;
+        el.alt = img.caption;
+        el.width = 600; el.height = 600;
+        cell.appendChild(el);
+        
+        cell.addEventListener('click', () => openLightbox(i));
+        stage.appendChild(cell);
+      });
+    }
+
+    // ======= LIGHTBOX =======
+    let currentIndex = 0;
+    const lightbox = document.getElementById('lightbox');
+    const lbStrip = document.getElementById('lbStrip');
+
+    function openLightbox(index){
+      currentIndex = index;
+      lbStrip.innerHTML = '';
+      IMAGES.forEach((img, i) => {
+        const slide = document.createElement('div');
+        slide.className = 'lb-slide';
+        const imgEl = document.createElement('img');
+        imgEl.src = img.src;
+        imgEl.alt = img.caption;
+        imgEl.loading = 'eager';
+        slide.appendChild(imgEl);
+        lbStrip.appendChild(slide);
+      });
+      updateStrip();
+      lightbox.classList.add('open');
+      lightbox.setAttribute('aria-hidden', 'false');
+    }
+
+    function closeLightbox(){ lightbox.classList.remove('open'); lightbox.setAttribute('aria-hidden','true'); }
+    function updateStrip(){ lbStrip.style.transform = `translateX(${-currentIndex * 100}%)`; }
+
+    document.getElementById('lbClose').addEventListener('click', closeLightbox);
+    document.getElementById('lbNext').addEventListener('click', () => { currentIndex = (currentIndex + 1) % IMAGES.length; updateStrip(); });
+    document.getElementById('lbPrev').addEventListener('click', () => { currentIndex = (currentIndex - 1 + IMAGES.length) % IMAGES.length; updateStrip(); });
+    lightbox.addEventListener('click', e => { if (e.target === lightbox) closeLightbox(); });
+
+    // ======= MOBILE & FEED =======
+    const mGrid = document.getElementById('mGrid');
+    const feed = document.getElementById('feed');
+    const feedClose = document.getElementById('feedClose');
+
+    function buildMobileGrid(){
+      if(!mGrid) return; mGrid.innerHTML = '';
+      IMAGES.forEach((img, i) => {
+        const t = document.createElement('div');
+        t.className = 'm-tile';
+        t.innerHTML = `<img loading="lazy" src="${img.src}" alt="${img.caption}" width="100" height="100">`;
+        t.addEventListener('click', () => openFeed(i));
+        mGrid.appendChild(t);
+      });
+    }
+
+    function openFeed(index){
+      feed.innerHTML = '';
+      IMAGES.forEach(({src, caption}, i) => {
+        const slide = document.createElement('div');
+        slide.className = 'feed-item';
+        const topAvatar = getLocalAvatar();
+        const bottomAvatar = getLocalAvatar();
+        const fmt = n => n.toLocaleString('id-ID');
+        const rc = () => Math.floor(Math.random() * (9800 - 1200 + 1)) + 1200;
+        const [likeC, cmtC, favC, shareC] = [rc(), rc(), rc(), rc()].map(fmt);
+
+        slide.innerHTML = `
+          <img src="${src}" alt="${caption}">
+          <div class="icon-col">
+            <div class="icon-avatar" role="button" tabindex="0" aria-label="Lihat profil" style="background-image:url('${topAvatar}');"></div>
+            <div class="icon-stack"><button class="icon-plain" aria-label="Suka ${likeC}"><svg viewBox="0 0 24 24"><path d="M20.8 12.5c0 4.7-8.8 9.4-8.8 9.4S3.2 17.2 3.2 12.5a5.6 5.6 0 0 1 9.3-4c1.1 1 1.5 1.5 1.5 1.5s.5-.5 1.6-1.5a5.6 5.6 0 0 1 5.2 4z"/></svg></button><div class="icon-count">${likeC}</div></div>
+            <div class="icon-stack"><button class="icon-plain" aria-label="Komentar ${cmtC}"><svg viewBox="0 0 24 24"><path d="M21 12a8 8 0 0 1-8 8H7l-4 4v-6a8 8 0 1 1 18-6z"/></svg></button><div class="icon-count">${cmtC}</div></div>
+            <div class="icon-stack"><button class="icon-plain" aria-label="Favorit ${favC}"><svg viewBox="0 0 24 24"><path d="M6 2h12v20l-6-3-6 3V2z"/></svg></button><div class="icon-count">${favC}</div></div>
+            <div class="icon-stack"><button class="icon-plain" aria-label="Bagikan ${shareC}"><svg viewBox="0 0 24 24"><path d="M4 12h9m0 0-3-3m3 3-3 3M14 5h6v14h-6"/></svg></button><div class="icon-count">${shareC}</div></div>
+            <div class="icon-avatar" role="button" tabindex="0" aria-label="Lihat profil" style="background-image:url('${bottomAvatar}');"></div>
+          </div>
+          <div class="caption">${caption}</div>`;
+        feed.appendChild(slide);
+      });
+
+      feed.classList.add('open'); feedClose.style.display = 'grid';
+      if (!document.querySelector('.feed-bottombar')) {
+        const sep = Object.assign(document.createElement('div'), {className: 'feed-sep'}); document.body.appendChild(sep);
+        const bar = Object.assign(document.createElement('div'), {className: 'feed-bottombar'});
+        bar.innerHTML = `<div class="bar">
+          <div class="item"><button title="Beranda" aria-label="Beranda"><svg viewBox="0 0 24 24"><path d="M3 10l9-7 9 7v10a2 2 0 0 1-2 2h-4V12H9v10H5a2 2 0 0 1-2-2V10z"/></svg></button><div class="label">Beranda</div></div>
+          <div class="item"><button title="Toko" aria-label="Toko"><svg viewBox="0 0 24 24"><path d="M3 7h18l-2 12H5L3 7zm4-4h10l2 4H5l2-4z"/></svg></button><div class="label">Toko</div></div>
+          <div class="item"><button title="Tambah" aria-label="Tambah"><svg viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg></button><div class="label" style="display:none"></div></div>
+          <div class="item"><button title="Pesan" aria-label="Pesan"><svg viewBox="0 0 24 24"><path d="M21 12a8 8 0 0 1-8 8H7l-4 4v-6a8 8 0 1 1 18-6z"/></svg></button><div class="label">Pesan</div></div>
+          <div class="item"><button title="Profil" aria-label="Profil"><svg viewBox="0 0 24 24"><path d="M12 12a5 5 0 1 0-5-5 5 5 0 0 0 5 5zm0 2c-5 0-9 2.5-9 5v3h18v-3c0-2.5-4-5-9-5z"/></svg></button><div class="label">Profil</div></div>
+        </div>`;
+        document.body.appendChild(bar);
+      }
+      feed.children[index]?.scrollIntoView({behavior: 'instant', block: 'start'});
+    }
+
+    function closeFeed(){
+      feed.classList.remove('open'); feedClose.style.display = 'none';
+      document.querySelectorAll('.feed-bottombar, .feed-sep').forEach(el => el.remove());
+    }
+    feedClose.addEventListener('click', closeFeed);
+
+    // ======= INIT =======
+    let currentMode = null;
+    function init(){
+      const isMobile = window.matchMedia('(max-width: 767px)').matches;
+      if (isMobile === currentMode) return;
+      if (isMobile) buildMobileGrid(); else buildDesktopGridMosaic();
+      currentMode = isMobile;
+
+      const fmt = n => n.toLocaleString('id-ID');
+      const rand = (a,b) => Math.floor(Math.random() * (b-a+1)) + a;
+      ['statFollowing', 'statFollowers', 'statLikes'].forEach(id => {
+        const el = document.getElementById(id);
+        if (el) el.textContent = fmt(rand(1200, 9800));
+      });
+    }
+
+    let wasMobile = window.matchMedia('(max-width: 767px)').matches;
+    window.addEventListener('resize', () => {
+      const isMobile = window.matchMedia('(max-width: 767px)').matches;
+      if (isMobile !== wasMobile) {
+        wasMobile = isMobile;
+        if (feed.classList.contains('open')) closeFeed();
+        init();
+      }
+    });
+
+    init();
+  </script>
+</body>
+</html>
