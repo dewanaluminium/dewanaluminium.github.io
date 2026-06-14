@@ -8,94 +8,115 @@
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
   
   <style>
-    /* Tema Gelap Total */
+    /* Tema Ultra Dark */
     body { 
-      background-color: #121214; 
-      color: #e2e8f0;
+      background-color: #000000; /* Hitam Pekat */
+      color: #ffffff; /* Font Utama Putih */
       font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
     }
     
     /* Header Gradasi Gelap ke Hijau Emerald Mewah */
     .header-toko { 
-      background: linear-gradient(135deg, #061f14 0%, #0b3c25 50%, #115e3b 100%);
+      background: linear-gradient(135deg, #020b06 0%, #062416 50%, #0d47a1 100%); /* Mix Gelap - Hijau - Biru */
       color: #ffffff; 
       padding: 35px 15px 55px 15px; 
       text-align: center; 
-      border-bottom: 4px solid #00ff87; /* Garis pembatas hijau neon */
+      border-bottom: 4px solid #00ff87; 
     }
-    .header-toko h2 { font-weight: 800; letter-spacing: 1px; text-transform: uppercase; text-shadow: 0 2px 4px rgba(0,0,0,0.5); }
+    .header-toko h2 { font-weight: 800; letter-spacing: 1px; text-transform: uppercase; text-shadow: 0 2px 4px rgba(0,0,0,0.8); }
     .header-toko p { color: #a7f3d0; }
     
     /* Wrapper Pencarian Rata Kiri & Mengambang */
     .search-wrapper { 
       max-width: 700px; 
       margin: -30px auto 20px auto; 
-      background: #1e1e24; 
+      background: #16161a; /* Abu gelap sedikit terang dari body */
       padding: 15px; 
       border-radius: 12px; 
-      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4); 
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.7); 
+      border: 1px solid #2d3748;
     }
-    /* Kolom input rata kiri penuh dengan bingkai hijau saat diklik */
     .search-wrapper input { 
-      background-color: #121214;
+      background-color: #000000;
       border: 2px solid #2d3748;
       color: #ffffff;
       border-radius: 8px; 
       font-size: 1.05rem; 
-      text-align: left; /* Rata kiri sesuai permintaan */
+      text-align: left; 
     }
     .search-wrapper input:focus {
-      background-color: #121214;
+      background-color: #000000;
       color: #ffffff;
       border-color: #00ff87;
-      box-shadow: 0 0 0 0.25rem rgba(0, 255, 135, 0.25);
+      box-shadow: 0 0 0 0.25rem rgba(0, 255, 135, 0.4);
     }
     .search-wrapper input::placeholder { color: #718096; }
     
     /* Kartu Tabel Tema Gelap */
     .table-card {
-      background: #1e1e24;
+      background: #000000;
       border-radius: 12px;
       padding: 0;
-      box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+      box-shadow: 0 4px 15px rgba(0,0,0,0.5);
       overflow: hidden;
       margin-bottom: 40px;
       border: 1px solid #2d3748;
     }
     
-    /* Pengaturan Tabel Gelap & Sticky Header */
-    .table { margin-bottom: 0; background-color: #1e1e24; color: #e2e8f0; }
+    /* Pengaturan Tabel Gelap Total & Font Putih Tajam */
+    .table { margin-bottom: 0; background-color: #000000; color: #ffffff; } /* Font tbody jadi putih */
     .table thead th { 
       background-color: #16161a; 
-      color: #00ff87; /* Header teks berwarna hijau neon */
+      color: #00ff87; /* Header tetap hijau neon biar keren */
       font-weight: 700; 
       text-transform: uppercase; 
       font-size: 0.8rem;
-      letter-spacing: 0.5px;
+      letter-spacing: 1px;
       position: sticky;
       top: 0;
       z-index: 10;
-      border-bottom: 2px solid #2d3748;
+      border-bottom: 2px solid #00ff87; /* Garis bawah header hijau */
       padding: 12px 8px;
     }
-    .table tbody td { border-bottom: 1px solid #2d3748; padding: 12px 8px; }
-    .table tbody tr:hover { background-color: #1a2e23; } /* Efek hover hijau gelap halus */
+    .table tbody td { 
+      border-bottom: 1px solid #1a1a1e; 
+      padding: 12px 8px; 
+      color: #ffffff !important; /* Paksa font isi tabel jadi putih bersih */
+    }
+    .table tbody tr:hover { background-color: #0a1a11; } /* Hover hijau gelap sangat tipis */
     
-    /* Warna Teks Spesifik */
-    .harga-text { color: #34d399; font-weight: bold; font-size: 1.05rem; } /* Hijau emerald cerah */
-    .nama-barang { font-weight: 600; color: #ffffff; }
+    /* Warna Teks Harga Hijau Menyala */
+    .harga-text { color: #00ff87 !important; font-weight: bold; font-size: 1.05rem; } 
+    .nama-barang { font-weight: 600; color: #ffffff !important; }
+    
+    /* Satuan dibuat putih tipis agar tidak mengganggu tapi tetap jelas */
+    .kolom-satuan { color: #cbd5e1 !important; font-size: 0.9rem; }
     
     .table-container-scroll { max-height: 65vh; overflow-y: auto; }
     
-    /* Badge Stok Kustom Gila */
-    .badge-stok-ada { background-color: rgba(52, 211, 153, 0.15); color: #34d399; border: 1px solid #34d399; }
-    .badge-stok-habis { background-color: rgba(239, 68, 68, 0.15); color: #f87171; border: 1px solid #f87171; }
+    /* BADGE STOK BARU: SOLID, PEKAT, TAJAM, TIDAK BURAM */
+    .badge-stok-ada { 
+      background-color: #00ff87; /* Hijau Neon Solid */
+      color: #000000; /* Teks Hitam Pekat agar kontras maksimal */
+      font-weight: 800; 
+      border: none;
+      font-size: 0.85rem;
+      box-shadow: none; /* Buang shadow agar tidak buram */
+    }
+    .badge-stok-habis { 
+      background-color: #ff4d4d; /* Merah Terang Solid */
+      color: #000000; /* Teks Hitam Pekat */
+      font-weight: 800; 
+      border: none;
+      font-size: 0.85rem;
+      box-shadow: none;
+    }
     
     /* Footer */
-    .footer { text-align: center; padding: 20px; color: #4a5568; font-size: 0.85rem; }
+    .footer { text-align: center; padding: 20px; color: #4a5568; font-size: 0.85rem; border-top: 1px solid #1a1a1e;}
     
     /* Indikator Sinkronisasi */
-    #statusSync { display: none; font-size: 0.8rem; color: #34d399; margin-top: 5px; font-weight: bold;}
+    #statusSync { display: none; font-size: 0.8rem; color: #00ff87; margin-top: 5px; font-weight: bold;}
   </style>
 </head>
 <body>
@@ -108,12 +129,12 @@
   <div class="container">
     <div class="search-wrapper">
       <input type="text" id="kolomCari" class="form-control form-control-lg" placeholder="🔍 Cari barang di sini...">
-      <div id="statusSync" class="text-center">🔄 Sinkronisasi harga terbaru...</div>
+      <div id="statusSync" class="text-center">🔄 Update harga terbaru...</div>
     </div>
 
     <div id="statusLoading" class="text-center text-muted my-5">
       <div class="spinner-border text-success" role="status"></div>
-      <p class="mt-2 fw-bold text-success">Menghubungkan ke server toko...</p>
+      <p class="mt-2 fw-bold text-success">Menghubungkan ke toko...</p>
     </div>
 
     <div class="table-card" id="tabelContainer" style="display: none;">
@@ -146,7 +167,8 @@
     let timeoutKetik = null;
 
     window.onload = function() {
-      const dataLama = localStorage.getItem('katalog_dewan_aluminium_dark');
+      // Gunakan kunci cache berbeda untuk tema ultra dark
+      const dataLama = localStorage.getItem('katalog_dewan_aluminium_ultradark');
       
       if (dataLama) {
         dataKatalogAsli = JSON.parse(dataLama);
@@ -160,7 +182,7 @@
         .then(response => response.json())
         .then(data => {
           dataKatalogAsli = data;
-          localStorage.setItem('katalog_dewan_aluminium_dark', JSON.stringify(data));
+          localStorage.setItem('katalog_dewan_aluminium_ultradark', JSON.stringify(data));
           
           document.getElementById('statusLoading').style.display = 'none';
           document.getElementById('statusSync').style.display = 'none';
@@ -171,7 +193,7 @@
           }
         })
         .catch(error => {
-          document.getElementById('statusLoading').innerHTML = "<span class='text-danger'>⚠️ Gagal memperbarui data. Menampilkan data offline.</span>";
+          document.getElementById('statusLoading').innerHTML = "<span class='text-danger'>⚠️ Gagal update. Menampilkan data offline.</span>";
           document.getElementById('statusSync').style.display = 'none';
         });
     };
@@ -188,14 +210,15 @@
 
       data.forEach(barang => {
         let stokAngka = Number(barang.stok);
+        // Lencana stok pekat, teks hitam, super tajam
         let badgeStok = stokAngka > 0 
-          ? `<span class="badge badge-stok-ada rounded-pill px-2 py-1">${stokAngka}</span>` 
+          ? `<span class="badge badge-stok-ada rounded-pill px-3 py-1">${stokAngka}</span>` 
           : `<span class="badge badge-stok-habis rounded-pill px-2 py-1">Habis</span>`;
 
         htmlKumpulan += `
           <tr>
             <td class="nama-barang text-wrap">${barang.nama}</td>
-            <td class="text-center text-muted small">${barang.satuan}</td>
+            <td class="text-center kolom-satuan">${barang.satuan}</td>
             <td class="text-end harga-text">${Number(barang.harga).toLocaleString('id-ID')}</td>
             <td class="text-center">${badgeStok}</td>
           </tr>
@@ -203,7 +226,7 @@
       });
       
       if (isLimit) {
-         htmlKumpulan += '<tr><td colspan="4" class="text-center py-3 text-success" style="font-size:0.85rem; font-style:italic;">Menampilkan 50 hasil terbaik. Silakan ketik nama barang lebih spesifik.</td></tr>';
+         htmlKumpulan += '<tr><td colspan="4" class="text-center py-3 text-success" style="font-size:0.85rem; font-style:italic;">Menampilkan 50 hasil. Ketik lebih spesifik.</td></tr>';
       }
 
       tbody.innerHTML = htmlKumpulan;
@@ -224,7 +247,7 @@
               renderTabel(hasilFilter, false);
            }
         }
-      }, 250); // Kecepatan sensor ketik ditingkatkan ke 250ms agar lebih responsif
+      }, 250); 
     });
   </script>
 </body>
