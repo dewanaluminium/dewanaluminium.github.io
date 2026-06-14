@@ -8,64 +8,28 @@
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
   
   <style>
-    body { 
-      background-color: #f4f7f6; 
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
-    }
+    body { background-color: #f4f7f6; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
     
-    /* Header Biru Dongker Mewah */
-    .header-toko { 
-      background: linear-gradient(135deg, #0d47a1 0%, #1976d2 100%);
-      color: white; 
-      padding: 30px 15px 50px 15px; 
-      text-align: center; 
-      box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-    }
+    .header-toko { background: linear-gradient(135deg, #0d47a1 0%, #1976d2 100%); color: white; padding: 30px 15px 50px 15px; text-align: center; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
     .header-toko h2 { font-weight: 800; letter-spacing: 1px; text-transform: uppercase; }
     
-    /* Kotak Pencarian Mengambang di atas batas header */
-    .search-wrapper { 
-      max-width: 700px; 
-      margin: -30px auto 20px auto; 
-      background: white; 
-      padding: 15px; 
-      border-radius: 12px; 
-      box-shadow: 0 5px 15px rgba(0,0,0,0.15); 
-    }
+    .search-wrapper { max-width: 700px; margin: -30px auto 20px auto; background: white; padding: 15px; border-radius: 12px; box-shadow: 0 5px 15px rgba(0,0,0,0.15); }
     .search-wrapper input { border-radius: 8px; font-size: 1.1rem; }
     
-    /* Desain Kartu Tabel */
-    .table-card {
-      background: white;
-      border-radius: 12px;
-      padding: 0;
-      box-shadow: 0 2px 10px rgba(0,0,0,0.05);
-      overflow: hidden;
-      margin-bottom: 40px;
-    }
+    .table-card { background: white; border-radius: 12px; padding: 0; box-shadow: 0 2px 10px rgba(0,0,0,0.05); overflow: hidden; margin-bottom: 40px; }
     
-    /* Pengaturan Tabel agar Rapi & Sticky Header */
     .table { margin-bottom: 0; }
-    .table thead th { 
-      background-color: #f8f9fa; 
-      color: #333; 
-      font-weight: 700; 
-      text-transform: uppercase; 
-      font-size: 0.85rem;
-      position: sticky;
-      top: 0;
-      z-index: 10;
-      border-bottom: 2px solid #dee2e6;
-    }
+    .table thead th { background-color: #f8f9fa; color: #333; font-weight: 700; text-transform: uppercase; font-size: 0.85rem; position: sticky; top: 0; z-index: 10; border-bottom: 2px solid #dee2e6; }
     .table tbody tr:hover { background-color: #f1f8ff; }
     .harga-text { color: #198754; font-weight: bold; }
     .nama-barang { font-weight: 600; color: #2c3e50; }
     
-    /* Pembatas tinggi tabel agar bisa di-scroll internal jika data sangat banyak */
     .table-container-scroll { max-height: 65vh; overflow-y: auto; }
     
-    /* Footer */
     .footer { text-align: center; padding: 20px; color: #6c757d; font-size: 0.85rem; }
+    
+    /* Indikator Update Background */
+    #statusSync { display: none; font-size: 0.8rem; color: #0d47a1; margin-top: 5px; font-weight: bold;}
   </style>
 </head>
 <body>
@@ -78,11 +42,12 @@
   <div class="container">
     <div class="search-wrapper">
       <input type="text" id="kolomCari" class="form-control form-control-lg border-primary" placeholder="🔍 Ketik nama barang yang dicari...">
+      <div id="statusSync" class="text-center">🔄 Menyinkronkan harga terbaru...</div>
     </div>
 
     <div id="statusLoading" class="text-center text-muted my-5">
       <div class="spinner-border text-primary" role="status"></div>
-      <p class="mt-2 fw-bold">Menyinkronkan data dengan toko...</p>
+      <p class="mt-2 fw-bold">Memuat katalog toko...</p>
     </div>
 
     <div class="table-card" id="tabelContainer" style="display: none;">
@@ -108,44 +73,73 @@
   </div>
 
   <script>
-    // ⚠️ GANTI DENGAN URL WEB APP GOOGLE SCRIPT ANDA ⚠️
+    // ⚠️ GANTI DENGAN URL WEB APP GOOGLE SCRIPT ANDA (YANG ADA ?action=katalog) ⚠️
     const URL_API_KASIR = "https://script.google.com/macros/s/AKfycbyaOcxsWdUXUh1px4RgCzovp6lk4NItG0hcXayuw38jCkd4reix7Cz9Qrf-PQLUQhCErw/exec?action=katalog";
     
     let dataKatalogAsli = [];
+    let timeoutKetik = null;
 
-    // Fungsi pertama kali berjalan saat halaman dibuka
     window.onload = function() {
+      // 1. CEK MEMORI HP (CACHE)
+      const dataLama = localStorage.getItem('katalog_dewan_aluminium');
+      
+      if (dataLama) {
+        // Jika ada data kemarin, langsung tampilkan dalam 0 detik!
+        dataKatalogAsli = JSON.parse(dataLama);
+        document.getElementById('statusLoading').style.display = 'none';
+        document.getElementById('tabelContainer').style.display = 'block';
+        
+        // Render maksimal 50 data saja di awal agar HP tidak ngelag
+        renderTabel(dataKatalogAsli.slice(0, 50)); 
+        
+        // Munculkan teks kecil bahwa sistem sedang update di background
+        document.getElementById('statusSync').style.display = 'block';
+      }
+
+      // 2. SELALU AMBIL DATA TERBARU DARI GOOGLE SECARA DIAM-DIAM
       fetch(URL_API_KASIR)
         .then(response => response.json())
         .then(data => {
           dataKatalogAsli = data;
+          
+          // Simpan data terbaru ke memori HP untuk besok
+          localStorage.setItem('katalog_dewan_aluminium', JSON.stringify(data));
+          
+          // Sembunyikan loading / teks sync
           document.getElementById('statusLoading').style.display = 'none';
+          document.getElementById('statusSync').style.display = 'none';
           document.getElementById('tabelContainer').style.display = 'block';
-          renderTabel(dataKatalogAsli);
+          
+          // Jika tadi pelanggan tidak sedang mengetik apapun, perbarui tabelnya
+          if(document.getElementById('kolomCari').value === "") {
+             renderTabel(dataKatalogAsli.slice(0, 50));
+          }
         })
         .catch(error => {
-          document.getElementById('statusLoading').innerHTML = "<span class='text-danger'>⚠️ Gagal memuat data. Mohon muat ulang halaman.</span>";
+          document.getElementById('statusLoading').innerHTML = "<span class='text-danger'>⚠️ Gagal terhubung ke toko. Menampilkan data offline.</span>";
+          document.getElementById('statusSync').style.display = 'none';
         });
     };
 
-    // Fungsi untuk menggambar baris tabel
-    function renderTabel(data) {
+    function renderTabel(data, isLimit = false) {
       const tbody = document.getElementById('isiTabel');
-      tbody.innerHTML = '';
       
+      // Jika data kosong
       if (data.length === 0) {
-        tbody.innerHTML = '<tr><td colspan="4" class="text-center py-4 text-muted">Barang yang Anda cari tidak ditemukan.</td></tr>';
+        tbody.innerHTML = '<tr><td colspan="4" class="text-center py-4 text-muted">Barang tidak ditemukan.</td></tr>';
         return;
       }
 
+      // Buat HTML sekaligus dalam satu wadah (Sangat cepat di HP)
+      let htmlKumpulan = "";
+
       data.forEach(barang => {
-        // Konversi angka stok ke format lencana Bootstrap
         let stokAngka = Number(barang.stok);
         let badgeStok = stokAngka > 0 
           ? `<span class="badge bg-success rounded-pill px-3">${stokAngka}</span>` 
           : `<span class="badge bg-danger rounded-pill px-3">Habis</span>`;
 
-        let tr = `
+        htmlKumpulan += `
           <tr>
             <td class="nama-barang text-wrap" style="min-width: 180px;">${barang.nama}</td>
             <td class="text-center text-muted">${barang.satuan}</td>
@@ -153,16 +147,41 @@
             <td class="text-center">${badgeStok}</td>
           </tr>
         `;
-        tbody.innerHTML += tr;
       });
+      
+      // Jika ada peringatan pemotongan data
+      if (isLimit) {
+         htmlKumpulan += '<tr><td colspan="4" class="text-center py-3 text-primary" style="font-size:0.85rem; font-style:italic;">Menampilkan 50 hasil teratas. Ketik kata kunci yang lebih spesifik jika barang tidak terlihat.</td></tr>';
+      }
+
+      // Masukkan ke layar sekaligus
+      tbody.innerHTML = htmlKumpulan;
     }
 
-    // Fitur Live Search Cerdas
+    // 3. FITUR DEBOUNCE (Menghilangkan Patah-Patah Saat Mengetik)
     document.getElementById('kolomCari').addEventListener('input', function(e) {
       const kataKunci = e.target.value.toLowerCase();
-      // Filter data: mencari jika nama barang mengandung huruf yang diketik
-      const hasilFilter = dataKatalogAsli.filter(b => b.nama.toLowerCase().includes(kataKunci));
-      renderTabel(hasilFilter);
+      
+      // Batalkan proses sebelumnya jika pelanggan masih lanjut mengetik
+      clearTimeout(timeoutKetik);
+      
+      // Tunggu 0.3 detik setelah pelanggan BERHENTI MENGETIK
+      timeoutKetik = setTimeout(() => {
+        if (kataKunci === "") {
+           // Jika kosong, kembalikan ke 50 data teratas
+           renderTabel(dataKatalogAsli.slice(0, 50));
+        } else {
+           // Filter data berdasarkan ketikan
+           const hasilFilter = dataKatalogAsli.filter(b => b.nama.toLowerCase().includes(kataKunci));
+           
+           // Jika hasilnya lebih dari 50, potong jadi 50 saja agar tetap mulus
+           if (hasilFilter.length > 50) {
+              renderTabel(hasilFilter.slice(0, 50), true);
+           } else {
+              renderTabel(hasilFilter, false);
+           }
+        }
+      }, 300); // Waktu jeda 300 milidetik
     });
   </script>
 </body>
