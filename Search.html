@@ -4,230 +4,166 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Pencarian Barang Dewan Aluminium</title>
+  
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  
   <style>
-    /* --- TEMA HITAM KEREN (DARK MODE) --- */
-    :root {
-      --bg-color: #1a1a1a;
-      --surface-color: #2a2a2a;
-      --text-color: #e0e0e0;
-      --border-color: #444;
-      --accent-color: #007bff;
-      --header-bg: #1f3a5f;
+    body { 
+      background-color: #f4f7f6; 
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
     }
-
-    body {
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-      margin: 0;
-      padding: 20px;
-      background-color: var(--bg-color);
-      color: var(--text-color);
-    }
-
-    h1 {
-      text-align: center;
-      color: #ffffff;
-      border-bottom: 2px solid var(--accent-color);
-      padding-bottom: 10px;
-    }
-
-    input[type="text"] {
-      font-size: 1.1em;
-      padding: 12px 15px;
-      width: 100%;
-      max-width: 500px; /* Batas lebar di layar besar */
-      display: block;
-      margin: 20px auto; /* Otomatis ke tengah */
-      background-color: var(--surface-color);
-      color: var(--text-color);
-      border: 2px solid var(--border-color);
-      border-radius: 8px; /* Sudut melengkung */
-      box-sizing: border-box; /* Padding tidak merusak layout */
-      transition: all 0.3s ease;
-    }
-
-    input[type="text"]:focus {
-      border-color: var(--accent-color);
-      box-shadow: 0 0 10px rgba(0,123,255, 0.5);
-      outline: none;
-    }
-
-    /* --- UTAMA: MEMBUAT TABEL RESPONSIVE --- */
-    #results {
-      margin-top: 20px;
-      width: 100%;
-      overflow-x: auto; /* Ini kuncinya! */
-      border-radius: 8px;
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
-    }
-    /* ----------------------------------------- */
     
-    .loading { 
-      font-style: italic; 
-      color: #888; 
-      text-align: center;
-      padding: 20px;
+    /* Header Biru Dongker Mewah */
+    .header-toko { 
+      background: linear-gradient(135deg, #0d47a1 0%, #1976d2 100%);
+      color: white; 
+      padding: 30px 15px 50px 15px; 
+      text-align: center; 
+      box-shadow: 0 4px 6px rgba(0,0,0,0.1);
     }
-
-    table {
-      width: 100%;
-      /* Penting: Atur lebar minimum agar tidak terlalu "gepeng" */
-      min-width: 600px; 
-      border-collapse: collapse;
-      background-color: var(--surface-color);
+    .header-toko h2 { font-weight: 800; letter-spacing: 1px; text-transform: uppercase; }
+    
+    /* Kotak Pencarian Mengambang di atas batas header */
+    .search-wrapper { 
+      max-width: 700px; 
+      margin: -30px auto 20px auto; 
+      background: white; 
+      padding: 15px; 
+      border-radius: 12px; 
+      box-shadow: 0 5px 15px rgba(0,0,0,0.15); 
     }
-
-    th, td {
-      padding: 12px 15px;
-      text-align: left;
-      border-bottom: 1px solid var(--border-color);
-      white-space: nowrap; /* Agar teks tidak turun baris */
+    .search-wrapper input { border-radius: 8px; font-size: 1.1rem; }
+    
+    /* Desain Kartu Tabel */
+    .table-card {
+      background: white;
+      border-radius: 12px;
+      padding: 0;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+      overflow: hidden;
+      margin-bottom: 40px;
     }
-
-    th {
-      background-color: var(--header-bg);
-      color: #ffffff;
-      font-weight: 600;
-      position: sticky; /* Header tabel menempel saat scroll vertikal */
+    
+    /* Pengaturan Tabel agar Rapi & Sticky Header */
+    .table { margin-bottom: 0; }
+    .table thead th { 
+      background-color: #f8f9fa; 
+      color: #333; 
+      font-weight: 700; 
+      text-transform: uppercase; 
+      font-size: 0.85rem;
+      position: sticky;
       top: 0;
+      z-index: 10;
+      border-bottom: 2px solid #dee2e6;
     }
-
-    tbody tr {
-      transition: background-color 0.2s ease;
-    }
-
-    /* Efek hover yang keren */
-    tbody tr:hover {
-      background-color: #3a3a3a;
-    }
-
-    /* Menghilangkan border di baris terakhir */
-    tbody tr:last-child td {
-      border-bottom: none;
-    }
-
-    /* Bonus: Scrollbar yang lebih keren (untuk Chrome/Edge/Safari) */
-    #results::-webkit-scrollbar {
-      height: 8px;
-    }
-    #results::-webkit-scrollbar-track {
-      background: #222;
-      border-radius: 4px;
-    }
-    #results::-webkit-scrollbar-thumb {
-      background-color: #555;
-      border-radius: 4px;
-    }
-    #results::-webkit-scrollbar-thumb:hover {
-      background-color: #777;
-    }
+    .table tbody tr:hover { background-color: #f1f8ff; }
+    .harga-text { color: #198754; font-weight: bold; }
+    .nama-barang { font-weight: 600; color: #2c3e50; }
+    
+    /* Pembatas tinggi tabel agar bisa di-scroll internal jika data sangat banyak */
+    .table-container-scroll { max-height: 65vh; overflow-y: auto; }
+    
+    /* Footer */
+    .footer { text-align: center; padding: 20px; color: #6c757d; font-size: 0.85rem; }
   </style>
 </head>
 <body>
 
-  <h1>Pencarian Barang</h1>
-  <input type="text" id="searchInput" placeholder="Ketik nama barang...">
-  <div id="results"></div>
+  <div class="header-toko">
+    <h2>DEWAN ALUMINIUM SOPPENG</h2>
+    <p class="mb-0">Cek Harga & Ketersediaan Barang Terkini</p>
+  </div>
+
+  <div class="container">
+    <div class="search-wrapper">
+      <input type="text" id="kolomCari" class="form-control form-control-lg border-primary" placeholder="🔍 Ketik nama barang yang dicari...">
+    </div>
+
+    <div id="statusLoading" class="text-center text-muted my-5">
+      <div class="spinner-border text-primary" role="status"></div>
+      <p class="mt-2 fw-bold">Menyinkronkan data dengan toko...</p>
+    </div>
+
+    <div class="table-card" id="tabelContainer" style="display: none;">
+      <div class="table-responsive table-container-scroll">
+        <table class="table table-hover align-middle text-nowrap">
+          <thead>
+            <tr>
+              <th style="width: 50%;">Nama Barang</th>
+              <th class="text-center">Satuan</th>
+              <th class="text-end">Harga (Rp)</th>
+              <th class="text-center">Stok</th>
+            </tr>
+          </thead>
+          <tbody id="isiTabel">
+            </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <div class="footer">
+    &copy; 2026 Dewan Aluminium Soppeng - Harga dapat berubah sewaktu-waktu.
+  </div>
 
   <script>
-    // --- KONFIGURASI ---
-    const WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbxcXnRPIUzCEWqK_zssMjDGxiZr_ymS5Js2pDgX8IT8aP5Az7YTV3hSgLxNueBbx36ZJQ/exec';
-    const API_KEY = 'dewan123'; // Samakan dengan API_KEY di Apps Script
-    const SHEET_NAME = 'Barang'; // Ganti dengan nama sheet Anda
-    // -------------------
+    // ⚠️ GANTI DENGAN URL WEB APP GOOGLE SCRIPT ANDA ⚠️
+    const URL_API_KASIR = "https://script.google.com/macros/s/AKfycbyaOcxsWdUXUh1px4RgCzovp6lk4NItG0hcXayuw38jCkd4reix7Cz9Qrf-PQLUQhCErw/exec";
+    
+    let dataKatalogAsli = [];
 
-    const searchInput = document.getElementById('searchInput');
-    const resultsDiv = document.getElementById('results');
-    let allData = []; // Variabel untuk menyimpan semua data dari sheet
+    // Fungsi pertama kali berjalan saat halaman dibuka
+    window.onload = function() {
+      fetch(URL_API_KASIR)
+        .then(response => response.json())
+        .then(data => {
+          dataKatalogAsli = data;
+          document.getElementById('statusLoading').style.display = 'none';
+          document.getElementById('tabelContainer').style.display = 'block';
+          renderTabel(dataKatalogAsli);
+        })
+        .catch(error => {
+          document.getElementById('statusLoading').innerHTML = "<span class='text-danger'>⚠️ Gagal memuat data. Mohon muat ulang halaman.</span>";
+        });
+    };
 
-    // 1. Fungsi untuk mengambil data
-    function fetchData() {
-      resultsDiv.innerHTML = '<div class="loading">Memuat data...</div>';
-      const script = document.createElement('script');
+    // Fungsi untuk menggambar baris tabel
+    function renderTabel(data) {
+      const tbody = document.getElementById('isiTabel');
+      tbody.innerHTML = '';
       
-      // Kita tambahkan '&action=search' untuk memicu logika baru di GAS
-      script.src = `${WEB_APP_URL}?action=search&key=${API_KEY}&sheet=${SHEET_NAME}&callback=handleData`;
-      
-      script.onerror = function() {
-        resultsDiv.innerHTML = '<div style="color: red;">Gagal memuat data.</div>';
-      };
-      document.body.appendChild(script);
-    }
-
-    // 2. Fungsi callback yang dipanggil oleh GAS
-    function handleData(data) {
-      // .slice(1) akan membuang baris pertama (Baris 1)
-      allData = data.slice(1); 
-      
-      resultsDiv.innerHTML = `Data siap. ${allData.length} baris barang dimuat.`;
-      
-      // Menghapus tag skrip lama
-      const oldScript = document.querySelector(`script[src*="${WEB_APP_URL}"]`);
-      if (oldScript) oldScript.remove();
-    }
-
-    // 3. Fungsi untuk melakukan pencarian
-    function performSearch() {
-      const searchTerm = searchInput.value.toLowerCase().trim();
-      
-      if (searchTerm.length < 2) {
-        resultsDiv.innerHTML = 'Ketik minimal 2 huruf...';
+      if (data.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="4" class="text-center py-4 text-muted">Barang yang Anda cari tidak ditemukan.</td></tr>';
         return;
       }
 
-      // Logika filter tetap sama (mencari di row[1] atau Kolom B)
-      const filteredResults = allData.filter(row => {
-        const dataKolomB = (row[1] || '').toLowerCase(); 
-        return dataKolomB.includes(searchTerm);
+      data.forEach(barang => {
+        // Konversi angka stok ke format lencana Bootstrap
+        let stokAngka = Number(barang.stok);
+        let badgeStok = stokAngka > 0 
+          ? `<span class="badge bg-success rounded-pill px-3">${stokAngka}</span>` 
+          : `<span class="badge bg-danger rounded-pill px-3">Habis</span>`;
+
+        let tr = `
+          <tr>
+            <td class="nama-barang text-wrap" style="min-width: 180px;">${barang.nama}</td>
+            <td class="text-center text-muted">${barang.satuan}</td>
+            <td class="text-end harga-text">${Number(barang.harga).toLocaleString('id-ID')}</td>
+            <td class="text-center">${badgeStok}</td>
+          </tr>
+        `;
+        tbody.innerHTML += tr;
       });
-      
-      // 4. Tampilkan hasil
-      if (filteredResults.length === 0) {
-        resultsDiv.innerHTML = 'Barang tidak ditemukan.';
-      } else {
-        // Mulai membangun string HTML untuk tabel
-        let html = `<table>
-                      <thead>
-                        <tr>
-                          <th>Barang</th>
-                          <th>Satuan</th>
-                          <th>Harga Jual</th>
-                          <th>Stok</th>
-                          <th>Lokasi/Rak</th>
-                        </tr>
-                      </thead>
-                      <tbody>`;
-
-        // Loop melalui hasil filter dan buat baris tabel (<tr>)
-        filteredResults.forEach(row => {
-          // Ingat: row[0] = Kolom A, row[1] = Kolom B, dst.
-          html += `<tr>
-                     <td>${row[1] || ''}</td>
-                     <td>${row[2] || ''}</td>
-                     <td>${row[4] || ''}</td>
-                     <td>${row[6] || ''}</td>
-                     <td>${row[7] || ''}</td>
-                   </tr>`;
-        });
-
-        // Tutup tabel
-        html += `  </tbody>
-                  </table>`;
-        
-        // Tampilkan tabel ke halaman
-        resultsDiv.innerHTML = html;
-      }
     }
-    
-    // 5. Jalankan listener
-    let searchTimeout;
-    searchInput.addEventListener('keyup', () => {
-      clearTimeout(searchTimeout);
-      searchTimeout = setTimeout(performSearch, 300); 
+
+    // Fitur Live Search Cerdas
+    document.getElementById('kolomCari').addEventListener('input', function(e) {
+      const kataKunci = e.target.value.toLowerCase();
+      // Filter data: mencari jika nama barang mengandung huruf yang diketik
+      const hasilFilter = dataKatalogAsli.filter(b => b.nama.toLowerCase().includes(kataKunci));
+      renderTabel(hasilFilter);
     });
-
-    // 6. Muat data saat halaman pertama kali dibuka
-    fetchData();
-
   </script>
 </body>
 </html>
