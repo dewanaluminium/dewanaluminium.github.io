@@ -8,57 +8,123 @@
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
   
   <style>
-    body { background-color: #f4f7f6; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+    /* Tema Gelap Total */
+    body { 
+      background-color: #121214; 
+      color: #e2e8f0;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
+    }
     
-    .header-toko { background: linear-gradient(135deg, #0d47a1 0%, #1976d2 100%); color: white; padding: 30px 15px 50px 15px; text-align: center; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
-    .header-toko h2 { font-weight: 800; letter-spacing: 1px; text-transform: uppercase; }
+    /* Header Gradasi Gelap ke Hijau Emerald Mewah */
+    .header-toko { 
+      background: linear-gradient(135deg, #061f14 0%, #0b3c25 50%, #115e3b 100%);
+      color: #ffffff; 
+      padding: 35px 15px 55px 15px; 
+      text-align: center; 
+      border-bottom: 4px solid #00ff87; /* Garis pembatas hijau neon */
+    }
+    .header-toko h2 { font-weight: 800; letter-spacing: 1px; text-transform: uppercase; text-shadow: 0 2px 4px rgba(0,0,0,0.5); }
+    .header-toko p { color: #a7f3d0; }
     
-    .search-wrapper { max-width: 700px; margin: -30px auto 20px auto; background: white; padding: 15px; border-radius: 12px; box-shadow: 0 5px 15px rgba(0,0,0,0.15); }
-    .search-wrapper input { border-radius: 8px; font-size: 1.1rem; }
+    /* Wrapper Pencarian Rata Kiri & Mengambang */
+    .search-wrapper { 
+      max-width: 700px; 
+      margin: -30px auto 20px auto; 
+      background: #1e1e24; 
+      padding: 15px; 
+      border-radius: 12px; 
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4); 
+    }
+    /* Kolom input rata kiri penuh dengan bingkai hijau saat diklik */
+    .search-wrapper input { 
+      background-color: #121214;
+      border: 2px solid #2d3748;
+      color: #ffffff;
+      border-radius: 8px; 
+      font-size: 1.05rem; 
+      text-align: left; /* Rata kiri sesuai permintaan */
+    }
+    .search-wrapper input:focus {
+      background-color: #121214;
+      color: #ffffff;
+      border-color: #00ff87;
+      box-shadow: 0 0 0 0.25rem rgba(0, 255, 135, 0.25);
+    }
+    .search-wrapper input::placeholder { color: #718096; }
     
-    .table-card { background: white; border-radius: 12px; padding: 0; box-shadow: 0 2px 10px rgba(0,0,0,0.05); overflow: hidden; margin-bottom: 40px; }
+    /* Kartu Tabel Tema Gelap */
+    .table-card {
+      background: #1e1e24;
+      border-radius: 12px;
+      padding: 0;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+      overflow: hidden;
+      margin-bottom: 40px;
+      border: 1px solid #2d3748;
+    }
     
-    .table { margin-bottom: 0; }
-    .table thead th { background-color: #f8f9fa; color: #333; font-weight: 700; text-transform: uppercase; font-size: 0.85rem; position: sticky; top: 0; z-index: 10; border-bottom: 2px solid #dee2e6; }
-    .table tbody tr:hover { background-color: #f1f8ff; }
-    .harga-text { color: #198754; font-weight: bold; }
-    .nama-barang { font-weight: 600; color: #2c3e50; }
+    /* Pengaturan Tabel Gelap & Sticky Header */
+    .table { margin-bottom: 0; background-color: #1e1e24; color: #e2e8f0; }
+    .table thead th { 
+      background-color: #16161a; 
+      color: #00ff87; /* Header teks berwarna hijau neon */
+      font-weight: 700; 
+      text-transform: uppercase; 
+      font-size: 0.8rem;
+      letter-spacing: 0.5px;
+      position: sticky;
+      top: 0;
+      z-index: 10;
+      border-bottom: 2px solid #2d3748;
+      padding: 12px 8px;
+    }
+    .table tbody td { border-bottom: 1px solid #2d3748; padding: 12px 8px; }
+    .table tbody tr:hover { background-color: #1a2e23; } /* Efek hover hijau gelap halus */
+    
+    /* Warna Teks Spesifik */
+    .harga-text { color: #34d399; font-weight: bold; font-size: 1.05rem; } /* Hijau emerald cerah */
+    .nama-barang { font-weight: 600; color: #ffffff; }
     
     .table-container-scroll { max-height: 65vh; overflow-y: auto; }
     
-    .footer { text-align: center; padding: 20px; color: #6c757d; font-size: 0.85rem; }
+    /* Badge Stok Kustom Gila */
+    .badge-stok-ada { background-color: rgba(52, 211, 153, 0.15); color: #34d399; border: 1px solid #34d399; }
+    .badge-stok-habis { background-color: rgba(239, 68, 68, 0.15); color: #f87171; border: 1px solid #f87171; }
     
-    /* Indikator Update Background */
-    #statusSync { display: none; font-size: 0.8rem; color: #0d47a1; margin-top: 5px; font-weight: bold;}
+    /* Footer */
+    .footer { text-align: center; padding: 20px; color: #4a5568; font-size: 0.85rem; }
+    
+    /* Indikator Sinkronisasi */
+    #statusSync { display: none; font-size: 0.8rem; color: #34d399; margin-top: 5px; font-weight: bold;}
   </style>
 </head>
 <body>
 
   <div class="header-toko">
     <h2>DEWAN ALUMINIUM SOPPENG</h2>
-    <p class="mb-0">Cek Harga & Ketersediaan Barang Terkini</p>
+    <p class="mb-0">Katalog Harga & Stok Barang Real-Time</p>
   </div>
 
   <div class="container">
     <div class="search-wrapper">
-      <input type="text" id="kolomCari" class="form-control form-control-lg border-primary" placeholder="🔍 Ketik nama barang yang dicari...">
-      <div id="statusSync" class="text-center">🔄 Menyinkronkan harga terbaru...</div>
+      <input type="text" id="kolomCari" class="form-control form-control-lg" placeholder="🔍 Cari barang di sini...">
+      <div id="statusSync" class="text-center">🔄 Sinkronisasi harga terbaru...</div>
     </div>
 
     <div id="statusLoading" class="text-center text-muted my-5">
-      <div class="spinner-border text-primary" role="status"></div>
-      <p class="mt-2 fw-bold">Memuat katalog toko...</p>
+      <div class="spinner-border text-success" role="status"></div>
+      <p class="mt-2 fw-bold text-success">Menghubungkan ke server toko...</p>
     </div>
 
     <div class="table-card" id="tabelContainer" style="display: none;">
       <div class="table-responsive table-container-scroll">
-        <table class="table table-hover align-middle text-nowrap">
+        <table class="table table-hover align-middle">
           <thead>
             <tr>
-              <th style="width: 50%;">Nama Barang</th>
-              <th class="text-center">Satuan</th>
-              <th class="text-end">Harga (Rp)</th>
-              <th class="text-center">Stok</th>
+              <th style="width: auto;">Nama Barang</th>
+              <th class="text-center" style="width: 15%;">Satuan</th>
+              <th class="text-end" style="width: 25%;">Harga (Rp)</th>
+              <th class="text-center" style="width: 15%;">Stok</th>
             </tr>
           </thead>
           <tbody id="isiTabel">
@@ -69,54 +135,43 @@
   </div>
 
   <div class="footer">
-    &copy; 2026 Dewan Aluminium Soppeng - Harga dapat berubah sewaktu-waktu.
+    &copy; 2026 Dewan Aluminium Soppeng
   </div>
 
   <script>
-    // ⚠️ GANTI DENGAN URL WEB APP GOOGLE SCRIPT ANDA (YANG ADA ?action=katalog) ⚠️
-    const URL_API_KASIR = "https://script.google.com/macros/s/AKfycbyaOcxsWdUXUh1px4RgCzovp6lk4NItG0hcXayuw38jCkd4reix7Cz9Qrf-PQLUQhCErw/exec?action=katalog";
+    // ⚠️ MASUKKAN URL API ANDA YANG BERAKHIRAN ?action=katalog DI SINI ⚠️
+    const URL_API_KASIR = "https://script.google.com/macros/s/AKfycbyaOcxsWdUXUh1px4RgCzovp6lk4NItG0hcXayuw38jCkd4reix7Cz9Qrf-PQLUQhCErw/exec?action=kataloghttps://script.google.com/macros/s/AKfycbyaOcxsWdUXUh1px4RgCzovp6lk4NItG0hcXayuw38jCkd4reix7Cz9Qrf-PQLUQhCErw/exec?action=katalog";
     
     let dataKatalogAsli = [];
     let timeoutKetik = null;
 
     window.onload = function() {
-      // 1. CEK MEMORI HP (CACHE)
-      const dataLama = localStorage.getItem('katalog_dewan_aluminium');
+      const dataLama = localStorage.getItem('katalog_dewan_aluminium_dark');
       
       if (dataLama) {
-        // Jika ada data kemarin, langsung tampilkan dalam 0 detik!
         dataKatalogAsli = JSON.parse(dataLama);
         document.getElementById('statusLoading').style.display = 'none';
         document.getElementById('tabelContainer').style.display = 'block';
-        
-        // Render maksimal 50 data saja di awal agar HP tidak ngelag
         renderTabel(dataKatalogAsli.slice(0, 50)); 
-        
-        // Munculkan teks kecil bahwa sistem sedang update di background
         document.getElementById('statusSync').style.display = 'block';
       }
 
-      // 2. SELALU AMBIL DATA TERBARU DARI GOOGLE SECARA DIAM-DIAM
       fetch(URL_API_KASIR)
         .then(response => response.json())
         .then(data => {
           dataKatalogAsli = data;
+          localStorage.setItem('katalog_dewan_aluminium_dark', JSON.stringify(data));
           
-          // Simpan data terbaru ke memori HP untuk besok
-          localStorage.setItem('katalog_dewan_aluminium', JSON.stringify(data));
-          
-          // Sembunyikan loading / teks sync
           document.getElementById('statusLoading').style.display = 'none';
           document.getElementById('statusSync').style.display = 'none';
           document.getElementById('tabelContainer').style.display = 'block';
           
-          // Jika tadi pelanggan tidak sedang mengetik apapun, perbarui tabelnya
           if(document.getElementById('kolomCari').value === "") {
              renderTabel(dataKatalogAsli.slice(0, 50));
           }
         })
         .catch(error => {
-          document.getElementById('statusLoading').innerHTML = "<span class='text-danger'>⚠️ Gagal terhubung ke toko. Menampilkan data offline.</span>";
+          document.getElementById('statusLoading').innerHTML = "<span class='text-danger'>⚠️ Gagal memperbarui data. Menampilkan data offline.</span>";
           document.getElementById('statusSync').style.display = 'none';
         });
     };
@@ -124,64 +179,52 @@
     function renderTabel(data, isLimit = false) {
       const tbody = document.getElementById('isiTabel');
       
-      // Jika data kosong
       if (data.length === 0) {
         tbody.innerHTML = '<tr><td colspan="4" class="text-center py-4 text-muted">Barang tidak ditemukan.</td></tr>';
         return;
       }
 
-      // Buat HTML sekaligus dalam satu wadah (Sangat cepat di HP)
       let htmlKumpulan = "";
 
       data.forEach(barang => {
         let stokAngka = Number(barang.stok);
         let badgeStok = stokAngka > 0 
-          ? `<span class="badge bg-success rounded-pill px-3">${stokAngka}</span>` 
-          : `<span class="badge bg-danger rounded-pill px-3">Habis</span>`;
+          ? `<span class="badge badge-stok-ada rounded-pill px-2 py-1">${stokAngka}</span>` 
+          : `<span class="badge badge-stok-habis rounded-pill px-2 py-1">Habis</span>`;
 
         htmlKumpulan += `
           <tr>
-            <td class="nama-barang text-wrap" style="min-width: 180px;">${barang.nama}</td>
-            <td class="text-center text-muted">${barang.satuan}</td>
+            <td class="nama-barang text-wrap">${barang.nama}</td>
+            <td class="text-center text-muted small">${barang.satuan}</td>
             <td class="text-end harga-text">${Number(barang.harga).toLocaleString('id-ID')}</td>
             <td class="text-center">${badgeStok}</td>
           </tr>
         `;
       });
       
-      // Jika ada peringatan pemotongan data
       if (isLimit) {
-         htmlKumpulan += '<tr><td colspan="4" class="text-center py-3 text-primary" style="font-size:0.85rem; font-style:italic;">Menampilkan 50 hasil teratas. Ketik kata kunci yang lebih spesifik jika barang tidak terlihat.</td></tr>';
+         htmlKumpulan += '<tr><td colspan="4" class="text-center py-3 text-success" style="font-size:0.85rem; font-style:italic;">Menampilkan 50 hasil terbaik. Silakan ketik nama barang lebih spesifik.</td></tr>';
       }
 
-      // Masukkan ke layar sekaligus
       tbody.innerHTML = htmlKumpulan;
     }
 
-    // 3. FITUR DEBOUNCE (Menghilangkan Patah-Patah Saat Mengetik)
     document.getElementById('kolomCari').addEventListener('input', function(e) {
       const kataKunci = e.target.value.toLowerCase();
-      
-      // Batalkan proses sebelumnya jika pelanggan masih lanjut mengetik
       clearTimeout(timeoutKetik);
       
-      // Tunggu 0.3 detik setelah pelanggan BERHENTI MENGETIK
       timeoutKetik = setTimeout(() => {
         if (kataKunci === "") {
-           // Jika kosong, kembalikan ke 50 data teratas
            renderTabel(dataKatalogAsli.slice(0, 50));
         } else {
-           // Filter data berdasarkan ketikan
            const hasilFilter = dataKatalogAsli.filter(b => b.nama.toLowerCase().includes(kataKunci));
-           
-           // Jika hasilnya lebih dari 50, potong jadi 50 saja agar tetap mulus
            if (hasilFilter.length > 50) {
               renderTabel(hasilFilter.slice(0, 50), true);
            } else {
               renderTabel(hasilFilter, false);
            }
         }
-      }, 300); // Waktu jeda 300 milidetik
+      }, 250); // Kecepatan sensor ketik ditingkatkan ke 250ms agar lebih responsif
     });
   </script>
 </body>
