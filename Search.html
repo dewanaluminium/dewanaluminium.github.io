@@ -6,142 +6,309 @@
   <title>Pencarian Barang Dewan Aluminium</title>
   
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
   
   <style>
-    /* Tema Ultra Dark */
     body { 
-      background-color: #000000; 
+      background-color: #050505; 
       color: #ffffff; 
       font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
     }
     
-    /* Header Gradasi Gelap ke Hijau Emerald Mewah */
     .header-toko { 
       background: linear-gradient(135deg, #020b06 0%, #062416 50%, #0d47a1 100%); 
       color: #ffffff; 
-      padding: 35px 15px 55px 15px; 
+      padding: 40px 15px 65px 15px; 
       text-align: center; 
-      border-bottom: 4px solid #00ff87; 
+      border-bottom: 3px solid #00ff87; 
+      box-shadow: 0 4px 15px rgba(0, 255, 135, 0.2);
     }
-    .header-toko h2 { font-weight: 800; letter-spacing: 1px; text-transform: uppercase; text-shadow: 0 2px 4px rgba(0,0,0,0.8); }
-    .header-toko p { color: #a7f3d0; }
     
-    /* Wrapper Pencarian */
+    .header-toko h2 { 
+      font-weight: 800; 
+      letter-spacing: 1.5px; 
+      text-transform: uppercase; 
+      text-shadow: 0 4px 6px rgba(0,0,0,0.8); 
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+    }
+    
+    /* CSS UNTUK LOGO BASE64 */
+    .logo-base64 {
+      height: 45px; 
+      width: auto;
+      object-fit: contain;
+      border-radius: 8px; 
+    }
+
+    .header-toko p { color: #a7f3d0; font-size: 1.1rem; }
+    
     .search-wrapper { 
-      max-width: 700px; 
-      margin: -30px auto 20px auto; 
-      background: #0a110d; 
-      padding: 15px; 
+      max-width: 800px; 
+      margin: -40px auto 20px auto; 
+      background: rgba(10, 17, 13, 0.85); 
+      backdrop-filter: blur(10px); 
+      padding: 20px; 
       border-radius: 12px; 
-      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.7); 
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.9); 
       border: 1px solid #113620;
     }
+    
+    .input-group-custom { display: flex; gap: 15px; align-items: center; }
+
     .search-wrapper input { 
       background-color: #000000;
-      border: 2px solid #113620;
+      border: 1px solid #113620;
       color: #ffffff;
       border-radius: 8px; 
       font-size: 1.05rem; 
-      text-align: left; 
     }
     .search-wrapper input:focus {
-      background-color: #000000;
+      background-color: #050505;
       color: #ffffff;
       border-color: #00ff87;
-      box-shadow: 0 0 0 0.25rem rgba(0, 255, 135, 0.4);
+      box-shadow: 0 0 0 0.25rem rgba(0, 255, 135, 0.2);
     }
     .search-wrapper input::placeholder { color: #4b6b58; }
     
-    /* Kartu Tabel - Latar Hitam Mengkilap */
+    .item-count-badge {
+      background-color: #02140a;
+      border: 1px solid #00ff87;
+      color: #00ff87;
+      padding: 0 20px;
+      border-radius: 8px;
+      font-weight: 600;
+      white-space: nowrap;
+      display: flex;
+      align-items: center;
+      height: 48px; 
+      box-shadow: inset 0 0 10px rgba(0, 255, 135, 0.1);
+    }
+    
+    .btn-clear {
+      position: absolute; right: 15px; top: 50%;
+      transform: translateY(-50%); background: none;
+      border: none; color: #4b6b58; z-index: 10; display: none; 
+    }
+    .btn-clear:hover { color: #00ff87; }
+    
     .table-card {
-      background: #000000;
-      border-radius: 12px;
-      padding: 0;
-      box-shadow: 0 4px 15px rgba(0, 255, 135, 0.1); /* Glow hijau tipis di luar tabel */
-      overflow: hidden;
-      margin-bottom: 40px;
-      border: 1px solid #113620;
+      background: #000000; border-radius: 12px; padding: 0;
+      box-shadow: 0 4px 20px rgba(0, 255, 135, 0.08); 
+      overflow: hidden; margin-bottom: 40px; border: 1px solid #113620;
     }
     
-    /* PENGATURAN TABEL ANTI-BOOTSTRAP */
-    .table { 
-      margin-bottom: 0; 
-      --bs-table-bg: transparent; /* Mematikan pemaksaan background putih bootstrap */
-      color: #ffffff; 
-    }
+    .table { margin-bottom: 0; --bs-table-bg: transparent; color: #ffffff; }
     .table thead th { 
-      background-color: #020b06 !important; 
-      color: #00ff87; 
-      font-weight: 700; 
-      text-transform: uppercase; 
-      font-size: 0.8rem;
-      letter-spacing: 1px;
-      position: sticky;
-      top: 0;
-      z-index: 10;
-      border-bottom: 2px solid #00ff87 !important; 
-      padding: 12px 8px;
+      background-color: #020b06 !important; color: #00ff87; font-weight: 700; 
+      text-transform: uppercase; font-size: 0.85rem; letter-spacing: 1px;
+      position: sticky; top: 0; z-index: 5;
+      border-bottom: 2px solid #00ff87 !important; padding: 15px 10px;
     }
     
-    /* Baris Tabel dengan Gradasi Hitam ke Hijau Tua (Mengkilap) */
-    .table tbody tr {
-      background: linear-gradient(90deg, #000000 0%, #061c0e 50%, #000000 100%);
-      transition: all 0.3s ease;
-    }
-    .table tbody td { 
-      border-bottom: 1px solid #0a2614 !important; 
-      padding: 14px 8px; 
-      color: #ffffff !important; 
-      background-color: transparent !important; /* Wajib transparan agar gradasi TR muncul */
-    }
-    .table tbody tr:hover { 
-      background: linear-gradient(90deg, #02140a 0%, #0c381c 50%, #02140a 100%); 
-    } 
+    .table tbody tr { background: linear-gradient(90deg, #000000 0%, #061c0e 50%, #000000 100%); transition: 
+
+all 0.2s ease-in-out; }
+    .table tbody td { border-bottom: 1px solid #0a2614 !important; padding: 16px 10px; color: #ffffff !
+
+important; background-color: transparent !important; vertical-align: middle; }
+    .table tbody tr:hover { background: linear-gradient(90deg, #02140a 0%, #0c381c 50%, #02140a 100%); 
+
+transform: scale(1.005); } 
     
-    /* Warna Teks */
-    .harga-text { color: #00ff87 !important; font-weight: bold; font-size: 1.05rem; } 
-    .nama-barang { font-weight: 600; color: #ffffff !important; }
+    .harga-text { color: #00ff87 !important; font-weight: 700; font-size: 1.1rem; } 
+    .nama-barang { font-weight: 600; color: #f8f9fa !important; font-size: 1.05rem; }
     .kolom-satuan { color: #8bb39b !important; font-size: 0.9rem; }
     
     .table-container-scroll { max-height: 65vh; overflow-y: auto; }
+    .table-container-scroll::-webkit-scrollbar { width: 8px; }
+    .table-container-scroll::-webkit-scrollbar-track { background: #000000; }
+    .table-container-scroll::-webkit-scrollbar-thumb { background: #113620; border-radius: 4px; }
+    .table-container-scroll::-webkit-scrollbar-thumb:hover { background: #00ff87; }
     
-    /* BADGE STOK SOLID PEKAT */
-    .badge-stok-ada { 
-      background-color: #00ff87; 
-      color: #000000; 
-      font-weight: 800; 
-      font-size: 0.85rem;
+    .badge-stok-ada { background-color: #00ff87; color: #000000; font-weight: 800; font-size: 0.85rem; 
+
+letter-spacing: 0.5px; }
+    .badge-stok-habis { background-color: #ff4d4d; color: #ffffff; font-weight: 800; font-size: 0.85rem; 
+
+letter-spacing: 0.5px; }
+    
+    .floating-wa {
+      position: fixed; bottom: 25px; right: 25px; background-color: #25D366; color: white;
+      width: 60px; height: 60px; border-radius: 50%; display: flex; align-items: center;
+      justify-content: center; font-size: 32px; box-shadow: 0 4px 15px rgba(37, 211, 102, 0.4);
+      z-index: 1000; transition: all 0.3s ease; text-decoration: none;
     }
-    .badge-stok-habis { 
-      background-color: #ff4d4d; 
-      color: #000000; 
-      font-weight: 800; 
-      font-size: 0.85rem;
+    .floating-wa:hover { background-color: #1ebe57; color: white; transform: scale(1.1); box-shadow: 0 6px 
+
+20px rgba(37, 211, 102, 0.6); }
+    
+    .footer { text-align: center; padding: 25px; color: #4b6b58; font-size: 0.9rem; border-top: 1px solid 
+
+#0a2614; margin-top: 20px;}
+    #statusSync { display: none; font-size: 0.85rem; color: #00ff87; margin-top: 10px; font-weight: bold;}
+    
+    @media (max-width: 768px) {
+      .input-group-custom { flex-direction: column; align-items: stretch; }
+      .item-count-badge { justify-content: center; }
     }
-    
-    /* Footer */
-    .footer { text-align: center; padding: 20px; color: #4b6b58; font-size: 0.85rem; border-top: 1px solid #0a2614;}
-    
-    /* Indikator */
-    #statusSync { display: none; font-size: 0.8rem; color: #00ff87; margin-top: 5px; font-weight: bold;}
   </style>
 </head>
 <body>
 
   <div class="header-toko">
-    <h2>DEWAN ALUMINIUM SOPPENG</h2>
+    <h2>
+      <img 
+
+src="data:image/jpeg;base64,/9j/4AAQSkZJRgABAQEAYABgAAD/2wBDAAIBAQIBAQICAgICAgICAwUDAwMDAwYEBAMFBwYHBwcGBwcICQ
+
+sJCAgKCAcHCg0KCgsMDAwMBwkODw0MDgsMDAz/2wBDAQICAgMDAwYDAwYMCAcIDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwM
+
+DAwMDAwMDAwMDAwMDAz/wAARCABaAFkDASIAAhEBAxEB/8QAHwAAAQUBAQEBAQEAAAAAAAAAAAECAwQFBgcICQoL/8QAtRAAAgEDAwIEAwUFBA
+
+QAAAF9AQIDAAQRBRIhMUEGE1FhByJxFDKBkaEII0KxwRVS0fAkM2JyggkKFhcYGRolJicoKSo0NTY3ODk6Q0RFRkdISUpTVFVWV1hZWmNkZWZn
+
+aGlqc3R1dnd4eXqDhIWGh4iJipKTlJWWl5iZmqKjpKWmp6ipqrKztLW2t7i5usLDxMXGx8jJytLT1NXW19jZ2uHi4+Tl5ufo6erx8vP09fb3+P
+
+n6/8QAHwEAAwEBAQEBAQEBAQAAAAAAAAECAwQFBgcICQoL/8QAtREAAgECBAQDBAcFBAQAAQJ3AAECAxEEBSExBhJBUQdhcRMiMoEIFEKRobHB
+
+CSMzUvAVYnLRChYkNOEl8RcYGRomJygpKjU2Nzg5OkNERUZHSElKU1RVVldYWVpjZGVmZ2hpanN0dXZ3eHl6goOEhYaHiImKkpOUlZaXmJmaoq
+
+OkpaanqKmqsrO0tba3uLm6wsPExcbHyMnK0tPU1dbX2Nna4uPk5ebn6Onq8vP09fb3+Pn6/9oADAMBAAIRAxEAPwD9/KKKKACiimySiJck4AGS
+
+TwAKAHZpNwr8+/8Agoj/AMHHHwG/YbkvtC0a/wD+Fq
+
++PbbdGdI8P3CNaWcg7XN5zHHz1VN7juor8lbv/AIOrP2n/APhoT/hMll8Ip4WQGL/hC/7NB05od2eZs/aPOx/y034/2MfLX6Lw/wCFfEWcUHiq
+
+FHkha6c3y83lFb/PReZnKrGO5/TfnNFcX4b+Mtg/7PNh8QtcKaRpbeHo/EWoHLSrYwm2FxL0G5gi7ugycdKsfBn47eDf2ifAFl4p8C
+
++JtF8WeHdQQPBf6XdLcQtkZwSp+VhnlWww6ECvgJYerGLk4uydm+l
+
++19jQ6yikBzS1iAUUUUAFITgUPyK/mD/4K8f8F2/j5+0f8Y/Hvw1sde/4V/4C8P65faIdO8OyPBcapHbzvDuubnPmvuCZKKVTnBU9a
+
++y4K4Ix3E2LlhsG1FQScpS6J+W7f9XJlNR3P2W/4KG/8HA3wD/YBa80Z9aPxD8e2+V/4Rzw5Mkxt34+W6ueYoOvKktIP7hr8Jv+ChP/AAXw
+
++P3/AAUFa90m813/AIQLwFckqPDPhyV4I54+MLdXHEtx05BKxn+4K8N/Y4/4J9/F79vrxmdG+FngvU/EJjkC3molfI03T8957l8Rqe
+
++3Jc9lNfoX4d/4J5fsZ/8ABJaKHU/2pPiRa/Gf4o2qiZfh74UzPaWsgzhJ1VlZ+R/y8PCh/wCebCv6Hy3hjhPhOqqbi8ZjekUueV/KK92C85a
+
++ZzuUpeh+ff7IX/BOX4xftxSXz/DnwXqGo6LpEUk
+
++oa5cD7LpNikaM7B7l8IXwpwibnP92vDpW3WjEd0J/Sv6I/8AgmF/wWv1L/gor8aviX8OPDvw68M/DL4T
+
++EfhzqWoaPpNkga73q8USF2QJFGuyRv3caYBP3mxX87Wc6f/ANs/6V
+
++gcJcRZrmOOxmGzOgqPslTcYp8zSmpP3pbN6La1jOUUo6H9ifjgZ/4JLav/wBkjm/9Mxr
+
++T39lP9tP4o/sQeMo/E3wt8Z6x4S1Hapnjtpd1pfqMHZcQNmKVeOjqcdsV/WF455/4JLav/2SOf8A9Mxr
+
++Oz/AJcB/uf0r8q8DsJQxOFzOjiIKcXKN00mn8XRm1bdH9ulp8RbTw98GYvFniG8hsbCy0VdX1O7ZSI7eNYBLLIQMkKoDHjsKs/C/wCK/hr42e
+
+CbDxL4Q17SPE3h/VIxLa6jpl2lzbTqQD8roSM88jqO9eXftHHH/BNrx3/2TTUP/TXJX8nP7GP7fHxc/YM8aQa18LfGuq
+
++G3ldDd2AbztN1EccT2z5jf0zjcOzCvyfg3w5q8SYPFV8LVUKlFqya91p36rVbdmaTnytI/s4oqj4ZvX1Pw9Y3Mm3zbm3jlfaMDcygnH51er8z
+
+aadmaCE4r+aT9oH4SfsffsVftMfEXxV8XvFt7+0T8Qr7xTqeowfD/wAGu1rommPJdySLDqOoNgu67sOkf3WBUqwr+ltjgV+EXx4/4NM/GXxb
+
++OnjXxXB8cPBFhD4o1+
+
++1eO2k0mdntluLiSUIxEmCV34P0r9U8Lczy7CYjELM8XLD05RS9y956vTmScor0s33M6ibWiO7+EP/BQzXv2u/wDggB+1H4q0jwz4b
+
++Elj4NaXRvDek+DUexj0q1ENo+BIpBaQmV9zqFznoK/AuSQzyPI5LvIxd2Y5LsepJ7mv6Xv2Uv
+
++CF/iL9nv/glH8bv2fLn4leGtU1P4p3klzb63BYSJa6aGitk2yIXLN/qCeCPvD0r4v/4g8fG//RevAX/gmn/
+
++O1+tcC8bcK5RiswiqqhTnVvD3Zu8eVLeze99/UylGTs7HlX/AAa1f8nUfGj/ALJRqf8A6Pt6/L8f8g//ALZ/0r
+
++jT/glz/wQe8Rf8Et/GvxO8c6t8S/DXjO31rwHqGirZ6dYSQSxMxSXzCzOw2gREYx/EK/nKX/kHf8AbP8ApX3PBed4LNc9zPG5fPnptUUnZraM
+
+r7pMiaaSv5n9ivjf/lEtq/8A2SOb/wBMzV/HX/y4f8A/pX9ifjj/AJRL6v8A9kjn/wDTMa/js/5cP+Af0r4TwE/hZl/jj/7caVuh/ZZ
+
++0f8A8o2PHf8A2TTUP/TXJX8bNl963/3l/pX9k37R/wDyjY8d/wDZNNQ/9Nclfxs2P3rf/eX+lY+AH
+
++55j6x/KQVt1/XY/uE8Ff8AInaV/wBecP8A6LWtSsvwV/yJ2lf9ecP/AKLWtSv5cqfGzoEPSv5L/wDgqn
+
++wF8cP2Z/2gPH/AI18QeHdYl8BeI/E2pajp3iXSLo6hpDxS3crKHmiJELjO0pIFIZSOcV/Wg39a/krm/4KVfGT9gv9uD4yf8K88WzQ6DfeN9b/
+
+ALQ8N6kgvtC1RTfThlltH+T5gSCybX/2q/b/AAPjmH1vFTy
+
++MJNRjeM7rmV3opK/K/NprvbcxrW0ufW3/BM/U7i5/wCDZ79sCVrm4kkXVZtrtKxZf9GsOhzxX5IjxBqGP+P+
+
++/8AAh/8a/aD9mb/AIKp/swftg/sc/FL4Bav4f0X9k/xN8ZY3a+1OytzceFbjUGEa
+
++eoDL9m3CJAUYIgH/LQnr8H/trf8ERvjv8AsU6Y3iC60GDx98PpI/PtvF3hBzqemyQn7skgUeZCCMHcy7PRzX7JwdmdDC5pjqOb0/q9WvV5oRn
+
+bVcqXuy+GWq2Tv5GTW1j6H/4Nc9Tub79qP40Ca5uZlHwp1MgSSsw/19v2Jr8tx/yD/wDtn/Sv0/8A
+
++DWhw/7U3xowc/8AFqdT6f8AXe3r8wB/yD/+2f8ASvpMiilxLmiitOWh/wCkyIn8C+Z/Yp44/wCUS
+
++r/APZI5v8A0zNX8dn/ADD/APgH9K/sS8cH/jUvq/8A2SOb/wBMxr+O0DdYqBnJT+lfmPgJ/CzL/HH/ANuNqu6P7K/2juf+CbPjv/smmof
+
++muSv42bH71v/ALy/0r
+
++hP/gpB/wch/Bn4afszar8K/h2k/xQ8U654WfQby9spfJ0bSTPaeS5NwQTO6bidsSlcjBcc1/PbDiBosnAVl5PpkV6HgjkWYZfl2MrY2k6aqNO
+
+PNo2kpa23trpfcKrTasf3B+Cv+RO0r/rzh/9FrWpWX4I/wCRN0n/AK8of/Ra1qV/I1T42dAHmvz4/wCCjf8AwblfAz9uu81TxJo1q/wv
+
++IeoM9xJrOiRKbS/nY5L3VnkJIWPJdCjknJY1+g9JivQynOsdleIWKy+q6c11T/BrZryegmk9GfyQf8ABQT/AIImfHr/AIJ1XFzfeKfDR8R
+
++Co3Pl+KtAV7vTguePPGPMtz/ANdVC+jNXNfsH/8ABWr44/8ABOzU0X4feLpZfDbyeZc+GdWze6NdZ+9+5JzET3aJkb1Jr
+
++wC7s4721lhljjlimQpJG6hlkUjBBB4II7V
+
++bn/AAUQ/wCDZL4H/tg/2h4g8Cxf8Kf8dXO6Y3Gj24bR72U5P7+yyFXJPLQlD3Iav37I/GnA5jQWXcW4dTi9OdK69XHdPzj8kjF0mtYnzn
+
++wR/wV6/Y8+MXjPxd4v1HwJo/7Pnxz8VeF73RL
+
++5jbytC8QeYiudsqbYllaSNSDMiOem9ya/BVY2+w7cc7On4V9S/t8f8ABH347f8ABOfUZpPHfhKW98LeYUg8T6NuvNImGTjfIAGgY4+7MqH0zX
+
+zATxnP41+1cEZFlGF9tjsmxDq0qyitZc6jy3sk3qlrs9UZSbekj+hX9tv/AIOHfgj8Df2HLf4VeEprj4m
+
++N9Z8BxeH7pdJkCaZo0k2niBzNdEFXdC2THEH5GGKmv56UHkxDnhRjNfTX7Bf/BIz46f8FGNVjbwB4Rmg8NCTZceJ9X3Wej2/rtlIJmYf3YVc
+
++uK/c/8A4J4/8GxPwS/ZH/s7xB8QUX4w+ObYrN5mq24TRbKUYP7myyQ+D/FMX9Qq9K
+
++Gp53wp4fUKuGoVXWrzd5RTTbfS/2YJX239S/enqfiR/wT8/4Is/Hj/goveW934S8MNoPg12Al8V68GtNMC8Z8njfcnnpErD1Za/dX/gnb/wAG
+
+2vwK/YoOn674ns/+Fs
+
++PbXbL/aWuW6/2fZyjnNtZZKLg9GkMjdwRX6GWNhDp1nFbwRRwQQII44o1CpGoGAoA4AA6AVNX4dxd4uZ5nnNSjL2NF/Zg9Wv70t3+C8jWNNLV
+
+jUXYMAYFOoor8uNAooooAKKKKAK2raPa69ps9ne28F5Z3UZingnjEkUyEYKspyCCOxFfGtx/wb5fsn3H7RX/AAsg/CzTft2fNOiCZxoDT5z55s
+
+c
+
++Xu/2P9X32Z5r7TorvwOa43Bc31OrKnzKz5ZNXXZ2E0nuVNG0Kz8O6Tb2On2ltYWNpGIre2tolihgQcBVRQAoHYAVboorg63YwooooAKKKKAP/
+
+9k=" alt="Logo" class="logo-base64">
+      DEWAN ALUMINIUM
+    </h2>
     <p class="mb-0">Katalog Harga & Stok Barang Real-Time</p>
   </div>
 
   <div class="container">
     <div class="search-wrapper">
-      <input type="text" id="kolomCari" class="form-control form-control-lg" placeholder="🔍 Cari barang di sini...">
-      <div id="statusSync" class="text-center">🔄 Update harga terbaru...</div>
+      <div class="input-group-custom">
+        <div class="position-relative flex-grow-1">
+          <input type="text" id="kolomCari" class="form-control form-control-lg ps-4" placeholder="Cari nama 
+
+barang di sini..." autocomplete="off">
+          <button id="btnClear" class="btn-clear"><i class="bi bi-x-circle-fill fs-5"></i></button>
+        </div>
+        <div class="item-count-badge" id="infoJumlah">
+          <i class="bi bi-database me-2"></i> <span id="angkaJumlah">0</span> &nbsp;Item
+        </div>
+      </div>
+      <div id="statusSync" class="text-center"><i class="bi bi-arrow-repeat me-1"></i>Meningkatkan data dari 
+
+server...</div>
     </div>
 
     <div id="statusLoading" class="text-center my-5">
       <div class="spinner-border" style="color: #00ff87;" role="status"></div>
-      <p class="mt-2 fw-bold" style="color: #00ff87;">Menghubungkan ke toko...</p>
+      <p class="mt-3 fw-bold" style="color: #00ff87;">Menghubungkan ke database toko...</p>
     </div>
 
     <div class="table-card" id="tabelContainer" style="display: none;">
@@ -149,111 +316,207 @@
         <table class="table table-hover align-middle">
           <thead>
             <tr>
-              <th style="width: auto;">Nama Barang</th>
+              <th style="width: auto;"><i class="bi bi-box-seam me-2"></i>Nama Barang</th>
               <th class="text-center" style="width: 15%;">Satuan</th>
-              <th class="text-end" style="width: 25%;">Harga (Rp)</th>
+              <th class="text-end" style="width: 25%;">Harga</th>
               <th class="text-center" style="width: 15%;">Stok</th>
             </tr>
           </thead>
-          <tbody id="isiTabel">
-            </tbody>
+          <tbody id="isiTabel"></tbody>
         </table>
       </div>
     </div>
   </div>
 
   <div class="footer">
-    &copy; 2026 Dewan Aluminium Soppeng - Premium Dark Mode.
+    &copy; 2026 Dewan Aluminium Soppeng
   </div>
 
+  <a href="https://wa.me/6285150520292" target="_blank" class="floating-wa" title="Hubungi Kami via WhatsApp">
+    <i class="bi bi-whatsapp"></i>
+  </a>
+
   <script>
-    // ⚠️ MASUKKAN URL API ANDA YANG BERAKHIRAN ?action=katalog DI SINI ⚠️
-    const URL_API_KASIR = "https://script.google.com/macros/s/AKfycbyaOcxsWdUXUh1px4RgCzovp6lk4NItG0hcXayuw38jCkd4reix7Cz9Qrf-PQLUQhCErw/exec?action=katalog";
+    // ⚠️ MASUKKAN URL GOOGLE SCRIPT (WEB APP) KAMU DI SINI ⚠️
+    // Jangan hapus parameter action, sheet, dan key yang sudah saya susun di bawah.
+    const SCRIPT_URL = 
+
+"https://script.google.com/macros/s/AKfycbxcXnRPIUzCEWqK_zssMjDGxiZr_ymS5Js2pDgX8IT8aP5Az7YTV3hSgLxNueBbx36ZJQ
+
+/exec";
+    const API_KEY = "dewan123";
+    const NAMA_SHEET = "Barang"; // Sesuaikan jika nama sheet di Google Sheet berbeda
+    
+    // URL Penuh untuk JSONP (Fungsi callback diatur ke 'prosesDataJSONP')
+    const URL_API_KASIR = `${SCRIPT_URL}?action=search&sheet=${NAMA_SHEET}&key=${API_KEY}
+
+&callback=prosesDataJSONP`;
     
     let dataKatalogAsli = [];
     let timeoutKetik = null;
 
+    const kolomCari = document.getElementById('kolomCari');
+    const btnClear = document.getElementById('btnClear');
+    const infoJumlah = document.getElementById('infoJumlah');
+
     window.onload = function() {
-      const dataLama = localStorage.getItem('katalog_dewan_aluminium_glow');
+      const dataLama = localStorage.getItem('katalog_dewan_db2');
       
       if (dataLama) {
         dataKatalogAsli = JSON.parse(dataLama);
-        document.getElementById('statusLoading').style.display = 'none';
-        document.getElementById('tabelContainer').style.display = 'block';
-        renderTabel(dataKatalogAsli.slice(0, 50)); 
+        tampilkanUI();
+        prosesDataDanRender(); 
         document.getElementById('statusSync').style.display = 'block';
       }
 
-      fetch(URL_API_KASIR)
-        .then(response => response.json())
-        .then(data => {
-          dataKatalogAsli = data;
-          localStorage.setItem('katalog_dewan_aluminium_glow', JSON.stringify(data));
-          
-          document.getElementById('statusLoading').style.display = 'none';
-          document.getElementById('statusSync').style.display = 'none';
-          document.getElementById('tabelContainer').style.display = 'block';
-          
-          if(document.getElementById('kolomCari').value === "") {
-             renderTabel(dataKatalogAsli.slice(0, 50));
-          }
-        })
-        .catch(error => {
-          document.getElementById('statusLoading').innerHTML = "<span class='text-danger'>⚠️ Gagal update. Menampilkan data offline.</span>";
-          document.getElementById('statusSync').style.display = 'none';
-        });
+      // Mengambil data menggunakan metode Script Injection untuk JSONP
+      const script = document.createElement('script');
+      script.src = URL_API_KASIR;
+      
+      // Menangani error jika script gagal dimuat (misal tidak ada internet)
+      script.onerror = function() {
+        if(!dataLama) { 
+          document.getElementById('statusLoading').innerHTML = "<span class='text-danger'><i class='bi bi-
+
+exclamation-triangle-fill me-2'></i>Gagal terhubung ke server. Periksa koneksi internet Anda.</span>";
+        }
+        document.getElementById('statusSync').style.display = 'none';
+      };
+
+      document.body.appendChild(script);
     };
 
-    function renderTabel(data, isLimit = false) {
+    // 🟢 FUNGSI CALLBACK JSONP (Dipanggil otomatis oleh server Google)
+    window.prosesDataJSONP = function(dataMentah2D) {
+      dataKatalogAsli = [];
+      
+      // Mengubah Array 2D (Kolom dan Baris) menjadi Array Objek
+      // Asumsi Kolom Spreadsheet: B(1)=Nama, C(2)=Satuan, E(4)=Harga, F(5)=Stok
+      // Kita lewati baris pertama (i=0) karena biasanya berisi Header "Nama Barang", "Harga", dll.
+      for (let i = 1; i < dataMentah2D.length; i++) {
+        let row = dataMentah2D[i];
+        let namaBarang = row[1]; // Kolom B
+        
+        if (namaBarang && namaBarang.toString().trim() !== "") {
+          dataKatalogAsli.push({
+            nama: namaBarang.toString().trim(),
+            satuan: row[2] || "-", // Kolom C
+            harga: row[4] || "",   // Kolom E
+            stok: row[5] || 0      // Kolom F
+          });
+        }
+      }
+
+      // Simpan ke Cache
+      localStorage.setItem('katalog_dewan_db2', JSON.stringify(dataKatalogAsli));
+      
+      tampilkanUI();
+      document.getElementById('statusSync').style.display = 'none';
+      prosesDataDanRender();
+    };
+
+    function tampilkanUI() {
+      document.getElementById('statusLoading').style.display = 'none';
+      document.getElementById('tabelContainer').style.display = 'block';
+    }
+
+    // FUNGSI MULTI-KEYWORD SEARCH & TANPA LIMIT
+    function prosesDataDanRender() {
+      const kataKunciMentah = kolomCari.value.toLowerCase().trim();
+
+      if (kataKunciMentah === "") {
+        infoJumlah.innerHTML = `<i class="bi bi-database me-2"></i> <span>${dataKatalogAsli.length}</span> 
+
+&nbsp;Total`;
+        renderTabel([]); // Tetap dikosongkan saat pertama load
+        return;
+      }
+
+      const arrayKataKunci = kataKunciMentah.split(/\s+/);
+
+      let dataOlahan = dataKatalogAsli.filter(b => {
+        const namaBarang = b.nama.toLowerCase();
+        return arrayKataKunci.every(kata => namaBarang.includes(kata));
+      });
+
+      infoJumlah.innerHTML = `<i class="bi bi-search me-2"></i> <span>${dataOlahan.length}</span> 
+
+&nbsp;Ditemukan`;
+      renderTabel(dataOlahan);
+    }
+
+    function renderTabel(data) {
       const tbody = document.getElementById('isiTabel');
       
       if (data.length === 0) {
-        tbody.innerHTML = '<tr><td colspan="4" class="text-center py-4" style="color: #4b6b58;">Barang tidak ditemukan.</td></tr>';
+        if (kolomCari.value.trim() === "") {
+          tbody.innerHTML = `
+            <tr>
+              <td colspan="4" class="text-center py-5">
+                <i class="bi bi-keyboard fs-1 mb-3 d-block" style="color: #113620;"></i>
+                <span style="color: #8bb39b; font-size: 1.1rem;">Ketik nama barang untuk memunculkan 
+
+data...</span>
+              </td>
+            </tr>`;
+        } else {
+          tbody.innerHTML = `
+            <tr>
+              <td colspan="4" class="text-center py-5">
+                <i class="bi bi-search fs-1 mb-3 d-block" style="color: #113620;"></i>
+                <span style="color: #8bb39b; font-size: 1.1rem;">Barang tidak ditemukan.</span>
+              </td>
+            </tr>`;
+        }
         return;
       }
 
       let htmlKumpulan = "";
-
       data.forEach(barang => {
-        let stokAngka = Number(barang.stok);
+        let stokAngka = (barang.stok && !isNaN(barang.stok)) ? Number(barang.stok) : 0;
         let badgeStok = stokAngka > 0 
-          ? `<span class="badge badge-stok-ada rounded-pill px-3 py-1">${stokAngka}</span>` 
-          : `<span class="badge badge-stok-habis rounded-pill px-2 py-1">Habis</span>`;
+          ? `<span class="badge badge-stok-ada rounded-pill px-3 py-2"><i class="bi bi-check-circle-fill me-
+
+1"></i>${stokAngka}</span>` 
+          : `<span class="badge badge-stok-habis rounded-pill px-3 py-2"><i class="bi bi-x-circle-fill me-
+
+1"></i>Habis</span>`;
+
+        let teksHarga = (barang.harga && !isNaN(barang.harga) && barang.harga !== "") 
+          ? `Rp ${Number(barang.harga).toLocaleString('id-ID')}` 
+          : `<span style="color:#4b6b58;">-</span>`;
+
+        let teksSatuan = (barang.satuan && barang.satuan.trim() !== "") ? barang.satuan : "-";
 
         htmlKumpulan += `
           <tr>
             <td class="nama-barang text-wrap">${barang.nama}</td>
-            <td class="text-center kolom-satuan">${barang.satuan}</td>
-            <td class="text-end harga-text">${Number(barang.harga).toLocaleString('id-ID')}</td>
+            <td class="text-center kolom-satuan">${teksSatuan}</td>
+            <td class="text-end harga-text">${teksHarga}</td>
             <td class="text-center">${badgeStok}</td>
           </tr>
         `;
       });
       
-      if (isLimit) {
-         htmlKumpulan += '<tr><td colspan="4" class="text-center py-3" style="font-size:0.85rem; font-style:italic; color: #00ff87;">Menampilkan 50 hasil. Ketik lebih spesifik.</td></tr>';
-      }
-
       tbody.innerHTML = htmlKumpulan;
     }
 
-    document.getElementById('kolomCari').addEventListener('input', function(e) {
-      const kataKunci = e.target.value.toLowerCase();
-      clearTimeout(timeoutKetik);
+    kolomCari.addEventListener('input', function(e) {
+      btnClear.style.display = e.target.value.length > 0 ? 'block' : 'none';
       
+      clearTimeout(timeoutKetik);
       timeoutKetik = setTimeout(() => {
-        if (kataKunci === "") {
-           renderTabel(dataKatalogAsli.slice(0, 50));
-        } else {
-           const hasilFilter = dataKatalogAsli.filter(b => b.nama.toLowerCase().includes(kataKunci));
-           if (hasilFilter.length > 50) {
-              renderTabel(hasilFilter.slice(0, 50), true);
-           } else {
-              renderTabel(hasilFilter, false);
-           }
-        }
-      }, 250); 
+        prosesDataDanRender();
+      }, 300); 
     });
+
+    btnClear.addEventListener('click', function() {
+      kolomCari.value = "";
+      btnClear.style.display = 'none';
+      kolomCari.focus();
+      prosesDataDanRender();
+    });
+
   </script>
 </body>
 </html>
