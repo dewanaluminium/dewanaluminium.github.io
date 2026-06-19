@@ -324,10 +324,14 @@
           ? `<span class="badge badge-stok-ada rounded-pill px-3 py-2"><i class="bi bi-check-circle-fill me-1"></i>${stokAngka}</span>` 
           : `<span class="badge badge-stok-habis rounded-pill px-3 py-2"><i class="bi bi-x-circle-fill me-1"></i>Habis</span>`;
 
-        let teksHarga = (barang.harga && !isNaN(barang.harga) && barang.harga !== "") 
-          ? `Rp ${Number(barang.harga).toLocaleString('id-ID')}` 
-          : `<span style="color:#4b6b58;">-</span>`;
+        // Ubah ke string dulu, lalu hapus semua karakter koma
+let hargaBersih = String(barang.harga).replace(/,/g, ''); 
+let hargaAngka = Number(hargaBersih);
 
+let teksHarga = (barang.harga && !isNaN(hargaAngka) && hargaBersih !== "") 
+  ? `Rp ${hargaAngka.toLocaleString('id-ID')}` 
+  : `<span style="color:#4b6b58;">-</span>`;
+        
         let teksSatuan = (barang.satuan && barang.satuan.trim() !== "") ? barang.satuan : "-";
 
         htmlKumpulan += `
