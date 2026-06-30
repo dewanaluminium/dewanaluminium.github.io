@@ -194,7 +194,7 @@
   </div>
 
   <div class="footer">
-    &copy; 2026 Dewan Aluminium Soppeng - Premium Dark Mode System.
+    &copy; 2026 Dewan Aluminium Soppeng
   </div>
 
   <a href="https://wa.me/6285150520292" target="_blank" class="floating-wa" title="Hubungi Kami via WhatsApp">
@@ -307,7 +307,8 @@
           ? `<span class="badge badge-stok-ada rounded-pill px-3 py-2"><i class="bi bi-check-circle-fill me-1"></i>${stokAngka}</span>` 
           : `<span class="badge badge-stok-habis rounded-pill px-3 py-2"><i class="bi bi-x-circle-fill me-1"></i>Habis</span>`;
 
-        let teksHarga = (barang.harga && !isNaN(barang.harga) && barang.harga !== "") 
+        // Menghapus syarat "barang.harga" yang pertama agar angka 0 tidak dianggap false
+        let teksHarga = (barang.harga !== "" && barang.harga !== null && !isNaN(barang.harga)) 
           ? `Rp ${Number(barang.harga).toLocaleString('id-ID')}` 
           : `<span style="color:#4b6b58;">-</span>`;
 
